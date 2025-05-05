@@ -118,7 +118,7 @@ namespace WPFCootreguaV2.UserControls
                 _ = Dispatcher.BeginInvoke(() => BtnCancelar.Visibility = Visibility.Visible);
                 return;
             }
-            EventLogger.SaveLog(EventType.Info, "Pago cancelado por el usuario.");
+            EventLogger.SaveLog(EventType.Info, "Transacción cancelada por el usuario.");
             await CancelPay();
         }
 

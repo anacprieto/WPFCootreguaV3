@@ -13,23 +13,38 @@
             <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
         </Grid.Background>
 
-        <TextBlock 
-            Text="CONFIGURACIÓN DEL DISPOSITIVO" Style="{StaticResource TitleStyle}" Margin="0,450,0,0" Width="900"
-        />
-        <TextBlock 
-            Text="Espere mientras se configura el dispositivo para iniciar" Style="{StaticResource MessageTextStyle}" Margin="162,545,163,0"
-        />
-        
-        
-        <mah:ProgressRing x:Name="LoadGif" Foreground="{StaticResource PRIMARYCOLOR}" Height="589" Width="563"
-                Style="{StaticResource ProgressRingStyle}" Margin="0,895,0,0"
-            />
+        <TextBlock
+             FontSize="75"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Right"
+             Margin="0,367,20,0"
+             TextAlignment="Right"
+             TextWrapping="Wrap"
+             Width="800"
+             FontFamily="Arial" 
+             Text="Configuración del dispositivo"
+             FontWeight="Bold" />
 
-
         <TextBlock 
-            x:Name="TxtStatus" Text="{Binding StatusMsg}" Foreground="{StaticResource SIXTARTCOLOR}" Style="{StaticResource MessageTextStyle}"
-            Margin="0,1609,0,0" FontWeight="Bold"
-        />
-
+             Text="Espere mientras se configura el dispositivo para iniciar"
+             FontFamily="Arial"
+             FontSize="60"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Right"
+             Margin="0,581,20,0"
+             Width="700"
+             TextWrapping="Wrap"
+             TextAlignment="Right"
+             FontWeight="Bold" />
+        <local:GifViewer PathFolder="Images/Gif/GifLoading" Margin="442,886,49,375" RenderTransformOrigin="0.5,0.5" >
+            <local:GifViewer.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </local:GifViewer.RenderTransform>
+        </local:GifViewer>
     </Grid>
 </local:AppUserControl>

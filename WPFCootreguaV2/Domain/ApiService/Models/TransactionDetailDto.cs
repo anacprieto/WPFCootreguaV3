@@ -1,4 +1,6 @@
-﻿namespace WPFCootreguaV2.ApiService.Models
+﻿using System;
+
+namespace WPFCootreguaV2.ApiService.Models
 {
     public class TransactionDetailDto : DtoCommon
     {
@@ -8,5 +10,5 @@
         public int IdTypeOperation { get; set; }
         public string TypeOperation { get; set; }
     }
-
+   
 }

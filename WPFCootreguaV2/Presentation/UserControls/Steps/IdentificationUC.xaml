@@ -7,9 +7,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-             Height="1720" 
-             Width="680">
+             Height="1920" 
+             Width="1080">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="{StaticResource BTN_IDENTIFICATE}" Stretch="Uniform"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="300" />
             <RowDefinition Height="*" />
@@ -27,11 +30,11 @@
                 md:HintAssist.Hint="      Ingrese su Cédula"
                 md:HintAssist.IsFloating="True"
                 md:HintAssist.FloatingScale="0.3"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsEnabled="False"
                 Tag="Identification"
-                Margin="0,10,0,0" 
+                Margin="464,10,0,0" 
                 Width="550"
                 TextAlignment="Center"
                 FontSize="50"
@@ -40,8 +43,8 @@
             <TextBlock x:Name="TxtStatusMsg"
             Text="{Binding StatusMsg}"
             Style="{StaticResource StatusTextStyle}" 
-            Margin="0,121,0,0"/>
-            <local:NumericKeyboard x:Name="Keyboard" Margin="109,201,106,53" />
+            Margin="439,172,0,0" HorizontalAlignment="Left"/>
+            <local:NumericKeyboard x:Name="Keyboard" Margin="408,299,10,206" />
         </Grid>
 
         <Grid Grid.Row="2" >
@@ -49,9 +52,9 @@
              Name="BtnCancelar"
              Source="/Images/Buttons/BtnCancelar.png"
              Height="90"
-             HorizontalAlignment="Left"
+             HorizontalAlignment="Center"
              VerticalAlignment="Top"
-             Margin="10,50,0,0"
+             Margin="0,60,0,0"
              Stretch="Uniform"
              TouchDown="BtnCancel_TouchDown"
          />

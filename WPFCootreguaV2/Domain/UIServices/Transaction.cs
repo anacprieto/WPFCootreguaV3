@@ -4,6 +4,8 @@ using WPFCootreguaV2.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.UserControls;
+using WPFCootreguaV2.Domain.ApiService.Models;
+using static WPFCootreguaV2.ApiService.Models.ApiResponse<T>;
 using static WPFCootreguaV2.Presentation.UserControls.ListOfObligationsViewModel;
 
 namespace WPFCootreguaV2.Domain.UIServices
@@ -31,6 +33,13 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         public TransactionDto ApiDto { get; set; }
         public int IdTransaccionApi { get; set; }
+
+        public Person DataPerson { get; set; }
+
+        public List<ProductsState> DataProducts { get; set; }
+        public ProductsState ProductSelect { get; set; }
+
+        public Payer payer { get; set; }
 
         public int IdPaypad { get; set; } = 3;
         public string? TipoRecaudo { get; set; }
@@ -83,4 +92,21 @@ namespace WPFCootreguaV2.Domain.UIServices
         public string IdTransaccion { get; set; }
 
     }
+    public class Person
+    {
+        public long CodPerson { get; set; }
+        public string Identification { get; set; }
+        public string FirstName { get; set; }
+        public string SecondName { get; set; }
+        public string FirstLastName { get; set; }
+        public string SecondLastName { get; set; }
+        public string Adress { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string CellPhone { get; set; }
+        public int CodOficine { get; set; }
+    }
+
+
 }
+

@@ -7,9 +7,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-             Height="1720" 
-             Width="680">
+             Height="1920" 
+             Width="1080">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="{StaticResource BTN_AUTENTICATE}" Stretch="Uniform"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="300" />
             <RowDefinition Height="*" />
@@ -21,7 +24,7 @@
         </Grid>
 
         <Grid Grid.Row="1" >
-            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="150,138,150,286" RenderTransformOrigin="0.5,0.5" >
+            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="428,10,10,488" RenderTransformOrigin="0.5,0.5" >
                 <local:GifViewer.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
@@ -44,7 +47,7 @@
                 Height="90"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="52,57,0,0"
+                Margin="583,46,0,0"
                 Stretch="Uniform"
                 PreviewMouseDown="OpcionButton_Click"
             />

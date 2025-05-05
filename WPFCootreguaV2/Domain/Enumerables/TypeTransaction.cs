@@ -8,6 +8,7 @@ namespace WPFCootreguaV2.Domain.Enumerables
 {
     public enum TypeTransaction
     {
+        Retiro = 2,
         Consulta = 1,
         Pago,
         Registro,

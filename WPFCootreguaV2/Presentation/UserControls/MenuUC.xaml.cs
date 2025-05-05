@@ -19,6 +19,9 @@ using WPFCootreguaV2.Modals;
 using ManualInputViewModel = WPFCootreguaV2.UserControls.ManualInputViewModel;
 using WPFCootreguaV2.Domain.UIServices.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
+using System.Reflection;
+using WPFCootreguaV2.Domain.ApiService.Models;
+using System.Diagnostics;
 
 namespace WPFCootreguaV2.Presentation.UserControls
 {
@@ -40,7 +43,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
             _ts = Transaction.Instance;
             GoTimer();
 
-       //     printData();
+
+            //     printData();
         }
 
         public void printData()
@@ -87,18 +91,45 @@ namespace WPFCootreguaV2.Presentation.UserControls
             StopTimer();
         }
 
-        private void BtnPay_Predial(object sender, EventArgs e)
+        private void Btn_Identification(object sender, EventArgs e)
         {
-            _ts.TipoRecaudo = "Predial";
-            _ts.ProcedureManager = new SIGAMPayInvoiceManager();
-            Dispatcher.Invoke(() => GoTo(new SelectOptionUC()));
+            //_ts.TipoRecaudo = "Predial";
+           // _ts.ProcedureManager = new SIGAMPayInvoiceManager();
+            Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
         }
 
-        private void BtnPay_ICA(object sender, EventArgs e)
+        private void Btn_Authentication(object sender, EventArgs e)
         {
-            _ts.TipoRecaudo = "ICA";
-            _ts.ProcedureManager = new SIGAMPayInvoiceManager();
+            //_ts.TipoRecaudo = "ICA";
+            Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
+
         }
+
+        private void Btn_Products(object sender, EventArgs e)
+        {
+            //_ts.TipoRecaudo = "Predial";
+            // _ts.ProcedureManager = new SIGAMPayInvoiceManager();
+            Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
+        }
+
+        private void Btn_Withdrawal(object sender, EventArgs e)
+        {
+            //_ts.TipoRecaudo = "ICA";
+            Dispatcher.Invoke(() => GoTo(new PaymentUC()));
+
+            //AQUI LLAMA A LA VENTANA Withdrawal
+
+        }
+
+        private void Btn_CancelPay(object sender, EventArgs e)
+        {
+            //_ts.TipoRecaudo = "ICA";
+            Dispatcher.Invoke(() => GoTo(new PaymentUC()));
+
+            //AQUI LLAMA A LA VENTANA CancelPay
+
+        }
+
 
         private void BtnAtras_MouseDown(object sender, EventArgs e)
         {

@@ -17,7 +17,6 @@
     <BitmapImage x:Key="BTN_AUTENTICATE" UriSource="pack://application:,,,/Images/Backgrounds/autenticate.jpg"/>
     <BitmapImage x:Key="BTN_AUTENTICATE2" UriSource="pack://application:,,,/Images/Backgrounds/autenticate2.jpg"/>
     <BitmapImage x:Key="BTN_PRODUCTOS" UriSource="pack://application:,,,/Images/Backgrounds/elige.jpg"/>
-    <BitmapImage x:Key="BTN_GENERICO" UriSource="pack://application:,,,/Images/Backgrounds/generic.jpg"/>
 
     <!-- BUTTONS -->
     <BitmapImage x:Key="BTN_ATRAS" UriSource="pack://application:,,,/Images/Buttons/BtnAtrasTxt.png"/>

@@ -333,6 +333,9 @@
     <Compile Update="Presentation\UserControls\Steps\IdentificationUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Presentation\UserControls\Steps\ListProductsUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

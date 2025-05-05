@@ -54,10 +54,9 @@ namespace WPFCootreguaV2.UserControls
             this.DataContext = _viewModel;
             this.Unloaded += OnUnloaded;
             this.Loaded += Onloaded;
-            Keyboard.KeyboardPressed += OnKeyboardPressed;
             GoTimer();
 
-            IcoReferencia.Visibility = Visibility.Visible;
+           
 
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -74,43 +73,68 @@ namespace WPFCootreguaV2.UserControls
             //       _viewModel.HelpMessage = "Ingresa número de cuenta o referente";
         }
 
+
+        private async void OpcionButton_Click(object sender, EventArgs e)
+        {
+
+            var control = sender as FrameworkElement;
+
+            // Validar que el control tenga un Tag definido
+            if (control == null || control.Tag == null)
+            {
+                return;
+            }
+
+            string tag = control.Tag.ToString();
+
+            //if (tag == "Gimnasio")
+            //{
+            //    _ts.EspacioReservar = tag;
+            //    Requestconsultarinscripciongimnasio request = new Requestconsultarinscripciongimnasio();
+            //    request.id_formulario = _ts.IdRegistroFormularioInder.ToString();
+            //    await _ts.ProcedureManagerInder.Getconsultarinscripciongimnasio(request);
+            //}
+            //else if (tag.Contains("Piscina"))
+            //{
+            //    _ts.EspacioReservar = tag;
+            //    Dispatcher.Invoke(() => GoTo(new SelectTipoRegistroPiscinaUC()));
+            //}
+            //else if (tag.Contains("Turcos"))
+            //{
+            //    _ts.EspacioReservar = tag;
+            //    // Ir primero a ManualInput para verificar si el usuario existe
+            //    Dispatcher.Invoke(() => GoTo(new ManualInputUC("Turcos")));
+            //}
+            //else
+            //{
+            //    // Verificar si es día de mantenimiento (lunes normal)
+            //    bool isDayOfMaintenance = AppConfig.Get("DiaMantenimiento") == diaActual;
+
+            //    // Si es lunes, verificar si es festivo
+            //    bool isMondayHoliday = false;
+            //    if (diaActual == "lunes")
+            //    {
+            //        // Verificar si el lunes actual es festivo
+            //        isMondayHoliday = ColombianHolidayHelper.IsColombianHoliday(DateTime.Today);
+            //        EventLogger.SaveLog(EventType.Info, $"Verificando si hoy ({DateTime.Today:yyyy-MM-dd}) es festivo: {isMondayHoliday}", null);
+            //    }
+
+            //    // Mostrar mensaje de mantenimiento solo si es día de mantenimiento y no es un lunes festivo
+            //    if (isDayOfMaintenance && !isMondayHoliday)
+            //    {
+            //        _nav.ShowModal($"Los días {diaActual} se realiza proceso de mantenimiento a este espacio.", new InfoModal());
+            //    }
+            //    else
+            //    {
+            //        _ts.EspacioReservar = tag;
+            //        Dispatcher.Invoke(() => GoTo(new ManualInputUC(tag)));
+            //    }
+            //}
+        }
+
         #region UI EVENTS
-        private async void OnKeyboardPressed(object? sender, string keyPressed)
-        {
-            if (string.IsNullOrEmpty(keyPressed)) return;
-            if (keyPressed == "Remove")
-            {
-                string text = InputInvoice.Text;
-                InputInvoice.Text = (text.Length > 1) ? text.Remove(text.Length - 1) : "";
-                if (text.Length > 1)
-                {
-                    InputInvoice.Text = text.Remove(text.Length - 1);
-                    return;
-                }
-                InputInvoice.Text = "";
-                return;
-            }
 
-            if (keyPressed == "Clear")
-            {
-                InputInvoice.Text = "";
-                return;
-            }
-
-            InputInvoice.Text += keyPressed;
-            await Task.Delay(100);
-        }
-
-        private void TxtInvoice_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.StatusMsg = "";
-            if (InputInvoice.Text.Length > 26)
-            {
-                InputInvoice.Text = InputInvoice.Text.Substring(0, InputInvoice.Text.Length - 1);
-                return;
-            }
-        }
-        private void BtnAtras_MouseDown(object sender, EventArgs e)
+        private void BtnCancelar_TouchDown(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() => GoTo(new SelectOptionUC()));
 
@@ -121,12 +145,7 @@ namespace WPFCootreguaV2.UserControls
             Dispatcher.Invoke(() => GoTo(new MainUC()));
 
         }
-        private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            TxtStatusMsg.Visibility = Visibility.Visible;
-            string doc = InputInvoice.Text;
-            await RequestDocData(doc);
-        }
+
         #endregion
 
         #region ScannerEvents
@@ -279,7 +298,7 @@ namespace WPFCootreguaV2.UserControls
 
             if (tag == "Clear")
             {
-                InputInvoice.Text = "";
+            //    InputInvoice.Text = "";
                 return;
             }
 

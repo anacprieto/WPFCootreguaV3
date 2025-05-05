@@ -111,7 +111,7 @@ namespace WPFCootreguaV2.Modals {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WPFCootreguaV2;V1.0.0.0;component/presentation/shared/modals/modalwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WPFCootreguaV2;component/presentation/shared/modals/modalwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Presentation\Shared\Modals\ModalWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

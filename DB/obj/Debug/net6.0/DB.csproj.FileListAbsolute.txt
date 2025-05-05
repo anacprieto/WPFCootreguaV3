@@ -26,3 +26,4 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\DB\obj\Debug\net6.0\re
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\DB\obj\Debug\net6.0\DB.pdb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\DB\obj\Debug\net6.0\DB.genruntimeconfig.cache
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\DB\obj\Debug\net6.0\ref\DB.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\DB\obj\Debug\net6.0\DB.sourcelink.json

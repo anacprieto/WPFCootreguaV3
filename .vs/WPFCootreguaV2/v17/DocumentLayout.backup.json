@@ -3,16 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\steps\\authenticationuc.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\steps\\authenticationuc.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\steps\\identificationuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\steps\\identificationuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\steps\\authenticationuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\steps\\authenticationuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\manualinputuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\manualinputuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\mainuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\mainuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\finishuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\finishuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\appusercontrol\\appusercontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\appusercontrol\\appusercontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\steps\\authenticationuc.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\steps\\authenticationuc.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\datapayuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -36,10 +52,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\images\\buttons\\btn0.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
       "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\images\\buttons\\btn0.png||{177559E0-D141-11D0-92DF-00A0C9138C45}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|c:\\users\\ana prieto\\desktop\\proyectos 2025\\wpfcootreguav2\\wpfcootreguav2\\presentation\\usercontrols\\manualinputuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{46CB02E5-D6F0-431E-98D5-71D09374A2A0}|WPFCootreguaV2\\WPFCootreguaV2.csproj|solutionrelative:wpfcootreguav2\\presentation\\usercontrols\\manualinputuc.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -49,7 +61,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -57,18 +69,56 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "IdentificationUC.xaml",
+              "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\Steps\\IdentificationUC.xaml",
+              "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\Steps\\IdentificationUC.xaml",
+              "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\Steps\\IdentificationUC.xaml",
+              "RelativeToolTip": "WPFCootreguaV2\\Presentation\\UserControls\\Steps\\IdentificationUC.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-05T12:59:16.521Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainUC.xaml",
+              "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml",
+              "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml",
+              "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml",
+              "RelativeToolTip": "WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-05T12:39:34.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AppUserControl.cs",
+              "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\AppUserControl\\AppUserControl.cs",
+              "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\AppUserControl\\AppUserControl.cs",
+              "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\AppUserControl\\AppUserControl.cs",
+              "RelativeToolTip": "WPFCootreguaV2\\Presentation\\AppUserControl\\AppUserControl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-02T22:23:36.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "FinishUC.xaml",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\FinishUC.xaml",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\FinishUC.xaml",
               "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\FinishUC.xaml",
               "RelativeToolTip": "WPFCootreguaV2\\Presentation\\UserControls\\FinishUC.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-02T21:52:42.658Z"
+              "WhenOpened": "2025-05-02T21:52:42.658Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "DataPayUC.xaml",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\DataPayUC.xaml",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\DataPayUC.xaml",
@@ -79,7 +129,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "ManualInputUC.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ManualInputUC.xaml.cs",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\ManualInputUC.xaml.cs",
@@ -91,20 +141,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "AuthenticationUC.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\Steps\\AuthenticationUC.xaml.cs",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\Steps\\AuthenticationUC.xaml.cs",
               "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\Steps\\AuthenticationUC.xaml.cs",
               "RelativeToolTip": "WPFCootreguaV2\\Presentation\\UserControls\\Steps\\AuthenticationUC.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACABAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-02T21:50:48.335Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "ManualInputUC.g.cs",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2-master\\WPFCootreguaV2\\obj\\Debug\\net6.0-windows\\Presentation\\UserControls\\Steps\\ManualInputUC.g.cs",
               "RelativeDocumentMoniker": "..\\WPFCootreguaV2-master\\WPFCootreguaV2\\obj\\Debug\\net6.0-windows\\Presentation\\UserControls\\Steps\\ManualInputUC.g.cs",
@@ -116,7 +166,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "CardPaymentUC.xaml",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\CardPaymentUC.xaml",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\CardPaymentUC.xaml",
@@ -134,11 +184,12 @@
               "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\Steps\\AuthenticationUC.xaml",
               "RelativeToolTip": "WPFCootreguaV2\\Presentation\\UserControls\\Steps\\AuthenticationUC.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-02T21:48:09.009Z"
+              "WhenOpened": "2025-05-02T21:48:09.009Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "Btn0.png -  [Espa\u00F1ol (Espa\u00F1a, alfabetizaci\u00F3n internacional)] - PNG [160x162, 32 bits, PNG]",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Images\\Buttons\\Btn0.png",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Images\\Buttons\\Btn0.png",
@@ -150,18 +201,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 2,
               "Title": "ManualInputUC.xaml",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ManualInputUC.xaml",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\ManualInputUC.xaml",
               "ToolTip": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ManualInputUC.xaml",
               "RelativeToolTip": "WPFCootreguaV2\\Presentation\\UserControls\\ManualInputUC.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-02T21:47:45.154Z"
+              "WhenOpened": "2025-05-02T21:47:45.154Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "ConfigUC.xaml",
               "DocumentMoniker": "C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ConfigUC.xaml",
               "RelativeDocumentMoniker": "WPFCootreguaV2\\Presentation\\UserControls\\ConfigUC.xaml",

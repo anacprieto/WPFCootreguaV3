@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Security;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
 using WPFCootreguaV2.Domain.UIServices;
 using WPFCootreguaV2.Domain.UIServices.Integrations;
+using WPFCootreguaV2.Domain.Variables;
 using WPFCootreguaV2.Modals;
 using WPFCootreguaV2.Presentation.UserControls;
 
@@ -26,12 +28,12 @@ namespace WPFCootreguaV2.UserControls
     /// <summary>
     /// Lógica de interacción para ScanInputUC.xaml
     /// </summary>
-    public partial class ManualInputUC : AppUserControl
+    public partial class IdentificationUC : AppUserControl
     {
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
-        private ManualInputViewModel _viewModel;
+        private IdentificationViewModel _viewModel;
         private ModalWindow? _currentLoadModal = null;
 
         #region Regex properies
@@ -45,19 +47,19 @@ namespace WPFCootreguaV2.UserControls
         private string _NoConvenio = string.Empty;
         #endregion
 
-        public ManualInputUC()
+        public IdentificationUC()
         {
             InitializeComponent();
             _ts = Transaction.Instance;
 
-            _viewModel = new ManualInputViewModel();
+            _viewModel = new IdentificationViewModel();
             this.DataContext = _viewModel;
             this.Unloaded += OnUnloaded;
             this.Loaded += Onloaded;
             Keyboard.KeyboardPressed += OnKeyboardPressed;
             GoTimer();
 
-            IcoReferencia.Visibility = Visibility.Visible;
+            //IcoReferencia.Visibility = Visibility.Visible;
 
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -75,38 +77,114 @@ namespace WPFCootreguaV2.UserControls
         }
 
         #region UI EVENTS
+
+        private void TxtIdentification_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                TextBox text = (TextBox)sender;
+                int length = text.Text.Length;
+                if (length > 10)
+                {
+                    text.Text = text.Text.Remove(text.Text.Length - 1);
+                }
+                _viewModel.StatusMsg = "";
+
+                if (length >= 5)
+                {
+                    BtnContinuar.IsEnabled = true;
+                    BtnContinuar.Opacity = 1;
+                }
+                else
+                {
+                    BtnContinuar.IsEnabled = false;
+                    BtnContinuar.Opacity = 0.3;
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Info, "Se consulto la cc ", this.GetType().Name, ex.ToString());
+
+            }
+        }
+        //BtnContinuar_TouchDown
+
+        private async void BtnCancel_TouchDown(object sender, EventArgs e)
+        {
+            _ = Dispatcher.BeginInvoke(() => BtnCancelar.Visibility = Visibility.Collapsed);
+
+            if (!_nav.ShowModal(Messages.CANCEL_TRANSACTION, new ConfirmationModal()))
+            {
+                _ = Dispatcher.BeginInvoke(() => BtnCancelar.Visibility = Visibility.Visible);
+                return;
+            }
+            EventLogger.SaveLog(EventType.Info, "Pago cancelado por el usuario.");
+            await CancelPay();
+        }
+
+        private async Task CancelPay()
+        {
+            try
+            {
+//                if (_paymentViewModel.IsPayCompleted) return;
+//#if NO_PERIPHERALS
+//#else
+//                await _peripherals.StopAceptance();
+//#endif
+//                _isPayCanceled = true;
+//                _tranStateTemp = StateTransaction.Cancelada;
+
+//                if (_paymentViewModel.EnteredAmount > 0)
+//                {
+//                    _paymentViewModel.ReturnAmount = _paymentViewModel.EnteredAmount;
+//                    _currentLoadModal = _nav.ShowLoadModal("Transacción cancelada. Devolución en curso...");
+//                    ReturnMoney(_paymentViewModel.EnteredAmount);
+//                }
+//                else
+//                {
+//                    _currentLoadModal = _nav.ShowLoadModal("Transacción cancelada");
+//                    _ts.DevueltaCorrecta = true;
+//                    await SavePay();
+//                }
+
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+            }
+        }
         private async void OnKeyboardPressed(object? sender, string keyPressed)
         {
             if (string.IsNullOrEmpty(keyPressed)) return;
             if (keyPressed == "Remove")
             {
-                string text = InputInvoice.Text;
-                InputInvoice.Text = (text.Length > 1) ? text.Remove(text.Length - 1) : "";
+                string text = TxtIdentification.Text;
+                TxtIdentification.Text = (text.Length > 1) ? text.Remove(text.Length - 1) : "";
                 if (text.Length > 1)
                 {
-                    InputInvoice.Text = text.Remove(text.Length - 1);
+                    TxtIdentification.Text = text.Remove(text.Length - 1);
                     return;
                 }
-                InputInvoice.Text = "";
+                TxtIdentification.Text = "";
                 return;
             }
 
             if (keyPressed == "Clear")
             {
-                InputInvoice.Text = "";
+                TxtIdentification.Text = "";
                 return;
             }
 
-            InputInvoice.Text += keyPressed;
+            TxtIdentification.Text += keyPressed;
             await Task.Delay(100);
         }
 
         private void TxtInvoice_TextChanged(object sender, TextChangedEventArgs e)
         {
             _viewModel.StatusMsg = "";
-            if (InputInvoice.Text.Length > 26)
+            if (TxtIdentification.Text.Length > 26)
             {
-                InputInvoice.Text = InputInvoice.Text.Substring(0, InputInvoice.Text.Length - 1);
+                TxtIdentification.Text = TxtIdentification.Text.Substring(0, TxtIdentification.Text.Length - 1);
                 return;
             }
         }
@@ -124,8 +202,8 @@ namespace WPFCootreguaV2.UserControls
         private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             TxtStatusMsg.Visibility = Visibility.Visible;
-            string doc = InputInvoice.Text;
-            await RequestDocData(doc);
+            //string doc = TxtIdentification.Text;
+            //await RequestDocData(doc);
         }
         #endregion
 
@@ -279,14 +357,14 @@ namespace WPFCootreguaV2.UserControls
 
             if (tag == "Clear")
             {
-                InputInvoice.Text = "";
+                TxtIdentification.Text = "";
                 return;
             }
 
         }
     }
 
-    public class ManualInputViewModel : INotifyPropertyChanged
+    public class IdentificationViewModel : INotifyPropertyChanged
     {
         private string _statusMsg = string.Empty;
 

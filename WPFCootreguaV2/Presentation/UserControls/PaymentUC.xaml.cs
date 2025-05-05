@@ -240,6 +240,7 @@ namespace WPFCootreguaV2.UserControls
             if (!_nav.ShowModal(Messages.CANCEL_TRANSACTION, new ConfirmationModal()))
             {
                 _ = Dispatcher.BeginInvoke(() => BtnCancel.Visibility = Visibility.Visible);
+                _ = Dispatcher.BeginInvoke(() => BtnCancel.Visibility = Visibility.Visible);
                 return;
             }
             EventLogger.SaveLog(EventType.Info, "Pago cancelado por el usuario.");

@@ -12,6 +12,8 @@
             <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
         </Grid.Background>
 
+        <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
+
         <!-- HEADER -->
         <Image x:Name="BtnAtras" Source="{StaticResource BTN_ATRAS}" Margin="48,48,858,1808"
         MouseDown="BtnAtras_MouseDown"/>
@@ -19,7 +21,6 @@
         <Image x:Name="BtnSalir" Source="{StaticResource BTN_SALIR}" Margin="861,40,33,1796"
         MouseDown="BtnSalir_MouseDown"/>
 
-        <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,12,0,0"/>
 
         <!--BODY-->
         <Image Source="{StaticResource TXTPAGAAQUI}" Margin="321,279,321,1515" />

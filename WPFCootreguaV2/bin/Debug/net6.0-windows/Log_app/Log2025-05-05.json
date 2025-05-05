@@ -308,3 +308,65 @@
     "WatsonBuckets": null
   }
 }
+{
+  "Time": "10:23:13.837 a. m.",
+  "IdTransaction": 0,
+  "Type": "Info",
+  "Class": "ConfigUC.xaml",
+  "Method": "InitPayPad",
+  "Message": "Inicializando Pay+",
+  "Obj": null
+}
+{
+  "Time": "10:23:14.621 a. m.",
+  "IdTransaction": 0,
+  "Type": "Error",
+  "Class": "ConfigUC.xaml",
+  "Method": "InitPayPad",
+  "Message": "Ocurrió un error en tiempo de ejecución Could not find a part of the path 'C:\\Users\\Jhosef.H\\Desktop\\Proyectos\\Proyectos Jhosef\\FloridaBlanca\\WPFCootreguaV2\\WPFCootreguaV2\\bin\\Debug\\net6.0-windows\\Images\\Publish'.",
+  "Obj": {
+    "ClassName": "System.IO.DirectoryNotFoundException",
+    "Message": "Could not find a part of the path 'C:\\Users\\Jhosef.H\\Desktop\\Proyectos\\Proyectos Jhosef\\FloridaBlanca\\WPFCootreguaV2\\WPFCootreguaV2\\bin\\Debug\\net6.0-windows\\Images\\Publish'.",
+    "Data": null,
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.IO.Enumeration.FileSystemEnumerator`1.CreateDirectoryHandle(String path, Boolean ignoreNotFound)\r\n   at System.IO.Enumeration.FileSystemEnumerator`1.Init()\r\n   at System.IO.Enumeration.FileSystemEnumerator`1..ctor(String directory, Boolean isNormalized, EnumerationOptions options)\r\n   at System.IO.Enumeration.FileSystemEnumerable`1..ctor(String directory, FindTransform transform, EnumerationOptions options, Boolean isNormalized)\r\n   at System.IO.Enumeration.FileSystemEnumerableFactory.UserFiles(String directory, String expression, EnumerationOptions options)\r\n   at System.IO.Directory.InternalEnumeratePaths(String path, String searchPattern, SearchTarget searchTarget, EnumerationOptions options)\r\n   at System.IO.Directory.GetFiles(String path, String searchPattern, EnumerationOptions enumerationOptions)\r\n   at System.IO.Directory.GetFiles(String path)\r\n   at WPFCootreguaV2.Presentation.UserControls.MainUC.LoadFiles() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml.cs:line 48\r\n   at WPFCootreguaV2.Presentation.UserControls.MainUC..ctor() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml.cs:line 38\r\n   at WPFCootreguaV2.UserControls.ConfigUC.<InitPayPad>b__3_0() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ConfigUC.xaml.cs:line 76\r\n   at System.Windows.Threading.Dispatcher.Invoke(Action callback, DispatcherPriority priority, CancellationToken cancellationToken, TimeSpan timeout)\r\n   at System.Windows.Threading.Dispatcher.Invoke(Action callback)\r\n   at WPFCootreguaV2.UserControls.ConfigUC.InitPayPad() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ConfigUC.xaml.cs:line 76",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": null,
+    "HResult": -2147024893,
+    "Source": "System.Private.CoreLib",
+    "WatsonBuckets": null
+  }
+}
+{
+  "Time": "10:30:17.907 a. m.",
+  "IdTransaction": 0,
+  "Type": "Info",
+  "Class": "ConfigUC.xaml",
+  "Method": "InitPayPad",
+  "Message": "Inicializando Pay+",
+  "Obj": null
+}
+{
+  "Time": "10:30:18.502 a. m.",
+  "IdTransaction": 0,
+  "Type": "Error",
+  "Class": "ConfigUC.xaml",
+  "Method": "InitPayPad",
+  "Message": "Ocurrió un error en tiempo de ejecución Could not find a part of the path 'C:\\Users\\Jhosef.H\\Desktop\\Proyectos\\Proyectos Jhosef\\FloridaBlanca\\WPFCootreguaV2\\WPFCootreguaV2\\bin\\Debug\\net6.0-windows\\Images\\Publish'.",
+  "Obj": {
+    "ClassName": "System.IO.DirectoryNotFoundException",
+    "Message": "Could not find a part of the path 'C:\\Users\\Jhosef.H\\Desktop\\Proyectos\\Proyectos Jhosef\\FloridaBlanca\\WPFCootreguaV2\\WPFCootreguaV2\\bin\\Debug\\net6.0-windows\\Images\\Publish'.",
+    "Data": null,
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.IO.Enumeration.FileSystemEnumerator`1.CreateDirectoryHandle(String path, Boolean ignoreNotFound)\r\n   at System.IO.Enumeration.FileSystemEnumerator`1.Init()\r\n   at System.IO.Enumeration.FileSystemEnumerator`1..ctor(String directory, Boolean isNormalized, EnumerationOptions options)\r\n   at System.IO.Enumeration.FileSystemEnumerable`1..ctor(String directory, FindTransform transform, EnumerationOptions options, Boolean isNormalized)\r\n   at System.IO.Enumeration.FileSystemEnumerableFactory.UserFiles(String directory, String expression, EnumerationOptions options)\r\n   at System.IO.Directory.InternalEnumeratePaths(String path, String searchPattern, SearchTarget searchTarget, EnumerationOptions options)\r\n   at System.IO.Directory.GetFiles(String path, String searchPattern, EnumerationOptions enumerationOptions)\r\n   at System.IO.Directory.GetFiles(String path)\r\n   at WPFCootreguaV2.Presentation.UserControls.MainUC.LoadFiles() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml.cs:line 48\r\n   at WPFCootreguaV2.Presentation.UserControls.MainUC..ctor() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\MainUC.xaml.cs:line 38\r\n   at WPFCootreguaV2.UserControls.ConfigUC.<InitPayPad>b__3_0() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ConfigUC.xaml.cs:line 76\r\n   at System.Windows.Threading.Dispatcher.Invoke(Action callback, DispatcherPriority priority, CancellationToken cancellationToken, TimeSpan timeout)\r\n   at System.Windows.Threading.Dispatcher.Invoke(Action callback)\r\n   at WPFCootreguaV2.UserControls.ConfigUC.InitPayPad() in C:\\Users\\Ana Prieto\\Desktop\\PROYECTOS 2025\\WPFCootreguaV2\\WPFCootreguaV2\\Presentation\\UserControls\\ConfigUC.xaml.cs:line 76",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": null,
+    "HResult": -2147024893,
+    "Source": "System.Private.CoreLib",
+    "WatsonBuckets": null
+  }
+}

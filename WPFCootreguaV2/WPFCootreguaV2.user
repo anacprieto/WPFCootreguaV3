@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Presentation\Shared\Modals\ModalWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\AquaMana\DataReferenceAquaUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\AquaMana\ManualInputAquaUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\AquaMana\ScanFacturaAquaUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\AquaMana\SelectOptionAquaUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\ConfigUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\DataPayUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Industria\DataPayICAUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Industria\ManualInputaICAUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Industria\ScanFactureUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Industria\SelectOptionICAUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\MainUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\MenuUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\PaymentUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\ScanInputUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\SelectOptionUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\Shared\Components\GenericButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\Shared\Components\GifViewer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\Shared\Components\NumericKeyboard.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\Shared\Components\ResourceText.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\Shared\Modals\ModalWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\AquaMana\DataReferenceAquaUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\AquaMana\ManualInputAquaUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\AquaMana\ScanFacturaAquaUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\AquaMana\SelectOptionAquaUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\ConfigUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\DataPayUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\Industria\DataPayICAUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\Industria\ManualInputaICAUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\Industria\ScanFactureUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\Industria\SelectOptionICAUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\MainUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\ManualInputUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\FinishUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\MenuUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\PaymentUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\ScanInputUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Presentation\UserControls\SelectOptionUC.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

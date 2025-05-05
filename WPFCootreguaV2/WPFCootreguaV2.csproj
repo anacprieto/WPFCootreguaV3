@@ -1,0 +1,1030 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);NO_DATAFONO;NO_PERIPHERALS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Images\Publish\**" />
+    <EmbeddedResource Remove="Images\Publish\**" />
+    <None Remove="Images\Publish\**" />
+    <Page Remove="Images\Publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="icono.ico" />
+    <None Remove="Images\Backgrounds\BackFinish.jpg" />
+    <None Remove="Images\Backgrounds\BgGenerico.jpg" />
+    <None Remove="Images\Backgrounds\BgInicio.jpg" />
+    <None Remove="Images\Backgrounds\BgInicio.png" />
+    <None Remove="Images\Buttons\Btn0.png" />
+    <None Remove="Images\Buttons\Btn1.png" />
+    <None Remove="Images\Buttons\Btn2.png" />
+    <None Remove="Images\Buttons\Btn3.png" />
+    <None Remove="Images\Buttons\Btn4.png" />
+    <None Remove="Images\Buttons\Btn5.png" />
+    <None Remove="Images\Buttons\Btn6.png" />
+    <None Remove="Images\Buttons\Btn7.png" />
+    <None Remove="Images\Buttons\Btn8.png" />
+    <None Remove="Images\Buttons\Btn9.png" />
+    <None Remove="Images\Buttons\BtnAquaMana.png" />
+    <None Remove="Images\Buttons\BtnAtrasTxt.png" />
+    <None Remove="Images\Buttons\BtnCancelar.png" />
+    <None Remove="Images\Buttons\BtnConsultar.png" />
+    <None Remove="Images\Buttons\BtnContinuar.png" />
+    <None Remove="Images\Buttons\BtnDocumento.png" />
+    <None Remove="Images\Buttons\BtnEfectivo.png" />
+    <None Remove="Images\Buttons\BtnEscanear.png" />
+    <None Remove="Images\Buttons\BtnEscribir.png" />
+    <None Remove="Images\Buttons\BtnFinalizar.png" />
+    <None Remove="Images\Buttons\BtnICA.png" />
+    <None Remove="Images\Buttons\Btnlimpiar.png" />
+    <None Remove="Images\Buttons\BtnOmitir.png" />
+    <None Remove="Images\Buttons\BtnPagar.png" />
+    <None Remove="Images\Buttons\BtnPredial.png" />
+    <None Remove="Images\Buttons\BtnReferencia.png" />
+    <None Remove="Images\Buttons\BtnSalirTxt.png" />
+    <None Remove="Images\Buttons\BtnVolver.png" />
+    <None Remove="Images\Buttons\btn_chec.png" />
+    <None Remove="Images\Buttons\btn_comienza_aqui.png" />
+    <None Remove="Images\Buttons\btn_documento_cedula_nit.png" />
+    <None Remove="Images\Buttons\btn_efigas.png" />
+    <None Remove="Images\Buttons\btn_empocabal.png" />
+    <None Remove="Images\Buttons\btn_omitir.png" />
+    <None Remove="Images\Buttons\btn_pagar.png" />
+    <None Remove="Images\Buttons\btn_recaudo_impuesto_predial.png" />
+    <None Remove="Images\Buttons\btn_recaudo_industria_comercio.png" />
+    <None Remove="Images\Buttons\btn_recaudo_tramites_transito.png" />
+    <None Remove="Images\Buttons\icono_califica_servicio.png" />
+    <None Remove="Images\Buttons\txt_gracias.png" />
+    <None Remove="Images\Gif\datafono.gif" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_000_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_001_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_002_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_003_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_004_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_005_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_006_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_007_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_008_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_009_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_010_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_011_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_012_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_013_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_014_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_015_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_016_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_017_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_018_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_019_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_020_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_021_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_022_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_023_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_024_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_025_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_026_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_027_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_028_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_029_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_030_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_031_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_032_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_033_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_034_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_035_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_036_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_037_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_038_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_039_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_040_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_041_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_042_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_043_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_044_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_045_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_046_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_047_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_048_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_049_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_050_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_051_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_052_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_053_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_054_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_055_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_056_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_057_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_058_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_059_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_060_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_061_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_062_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_063_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_064_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_065_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_066_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_067_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_068_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_069_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_070_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_071_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_072_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_073_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_074_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_075_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_076_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_077_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_078_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_079_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_080_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_081_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_082_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_083_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_084_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_085_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_086_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_087_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_088_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_089_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_090_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_091_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_092_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_093_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_094_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_095_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_096_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_097_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_098_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_099_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_100_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_101_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_102_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_103_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_104_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_105_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_106_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_107_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_108_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_109_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_110_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_111_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_112_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_113_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_114_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_115_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_116_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_117_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_118_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_119_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_120_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_121_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_122_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_123_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_124_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_125_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_126_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_127_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_128_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_129_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_130_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_131_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_132_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_133_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_134_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_135_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_136_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_137_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_138_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_139_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_140_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_141_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_142_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_143_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_144_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_145_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_146_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_147_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_148_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_149_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_150_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_151_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_152_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_153_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_154_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_155_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_156_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_157_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_158_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_159_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_160_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_161_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_162_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_163_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_164_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_165_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_166_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_167_delay-0.02s.png" />
+    <None Remove="Images\Gif\GifFactureFrames\frame_168_delay-0.02s.png" />
+    <None Remove="Images\Gif\loading_marinilla.gif" />
+    <None Remove="Images\Gif\Scan.gif" />
+    <None Remove="Images\Gif\scaner_factura_Compressed.gif" />
+    <None Remove="Images\Others\BannerChec.png" />
+    <None Remove="Images\Others\BannerEfigas.png" />
+    <None Remove="Images\Others\check.png" />
+    <None Remove="Images\Others\ChecOk.png" />
+    <None Remove="Images\Others\IcoDocumento.png" />
+    <None Remove="Images\Others\icono_referencia_pagar.png" />
+    <None Remove="Images\Others\icono_referencia_pagar_industria_comercio.png" />
+    <None Remove="Images\Others\icono_referencia_pagar_tramite_transito.png" />
+    <None Remove="Images\Others\icono_solo_pago_efectivo.png" />
+    <None Remove="Images\Others\IcoReferencia.png" />
+    <None Remove="Images\Others\input_valor_total.png" />
+    <None Remove="Images\Others\item-cantidad.png" />
+    <None Remove="Images\Others\item_denominacion - copia.png" />
+    <None Remove="Images\Others\item_fecha_limite.png" />
+    <None Remove="Images\Others\item_referencia.png" />
+    <None Remove="Images\Others\item_seleccione.png" />
+    <None Remove="Images\Others\item_valor.png" />
+    <None Remove="Images\Others\leynda_linea_atencion.png" />
+    <None Remove="Images\Others\LineaAtencion.png" />
+    <None Remove="Images\Others\LogoDobleclick.png" />
+    <None Remove="Images\Others\scannerVideo.wmv" />
+    <None Remove="Images\Others\star.png" />
+    <None Remove="Images\Others\StarS.png" />
+    <None Remove="Images\Others\TxtDireccion.png" />
+    <None Remove="Images\Others\TxtEscribe.png" />
+    <None Remove="Images\Others\TxtFechaVencimiento.png" />
+    <None Remove="Images\Others\TxtIngresaMedidor.png" />
+    <None Remove="Images\Others\TxtIngresaNum.png" />
+    <None Remove="Images\Others\TxtOpcionConsult.png" />
+    <None Remove="Images\Others\TxtOpcionEscanea.png" />
+    <None Remove="Images\Others\TxtPagaAqui.png" />
+    <None Remove="Images\Others\TxtReferenciaPago.png" />
+    <None Remove="Images\Others\TxtSelecciona.png" />
+    <None Remove="Images\Others\TxtSeleccionTipo.png" />
+    <None Remove="Images\Others\TxtValorPagar.png" />
+    <None Remove="Images\Others\txt_calificza_serivicio.png" />
+    <None Remove="Images\Others\txt_ingrese_dinero.png" />
+    <None Remove="Images\Others\txt_pago_factura.png" />
+    <None Remove="Images\Others\txt_selecciona_la_opcion.png" />
+    <None Remove="Images\Others\txt_selecciona_opcion_a_utilizar.png" />
+    <None Remove="Images\Others\txt_seleccione_la_referencia_a_pagar.png" />
+    <None Remove="Images\Others\voucher.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Images\Gif\GifFactureFrames\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="Icon.ico" />
+	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DB\DB.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Presentation\UserControls\ManualInputUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\FinishUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Steps\AuthenticationUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Steps\IdentificationUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net6.0-windows\" />
+    <Folder Include="Domain\Peripherals\Recorder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="KioskosLib">
+      <HintPath>..\DLLS\Datafono\KioskosLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MPOST">
+      <HintPath>..\DLLS\MPOST6\MPOST.dll</HintPath>
+    </Reference>
+    <Reference Include="TEFII_NET">
+      <HintPath>..\..\..\..\..\..\..\..\TEFII_NET\TEFII_NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icono.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\BackFinish.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\BgGenerico.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\BgInicio.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn8.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btn9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnAquaMana.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnAtrasTxt.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnDocumento.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnEfectivo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnFinalizar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnICA.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\Btnlimpiar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnOmitir.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnPagar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnPredial.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnReferencia.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnSalirTxt.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnCancelar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnConsultar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnContinuar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnVolver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Gif\datafono.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Gif\loading_marinilla.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Gif\Scan.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Gif\scaner_factura_Compressed.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\check.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\ChecOk.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\IcoDocumento.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\IcoReferencia.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\LineaAtencion.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\LogoDobleclick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\star.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\StarS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtDireccion.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtEscribe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtFechaVencimiento.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtIngresaMedidor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtIngresaNum.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtOpcionConsult.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtOpcionEscanea.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtPagaAqui.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtReferenciaPago.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtSelecciona.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtSeleccionTipo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\TxtValorPagar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Images\Gif\GifFactureFrames\frame_000_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_001_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_002_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_003_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_004_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_005_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_006_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_007_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_008_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_009_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_010_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_011_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_012_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_013_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_014_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_015_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_016_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_017_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_018_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_019_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_020_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_021_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_022_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_023_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_024_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_025_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_026_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_027_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_028_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_029_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_030_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_031_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_032_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_033_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_034_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_035_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_036_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_037_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_038_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_039_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_040_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_041_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_042_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_043_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_044_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_045_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_046_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_047_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_048_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_049_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_050_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_051_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_052_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_053_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_054_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_055_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_056_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_057_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_058_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_059_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_060_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_061_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_062_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_063_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_064_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_065_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_066_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_067_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_068_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_069_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_070_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_071_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_072_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_073_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_074_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_075_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_076_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_077_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_078_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_079_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_080_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_081_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_082_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_083_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_084_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_085_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_086_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_087_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_088_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_089_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_090_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_091_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_092_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_093_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_094_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_095_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_096_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_097_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_098_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_099_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_100_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_101_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_102_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_103_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_104_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_105_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_106_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_107_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_108_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_109_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_110_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_111_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_112_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_113_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_114_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_115_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_116_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_117_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_118_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_119_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_120_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_121_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_122_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_123_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_124_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_125_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_126_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_127_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_128_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_129_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_130_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_131_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_132_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_133_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_134_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_135_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_136_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_137_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_138_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_139_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_140_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_141_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_142_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_143_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_144_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_145_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_146_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_147_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_148_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_149_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_150_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_151_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_152_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_153_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_154_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_155_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_156_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_157_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_158_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_159_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_160_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_161_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_162_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_163_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_164_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_165_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_166_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_167_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Images\Gif\GifFactureFrames\frame_168_delay-0.02s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

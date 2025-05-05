@@ -1,0 +1,89 @@
+﻿<Window x:Class="WPFCootreguaV2.Modals.ModalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFCootreguaV2.Modals"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:converters="clr-namespace:WPFCootreguaV2.Presentation.Shared.Converters"
+        mc:Ignorable="d"
+        Title="ModalWindow"
+        WindowStyle="None"
+        Topmost="False"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Height="1920" Width="1080">
+
+    <Viewbox x:Name="WindowVB" Stretch="Uniform">
+        <Grid Width="1080" Height="1920">
+            <Grid.Resources>
+                <converters:ToUpperCase x:Key="ToUpper" />
+            </Grid.Resources>
+            <Grid.Background>
+                <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+            </Grid.Background>
+
+            <TextBlock 
+                x:Name="TxtTitle" 
+                Text="{Binding Title, Converter={StaticResource ToUpper}}"
+                Style="{StaticResource TitleStyle}"
+                Margin="0,350,0,0"
+            />
+
+            <TextBlock
+                x:Name="TxtMsg" 
+                Text="{Binding Message}"
+                Style="{StaticResource MessageTextStyle}"
+                TextWrapping="WrapWithOverflow"
+                TextAlignment="Center" Height="520" Margin="190,548,190,0" 
+                />
+
+            <mah:ProgressRing 
+                x:Name="LoadGif"
+                Foreground="{StaticResource PRIMARYCOLOR}"
+                Style="{StaticResource ProgressRingStyle}"
+                Height="400" 
+                Width="400" 
+                Margin="0,1119,0,0" 
+            />
+
+
+            <Image 
+                x:Name="BtnOk" 
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Height="120"
+                Margin="0,1696,0,0"
+                MouseDown="BtnOk_MouseDown"
+                TouchDown="BtnOk_MouseDown"
+                Source="{StaticResource BTN_CONTINUAR}" 
+                Stretch="Uniform" Width="400" 
+             />
+
+            <Image 
+                x:Name="BtnNo" 
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Height="100"
+                Visibility="Visible"
+                Margin="70,0,0,115"
+                MouseDown="BtnNo_MouseDown"
+                TouchDown="BtnNo_MouseDown"
+                Source="{StaticResource BTN_CANCELAR}"
+                Stretch="Uniform" />
+
+            <Image 
+                x:Name="BtnYes" 
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Height="100"
+                Visibility="Visible"
+                Margin="0,0,70,115"
+                MouseDown="BtnYes_MouseDown"
+                TouchDown="BtnYes_MouseDown"
+                Source="{StaticResource BTN_CONTINUAR}" 
+                Stretch="Uniform" 
+            />
+        </Grid>
+    </Viewbox>
+</Window>

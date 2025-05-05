@@ -1,0 +1,75 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- BACKGROUND WELCOME IS A RESOURCE IT WILL BE JUST ON WELCOME SCREEN  -->
+    <BitmapImage x:Key="BACKWELCOME" UriSource="pack://application:,,,/Images/Backgrounds/BgInicio.jpg"/>
+    <!-- BACKGROUND GENERIC IS A COMMON RESOURCE ON THE SCREENS -->
+    <BitmapImage x:Key="BACKGENERIC" UriSource="pack://application:,,,/Images/Backgrounds/BgGenerico.jpg"/>
+    <BitmapImage x:Key="BACKCALIFICA" UriSource="pack://application:,,,/Images/Backgrounds/BackFinish.jpg"/>
+
+    <!-- CUSTOM BACKGROUNDS -->
+
+    <!-- LOGOS -->
+
+    <!-- BUTTONS -->
+    <BitmapImage x:Key="BTN_ATRAS" UriSource="pack://application:,,,/Images/Buttons/BtnAtrasTxt.png"/>
+    <BitmapImage x:Key="BTN_SALIR" UriSource="pack://application:,,,/Images/Buttons/BtnSalirTxt.png"/>
+    <BitmapImage x:Key="BTN_PREDIAL" UriSource="pack://application:,,,/Images/Buttons/BtnPredial.png"/>
+    <BitmapImage x:Key="BTN_AQUAMANA" UriSource="pack://application:,,,/Images/Buttons/BtnAquaMana.png"/>
+    <BitmapImage x:Key="BTN_ICA" UriSource="pack://application:,,,/Images/Buttons/BtnICA.png"/>
+    <BitmapImage x:Key="BTN_REFERENCIA" UriSource="pack://application:,,,/Images/Buttons/BtnReferencia.png"/>
+    <BitmapImage x:Key="BTN_DOCUMENTO" UriSource="pack://application:,,,/Images/Buttons/BtnDocumento.png"/>
+    
+
+    <BitmapImage x:Key="BTN_CONSULTAR" UriSource="pack://application:,,,/Images/Buttons/BtnConsultar.png"/>
+    <BitmapImage x:Key="BTN_CONTINUAR" UriSource="pack://application:,,,/Images/Buttons/BtnContinuar.png"/>
+    <BitmapImage x:Key="BTN_CANCELAR" UriSource="pack://application:,,,/Images/Buttons/BtnCancelar.png"/>
+    <BitmapImage x:Key="BTN_FINALIZAR" UriSource="pack://application:,,,/Images/Buttons/BtnFinalizar.png"/>
+    <BitmapImage x:Key="BTN_OMITIR" UriSource="pack://application:,,,/Images/Buttons/BtnOmitir.png"/>
+    <BitmapImage x:Key="BTN_PAGAR" UriSource="pack://application:,,,/Images/Buttons/BtnPagar.png"/>
+    <BitmapImage x:Key="BTN_EFECTIVO" UriSource="pack://application:,,,/Images/Buttons/BtnEfectivo.png"/>
+   
+    <!-- OTHERS -->
+    <BitmapImage x:Key="ATENTION_LINE" UriSource="pack://application:,,,/Images/Others/LineaAtencion.png"/>
+    <BitmapImage x:Key="ICO_STAR" UriSource="pack://application:,,,/Images/Others/Star.png"/>
+    <BitmapImage x:Key="ICO_STARS" UriSource="pack://application:,,,/Images/Others/StarS.png"/>
+    <BitmapImage x:Key="ICO_CHECK" UriSource="pack://application:,,,/Images/Others/check.png"/>
+    <BitmapImage x:Key="ICO_CHECKOK" UriSource="pack://application:,,,/Images/Others/checOk.png"/>
+    <BitmapImage x:Key="ICO_DOCUMENTO" UriSource="pack://application:,,,/Images/Others/IcoDocumento.png"/>
+    <BitmapImage x:Key="ICO_REFERENCIA" UriSource="pack://application:,,,/Images/Others/IcoReferencia.png"/>
+ 
+
+    <!--KEYBOARD-->
+
+    <BitmapImage x:Key="0" UriSource="pack://application:,,,/Images/Buttons/Btn0.png"/>
+    <BitmapImage x:Key="1" UriSource="pack://application:,,,/Images/Buttons/Btn1.png"/>
+    <BitmapImage x:Key="2" UriSource="pack://application:,,,/Images/Buttons/Btn2.png"/>
+    <BitmapImage x:Key="3" UriSource="pack://application:,,,/Images/Buttons/Btn3.png"/>
+    <BitmapImage x:Key="4" UriSource="pack://application:,,,/Images/Buttons/Btn4.png"/>
+    <BitmapImage x:Key="5" UriSource="pack://application:,,,/Images/Buttons/Btn5.png"/>
+    <BitmapImage x:Key="6" UriSource="pack://application:,,,/Images/Buttons/Btn6.png"/>
+    <BitmapImage x:Key="7" UriSource="pack://application:,,,/Images/Buttons/Btn7.png"/>
+    <BitmapImage x:Key="8" UriSource="pack://application:,,,/Images/Buttons/Btn8.png"/>
+    <BitmapImage x:Key="9" UriSource="pack://application:,,,/Images/Buttons/Btn9.png"/>
+    <BitmapImage x:Key="DELETE" UriSource="pack://application:,,,/Images/Buttons/BtnLimpiar.png"/>
+    <BitmapImage x:Key="LIMPIAR" UriSource="pack://application:,,,/Images/Buttons/BtnVolver.png"/>
+
+    <!--TEXTOS-->
+
+    <BitmapImage x:Key="TXTPAGAAQUI" UriSource="pack://application:,,,/Images/Others/TxtPagaAqui.png"/>
+
+    <BitmapImage x:Key="TXTVALORPAGAR" UriSource="pack://application:,,,/Images/Others/TxtValorPagar.png"/>
+    <BitmapImage x:Key="TXTDIRECCION" UriSource="pack://application:,,,/Images/Others/TxtDireccion.png"/>
+    <BitmapImage x:Key="TXTFECHAVENCIMIENTO" UriSource="pack://application:,,,/Images/Others/TxtFechaVencimiento.png"/>
+    <BitmapImage x:Key="TXTREFERENCIAPAGO" UriSource="pack://application:,,,/Images/Others/TxtReferenciaPago.png"/>
+    <BitmapImage x:Key="TextEscribe" UriSource="pack://application:,,,/Images/Others/TxtEscribe.png"/>
+    <BitmapImage x:Key="TxtSelecciona" UriSource="pack://application:,,,/Images/Others/TxtSelecciona.png"/>
+    <BitmapImage x:Key="TxtIngresaNum" UriSource="pack://application:,,,/Images/Others/TxtIngresaNum.png"/>
+    <BitmapImage x:Key="TXTSELECCIONATIPO" UriSource="pack://application:,,,/Images/Others/TxtSeleccionTipo.png"/>
+    <BitmapImage x:Key="TXTINGRESAMEDIDOR" UriSource="pack://application:,,,/Images/Others/TxtIngresaMedidor.png"/>
+    <BitmapImage x:Key="TXTOPCIONESCANER" UriSource="pack://application:,,,/Images/Others/TxtOpcionEscanea.png"/>
+    <BitmapImage x:Key="TXTOPCIONDIGITA" UriSource="pack://application:,,,/Images/Others/TxtOpcionConsult.png"/>
+
+    <!-- SVG RESOURCES -->
+
+</ResourceDictionary>

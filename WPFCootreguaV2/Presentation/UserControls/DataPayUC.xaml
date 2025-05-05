@@ -1,0 +1,127 @@
+﻿<local:AppUserControl x:Class="WPFCootreguaV2.Presentation.UserControls.DataPayUC"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
+            xmlns:converters="clr-namespace:WPFCootreguaV2.Presentation.Shared.Converters"
+            xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
+            xmlns:gif="http://wpfanimatedgif.codeplex.com"
+            mc:Ignorable="d" 
+            d:DesignHeight="1920" d:DesignWidth="1080">
+
+    <Grid>
+
+        
+        
+        <Grid.Background>
+            <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+        </Grid.Background>
+
+        <!-- HEADER -->
+        <Image x:Name="BtnAtras" Source="{StaticResource BTN_ATRAS}" Margin="37,37,828,1755"
+        MouseDown="BtnAtras_MouseDown"/>
+
+        <Image x:Name="BtnSalir" Source="{StaticResource BTN_SALIR}" Margin="840,39,26,1755"
+        MouseDown="BtnSalir_MouseDown"/>
+
+        <TextBlock x:Name="TxtTimer" Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,27,0,0"/>
+
+        <!-- BODY -->
+
+        <Image x:Name="BtnPredial" Source="{StaticResource BTN_PREDIAL}" Margin="434,262,407,1496"
+         />
+
+        <TextBlock Text="Seleccione la referencia a pagar" Foreground="{StaticResource SIXTARTCOLOR}" Style="{StaticResource TitleStyle}" Margin="0,429,0,0" Width="860"/>
+
+        <Border BorderThickness="10" BorderBrush="#326ea5" CornerRadius="50" Padding="40" Margin="10,525,10,375">
+
+            <Grid Margin="-40,-40,-40,-40">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Margin="5" Grid.Column="0" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
+                    <TextBlock Text="Referencia" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="25"/>
+                </Border>
+                <Border Margin="5" Grid.Column="1" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
+                    <TextBlock Text="Fecha Vencimiento" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="25"/>
+                </Border>
+                <Border Margin="5" Grid.Column="2" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
+                    <TextBlock Text="Total" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="25"/>
+                </Border>
+                <Border Margin="5" Grid.Column="3" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
+                    <TextBlock Text="Seleccione" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="25"/>
+                </Border>
+
+                <ListBox x:Name="DataView" Background="#0f0f"  BorderThickness="0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"   Margin="0,0,0,200">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center"  Width="1080">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Columna de Referencia -->
+                                <TextBlock x:Name="TxtReferenceData"  Text="{Binding Referencia}" Style="{StaticResource ViewBoxTextStyle}" FontSize="22" HorizontalAlignment="Center" FontWeight="Bold"  Grid.Column="0" />
+
+                                <!-- Columna de Fecha pago -->
+                                <TextBlock  Text="{Binding FechaPago}" Style="{StaticResource ViewBoxTextStyle}"  FontSize="25" HorizontalAlignment="Center" FontWeight="Bold"   Grid.Column="1" />
+
+                                <!-- Columna de Total -->
+                                <TextBlock  Text="{Binding Total, StringFormat=\{0:C0\}}" Style="{StaticResource ViewBoxTextStyle}"   FontSize="25" HorizontalAlignment="Center"   FontWeight="Bold" Grid.Column="2" />
+
+                                <!-- Columna de Selecione -->
+                                <Border Width="65" Grid.Column="5" Height="65" Background="{StaticResource PRIMARYCOLOR}" VerticalAlignment="Top" CornerRadius="50"  Visibility="Visible" PreviewMouseDown="SelectItem">
+                                    <md:PackIcon Kind="Check" x:Name="checkIcon" VerticalAlignment="Center" HorizontalAlignment="Center" Width="50" Height="50" Foreground="#fff" Visibility="Collapsed"/>
+                                </Border>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Border Background="{StaticResource LIGTHCOLOR}" CornerRadius="20" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Width="400" Height="130" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,38,30">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="2*"/>
+
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="VALOR TOTAL" Style="{StaticResource TitleStyle}" Foreground="{StaticResource PRIMARYCOLOR}" FontSize="30" VerticalAlignment="Bottom" />
+                        <TextBlock Grid.Row="1" Text="{Binding TxtTotal, StringFormat=\{0:C0\}}" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource PRIMARYCOLOR}" VerticalAlignment="Top" FontSize="50" />
+
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Image x:Name="BtnCancel" Source="{StaticResource BTN_CANCELAR}" Margin="141,1584,643,251"
+      MouseDown="BtnSalir_MouseDown"/>
+
+        <Image x:Name="BtnPAY" Source="{StaticResource BTN_PAGAR}" Margin="604,1584,180,251"
+            MouseDown="BtnContinuar_TouchDown"/>
+
+
+
+
+
+
+        <!--FOOTER-->
+
+        <Image Source="{StaticResource ATENTION_LINE}" Margin="353,1758,353,44" />
+
+
+    </Grid>
+</local:AppUserControl>

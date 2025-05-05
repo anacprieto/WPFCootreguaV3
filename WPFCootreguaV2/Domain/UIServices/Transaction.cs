@@ -1,0 +1,86 @@
+﻿using System.Collections.Generic;
+using WPFCootreguaV2.ApiService.IntegrationModels;
+using WPFCootreguaV2.ApiService.Models;
+using WPFCootreguaV2.Domain.Enumerables;
+using WPFCootreguaV2.Domain.Integrations;
+using WPFCootreguaV2.UserControls;
+using static WPFCootreguaV2.Presentation.UserControls.ListOfObligationsViewModel;
+
+namespace WPFCootreguaV2.Domain.UIServices
+{
+    public class Transaction
+    {
+        // Patron de Diseño Singleton
+        private static Transaction? _instance;
+        public static Transaction Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Transaction();
+                return _instance;
+            }
+        }
+
+        public static void Reset()
+        {
+            _instance = null;
+        }
+
+        private Transaction() { }
+
+        public TransactionDto ApiDto { get; set; }
+        public int IdTransaccionApi { get; set; }
+
+        public int IdPaypad { get; set; } = 3;
+        public string? TipoRecaudo { get; set; }
+        public TypeTransaction TipoTransaccion { get; set; }
+        public TypePayment TipoPago { get; set; }
+        public StateTransaction EstadoTransaccion { get; set; }
+        public string EstadoTransaccionVerb { get; set; }
+        public string? Referencia { get; set; }
+        public string? Documento { get; set; }
+        public string? Descripcion { get; set; }
+        public string? FechaVencimiento { get; set; }
+        public decimal TotalSinRedondear { get; set; }
+        public decimal Total { get; set; }
+        public decimal TotalDevuelta { get; set; }
+        public decimal TotalIngresado { get; set; }
+
+        public bool DevueltaCorrecta { get; set; }
+        public PaymentViewModel DatosPago { get; set; }
+        public string Calificacion { get; set; }
+        public IProcedureManager ProcedureManager { get; set; }
+
+        //Integración
+
+        public string TipoConsulta { get; set; }
+        public MunicipalDetails DetailsPago { get; set; }
+        public List<MunicipalDetails> ListFacture { get; set; }
+
+        public string Token { get; set; }
+
+        public decimal ValueScan { get; set; }
+
+        public string IdTipoPago { get; set; }
+
+        //Datafono
+
+        public RequestDatafonoInfo Datafono { get; set; }
+
+
+    }
+
+    public class RequestDatafonoInfo
+    {
+
+        public string Inicial { get; set; }
+
+        public string Value { get; set; }
+
+        public string PaypadID { get; set; }    
+
+        public string IdTransaccion { get; set; }
+
+    }
+}

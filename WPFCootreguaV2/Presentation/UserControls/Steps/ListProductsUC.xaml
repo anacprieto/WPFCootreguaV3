@@ -19,6 +19,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="447,62,0,0" HorizontalAlignment="Left" Height="38" Width="134"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -31,6 +32,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="80" />
             </Grid.ColumnDefinitions>
+
             <ListView 
          x:Name="lv_Products"
          HorizontalAlignment="Center" 

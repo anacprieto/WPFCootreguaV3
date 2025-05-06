@@ -35,14 +35,8 @@ namespace WPFCootreguaV2.UserControls
         private ModalWindow? _currentLoadModal = null;
 
         #region Regex properies
-        private string _regexReferencia = @"8020(0*[1-9]\d*)\u001d3900";
-        private string _regexValorPago = @"\u001d3900(0*[1-9]\d*)\u001d96";
-        private string _regexFechaVencimiento = @"\u001d96(\d*)";
 
         private string _referencia = string.Empty;
-        private string _valorPagar = string.Empty;
-        private string _fechaPago = string.Empty;
-        private string _NoConvenio = string.Empty;
         #endregion
 
         public ManualInputUC()
@@ -140,10 +134,10 @@ namespace WPFCootreguaV2.UserControls
 
                 EventLogger.SaveLog(EventType.Info, "Data readed from scanner", scannerRead);
 
-                _NoConvenio = scannerRead.Substring(3, 13);
+                //_NoConvenio = scannerRead.Substring(3, 13);
                 _referencia = scannerRead.Substring(20, 24);
-                _valorPagar = scannerRead.Substring(48, 12);
-                _fechaPago = scannerRead.Substring(62, 8);
+               // _valorPagar = scannerRead.Substring(48, 12);
+                //_fechaPago = scannerRead.Substring(62, 8);
 
                 RequestConsultData request = new RequestConsultData();
 

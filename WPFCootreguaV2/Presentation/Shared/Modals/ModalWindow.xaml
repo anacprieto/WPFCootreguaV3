@@ -16,16 +16,12 @@
 
     <Viewbox x:Name="WindowVB" Stretch="Uniform">
         <Grid Width="1080" Height="1920">
-            <Grid.Resources>
-                <converters:ToUpperCase x:Key="ToUpper" />
-            </Grid.Resources>
             <Grid.Background>
                 <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
             </Grid.Background>
 
             <TextBlock 
                 x:Name="TxtTitle" 
-                Text="{Binding Title, Converter={StaticResource ToUpper}}"
                 Style="{StaticResource TitleStyle}"
                 Margin="0,350,0,0"
             />
@@ -38,52 +34,6 @@
                 TextAlignment="Center" Height="520" Margin="190,548,190,0" 
                 />
 
-            <mah:ProgressRing 
-                x:Name="LoadGif"
-                Foreground="{StaticResource PRIMARYCOLOR}"
-                Style="{StaticResource ProgressRingStyle}"
-                Height="400" 
-                Width="400" 
-                Margin="0,1119,0,0" 
-            />
-
-
-            <Image 
-                x:Name="BtnOk" 
-                VerticalAlignment="Top"
-                HorizontalAlignment="Center"
-                Height="120"
-                Margin="0,1696,0,0"
-                MouseDown="BtnOk_MouseDown"
-                TouchDown="BtnOk_MouseDown"
-                Source="{StaticResource BTN_CONTINUAR}" 
-                Stretch="Uniform" Width="400" 
-             />
-
-            <Image 
-                x:Name="BtnNo" 
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Left"
-                Height="100"
-                Visibility="Visible"
-                Margin="70,0,0,115"
-                MouseDown="BtnNo_MouseDown"
-                TouchDown="BtnNo_MouseDown"
-                Source="{StaticResource BTN_CANCELAR}"
-                Stretch="Uniform" />
-
-            <Image 
-                x:Name="BtnYes" 
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
-                Height="100"
-                Visibility="Visible"
-                Margin="0,0,70,115"
-                MouseDown="BtnYes_MouseDown"
-                TouchDown="BtnYes_MouseDown"
-                Source="{StaticResource BTN_CONTINUAR}" 
-                Stretch="Uniform" 
-            />
         </Grid>
     </Viewbox>
 </Window>

@@ -33,8 +33,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
-        private ManualInputViewModel _viewModel;
-        private ModalWindow? _currentLoadModal = null;
+        //private ManualInputViewModel _viewModel;
+        //private ModalWindow? _currentLoadModal = null;
 
         public MenuUC()
         {

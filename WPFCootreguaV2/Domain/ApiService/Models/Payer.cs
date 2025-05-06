@@ -7,6 +7,7 @@ using WPFCootreguaV2.Domain.Enumerables;
 
 namespace WPFCootreguaV2.Domain.ApiService.Models
 {
+    
     public partial class Payer
     {
         public int PAYER_ID { get; set; }

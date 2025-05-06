@@ -23,18 +23,17 @@
 
 
         <!--BODY-->
-        <Image Source="{StaticResource TXTPAGAAQUI}" Margin="321,279,321,1515" />
+        <Image Source="{StaticResource TXTPAGAAQUI}" Margin="330,1004,312,790" />
 
 
 
-        <Image x:Name="BtnPredial" Source="{StaticResource BTN_PREDIAL}" Margin="109,789,599,691"
+        <!--<Image x:Name="BtnPredial" Source="{StaticResource BTN_PREDIAL}" Margin="109,789,599,691"
         MouseDown="BtnPay_Predial"/>
 
 
         <Image  x:Name="BtnICA" Source="{StaticResource BTN_ICA}" Margin="637,789,117,691"
         MouseDown="BtnPay_ICA"/>
-
-        <!--FOOTER-->
+-->
 
         <Image Source="{StaticResource ATENTION_LINE}" Margin="292,1740,292,50" />
 

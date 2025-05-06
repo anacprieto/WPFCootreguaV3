@@ -15,8 +15,8 @@ namespace WPFCootreguaV2.Domain.UIServices.Integrations
             try
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(plainText);
-                byte[] inArray = GetRijndaelManaged(key).CreateEncryptor().TransformFinalBlock(bytes, 0, bytes.Length);
-                return Convert.ToBase64String(inArray);
+               // byte[] inArray = GetRijndaelManaged(key).CreateEncryptor().TransformFinalBlock(bytes, 0, bytes.Length);
+                return Convert.ToBase64String(bytes);
             }
             catch (Exception)
             {
@@ -29,8 +29,11 @@ namespace WPFCootreguaV2.Domain.UIServices.Integrations
             try
             {
                 byte[] array = Convert.FromBase64String(encryptedText);
-                byte[] bytes = GetRijndaelManaged(key).CreateDecryptor().TransformFinalBlock(array, 0, array.Length);
-                return Encoding.UTF8.GetString(bytes);
+                //byte[] bytes = GetRijndaelManaged(key).CreateDecryptor().TransformFinalBlock(array, 0, array.Length);
+                //return Encoding.UTF8.GetString(bytes);
+                return Encoding.UTF8.GetString(array);
+
+
             }
             catch (Exception)
             {
@@ -38,34 +41,34 @@ namespace WPFCootreguaV2.Domain.UIServices.Integrations
             }
         }
 
-        private static RijndaelManaged GetRijndaelManaged(string secretKey)
-        {
-            try
-            {
-                if (secretKey == null)
-                {
-                    // Si no se proporciona una clave, usa el namespace de la clase que contiene el punto de entrada
-                    secretKey = Assembly.GetExecutingAssembly().EntryPoint.DeclaringType.Namespace;
-                }
+        //private static RijndaelManaged GetRijndaelManaged(string secretKey)
+        //{
+        //    try
+        //    {
+        //        if (secretKey == null)
+        //        {
+        //            // Si no se proporciona una clave, usa el namespace de la clase que contiene el punto de entrada
+        //            secretKey = Assembly.GetExecutingAssembly().EntryPoint.DeclaringType.Namespace;
+        //        }
 
-                byte[] array = new byte[16];
-                byte[] bytes = Encoding.UTF8.GetBytes(secretKey);
-                Array.Copy(bytes, array, Math.Min(array.Length, bytes.Length));
+        //        byte[] array = new byte[16];
+        //        byte[] bytes = Encoding.UTF8.GetBytes(secretKey);
+        //        Array.Copy(bytes, array, Math.Min(array.Length, bytes.Length));
 
-                return new RijndaelManaged
-                {
-                    Mode = CipherMode.CBC,
-                    Padding = PaddingMode.PKCS7,
-                    KeySize = 128,
-                    BlockSize = 128,
-                    Key = array,
-                    IV = array
-                };
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+        //        return new RijndaelManaged
+        //        {
+        //            Mode = CipherMode.CBC,
+        //            Padding = PaddingMode.PKCS7,
+        //            KeySize = 128,
+        //            BlockSize = 128,
+        //            Key = array,
+        //            IV = array
+        //        };
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

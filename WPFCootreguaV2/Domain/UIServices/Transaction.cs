@@ -5,14 +5,16 @@ using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.UserControls;
 using WPFCootreguaV2.Domain.ApiService.Models;
-using static WPFCootreguaV2.ApiService.Models.ApiResponse<T>;
 using static WPFCootreguaV2.Presentation.UserControls.ListOfObligationsViewModel;
+using System;
 
 namespace WPFCootreguaV2.Domain.UIServices
 {
     public class Transaction
     {
         // Patron de Diseño Singleton
+        public static ETransactionType TransactionType { get; set; }
+
         private static Transaction? _instance;
         public static Transaction Instance
         {
@@ -105,6 +107,58 @@ namespace WPFCootreguaV2.Domain.UIServices
         public string Email { get; set; }
         public string CellPhone { get; set; }
         public int CodOficine { get; set; }
+    }
+
+    public class AuthenticationBiomety
+    {
+        public int IdBiometry { get; set; }
+        public int TypeReader { get; set; }
+        public string Identification { get; set; }
+        public long CodSession { get; set; }
+        public string Template { get; set; }
+        public int Validate { get; set; }
+    }
+
+    public class Authentication
+    {
+        public long CodUsuario { get; set; }
+        public string Identification { get; set; }
+        public string Password { get; set; }
+        public int Validate { get; set; }
+    }
+
+    public class PymentProduct
+    {
+
+        public int Coduser { get; set; }
+        public string Identification { get; set; }
+        public int TypeProduct { get; set; }
+        public long NumberProduct { get; set; }
+        public string Description { get; set; }
+        public long ValueToPay { get; set; }
+        public DateTime PayDate { get; set; }
+        public int codOpe { get; set; }
+        public int TipoMovimiento { get; set; }
+    }
+
+    public class ProductsState
+    {
+        public string Identititfy { get; set; }
+        public int CodSession { get; set; }
+        public object NameLine { get; set; }
+        public string NumberProduct { get; set; }
+        public object NameProduct { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime ProxDate { get; set; }
+        public object PaymentMethod { get; set; }
+        public decimal Saldo { get; set; }
+        public int RetirarProducto { get; set; }
+        public decimal Cuota { get; set; }
+        public int TipoProducto { get; set; }
+        public string img { get; set; }
+        public decimal ValorPagar { get; set; }
+        public decimal ValorAPagar { get; set; }
+        public string ColorState { get; set; }
     }
 
 

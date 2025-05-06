@@ -23,16 +23,16 @@ namespace WPFCootreguaV2.Modals
 
             this.DataContext = _viewModel;
 
-            ConfigureModal();
+            //ConfigureModal();
         }
 
-        private void ConfigureModal()
-        {
-            this.BtnOk.Visibility = _viewModel.TypeModal.BtnOkVisibility;
-            this.BtnYes.Visibility = _viewModel.TypeModal.BtnYesVisibility;
-            this.BtnNo.Visibility = _viewModel.TypeModal.BtnNoVisibility;
-            this.LoadGif.Visibility = _viewModel.TypeModal.LoadGifVisibility;
-        }
+        //private void ConfigureModal()
+        //{
+        //    this.BtnOk.Visibility = _viewModel.TypeModal.BtnOkVisibility;
+        //    this.BtnYes.Visibility = _viewModel.TypeModal.BtnYesVisibility;
+        //    this.BtnNo.Visibility = _viewModel.TypeModal.BtnNoVisibility;
+        //    this.LoadGif.Visibility = _viewModel.TypeModal.LoadGifVisibility;
+        //}
 
         private void BtnOk_MouseDown(object sender, EventArgs e)
         {

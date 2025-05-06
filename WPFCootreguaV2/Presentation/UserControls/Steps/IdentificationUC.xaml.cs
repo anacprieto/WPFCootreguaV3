@@ -64,7 +64,7 @@ namespace WPFCootreguaV2.UserControls
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            CloseLoadModal();
+            //CloseLoadModal();
             StopTimer();
             ScannerController.Stop();
             ScannerController.ScannerDataReceived -= OnScannerDataReceived;
@@ -234,7 +234,7 @@ namespace WPFCootreguaV2.UserControls
             }
             catch (Exception ex)
             {
-                _nav.ShowModal($"Hubo un error inesperado al realizar la consulta intenta nuevamente", new InfoModal());
+                _nav.ShowModal($"Hubo un error inesperado al realizar la consulta intenta nuevamente", new Modals.InfoModal());
                 await Application.Current.Dispatcher.InvokeAsync(() => GoTo(new MainUC()));
             }
             EnableView();
@@ -245,11 +245,14 @@ namespace WPFCootreguaV2.UserControls
 
         private async Task RequestDocData(string document)
         {
+            ModalWindow? loadModal = null;
+
             try
             {
                 if (document.Length < 6)
                 {
-                    _nav.ShowModal("Por favor ingrese un número de referencia valido.", new InfoModal());
+                    loadModal = _nav.ShowLoadModal("Por favor ingrese un número de referencia valido.");
+
                     return;
                 }
 
@@ -284,16 +287,12 @@ namespace WPFCootreguaV2.UserControls
 
             }
 
-            CloseLoadModal();
-        }
-
-        private void CloseLoadModal()
-        {
-            if (_currentLoadModal != null)
+            if (loadModal != null)
             {
-                _currentLoadModal.Close();
-                _currentLoadModal = null;
+                loadModal.Close();
+                loadModal = null;
             }
+
         }
 
         #region Timer

@@ -19,11 +19,11 @@ namespace WPFCootreguaV2.Presentation.UserControls
     {
 
         
-        private ImageSliderViewModel _sliderViewModel;
-        private Task? _initTask = null;
+        //private ImageSliderViewModel _sliderViewModel;
+        //private Task? _initTask = null;
         private TimerGeneric _timer;
         private const string STR_TIMER = "09:59";
-        private ImageSleader _imageSleader;
+        //private ImageSleader _imageSleader;
 
         private string folderPath = @$"{AppConfig.Get("PublishDir")}"; // Cambia esto a la carpeta que contiene las imágenes y videos
         private string[] files;

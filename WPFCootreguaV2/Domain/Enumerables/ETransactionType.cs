@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace WPFCootreguaV2.Domain.Enumerables
 {
-    public enum TypeTransaction
+    public enum ETransactionType
     {
-        Retiro = 2,
-        Consulta = 1,
-        Pago,
-        Registro,
-        Abono = 8,
-        Recarga = 9,
-        PagoFactura = 10
+        Withdrawal = 4,
+        Payment = 3,
+        ConsultName = 1,
+        ConsultTransact = 2,
+        Registros = 22,
     }
-
-
 }

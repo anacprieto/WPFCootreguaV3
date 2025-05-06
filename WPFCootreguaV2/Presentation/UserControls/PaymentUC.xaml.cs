@@ -253,7 +253,7 @@ namespace WPFCootreguaV2.UserControls
         private async Task PaymentProcess()
         {
 
-              NotifyPay();
+              //NotifyPay();
 
         }
 

@@ -62,6 +62,10 @@ namespace WPFCootreguaV2.UserControls
             //IcoReferencia.Visibility = Visibility.Visible;
 
         }
+
+        private void Btn_Cancelar_Touch(object sender, EventArgs e)
+        {
+        }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             //CloseLoadModal();
@@ -201,7 +205,7 @@ namespace WPFCootreguaV2.UserControls
         }
         private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            TxtStatusMsg.Visibility = Visibility.Visible;
+            //TxtStatusMsg.Visibility = Visibility.Visible;
             //string doc = TxtIdentification.Text;
             //await RequestDocData(doc);
         }

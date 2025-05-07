@@ -10,9 +10,6 @@
              Height="1920" 
              Width="1080">
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource BTN_AUTENTICATE}" Stretch="Uniform"/>
-        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="300" />
             <RowDefinition Height="*" />

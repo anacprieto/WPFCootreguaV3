@@ -7,70 +7,75 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-             Height="1920" 
-             Width="1080">
-    <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource BTN_IDENTIFICATE}" Stretch="Uniform"/>
-        </Grid.Background>
+             Height="1720" 
+             Width="680"
+             Panel.ZIndex="1">
+    
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="300" />
+            <RowDefinition Height="500" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="300" />
+            <RowDefinition Height="400" />
         </Grid.RowDefinitions>
-        <!-- HEADER -->
-        <Grid Grid.Row="0" Margin="0,0,0,644" Grid.RowSpan="2">
+
+        <Grid Grid.Row="0">
             <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
-        </Grid>
-
-        <Grid Grid.Row="1" >
-            <!--<local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="442,960,0,418" /> -->
             <TextBox
-                x:Name="TxtIdentification"
-                md:HintAssist.Hint="      Ingrese su Cédula"
-                md:HintAssist.IsFloating="True"
-                md:HintAssist.FloatingScale="0.3"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                IsEnabled="False"
-                Tag="Identification"
-                Margin="464,10,0,0" 
-                Width="550"
-                TextAlignment="Center"
-                FontSize="50"
-                TextChanged="TxtIdentification_TextChanged" BorderBrush="{x:Null}"
-            />
-            <TextBlock x:Name="TxtStatusMsg"
-            Text="{Binding StatusMsg}"
-            Style="{StaticResource StatusTextStyle}" 
-            Margin="439,172,0,0" HorizontalAlignment="Left"/>
-            <local:NumericKeyboard x:Name="Keyboard" Margin="408,299,10,206" />
+            x:Name="TxtIdentification"
+            md:HintAssist.Hint="      Ingrese su Cédula"
+            md:HintAssist.IsFloating="True"
+            md:HintAssist.FloatingScale="0.3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            IsEnabled="False"
+            Tag="Identification"
+            Margin="0,0,0,150" 
+            Width="550"
+            TextAlignment="Center"
+            FontSize="50"
+            TextChanged="TxtIdentification_TextChanged" BorderBrush="{x:Null}"
+        />
+            <Label 
+            x:Name="lblErrorIdentification"
+            Content=""
+            Foreground="Red"
+            FontSize="25"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center"
+            Margin="0,0,0,80"
+            FontWeight="Bold" 
+        />
         </Grid>
 
-        <Grid Grid.Row="2" >
+        <Grid Grid.Row="1">
+            <local:NumericKeyboard x:Name="Keyboard" Margin="10,61,10,206" />
+        </Grid>
+
+        <Grid Grid.Row="2">
             <Image 
-             Name="BtnCancelar"
-             Source="/Images/Buttons/BtnCancelar.png"
-             Height="90"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Top"
-             Margin="0,60,0,0"
-             Stretch="Uniform"
-             TouchDown="BtnCancel_TouchDown"
-         />
+            Name="BtnContinuar"
+            Source="/Images/Buttons/BtnContinuar.png"
+            Height="90"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0,923,21,0"
+            Stretch="Uniform" 
+            Opacity="0.3"
+            IsEnabled="False"
+            MouseDown="BtnConsultar_Touch"
+        />
             <Image 
-             Name="BtnContinuar"
-             Source="/Images/Buttons/BtnContinuar.png"
-             Height="90"
-             HorizontalAlignment="Right"
-             VerticalAlignment="Top"
-             Margin="389,50,0,0"
-             Stretch="Uniform"
-             MouseDown="BtnConsultar_Touch" Width="291"
-         />
-            <!--FOOTER-->
-            <Image Source="{StaticResource ATENTION_LINE}" Margin="292,1740,292,50" />
+            Name="BtnCancelar"
+            Source="/Images/Buttons/BtnAnterior.png"
+            Height="90"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="73,1013,0,0"
+            Stretch="Uniform"
+            TouchDown="Btn_Cancelar_Touch" RenderTransformOrigin="0.502,-0.244"
+        />
         </Grid>
 
     </Grid>
+
 </local:AppUserControl>

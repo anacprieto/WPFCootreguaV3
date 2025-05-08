@@ -65,6 +65,9 @@ namespace WPFCootreguaV2.UserControls
 
         }
 
+        // Fix for CS0121: The issue arises because there are two identical method signatures for OnKeyboardPressed in the same class.
+        // To resolve this, one of the duplicate methods must be removed.
+
         private async void OnKeyboardPressed(object? sender, string keyPressed)
         {
             if (string.IsNullOrEmpty(keyPressed)) return;
@@ -185,32 +188,6 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
             }
         }
-        private async void OnKeyboardPressed(object? sender, string keyPressed)
-        {
-            if (string.IsNullOrEmpty(keyPressed)) return;
-            if (keyPressed == "Remove")
-            {
-                string text = TxtIdentification.Text;
-                TxtIdentification.Text = (text.Length > 1) ? text.Remove(text.Length - 1) : "";
-                if (text.Length > 1)
-                {
-                    TxtIdentification.Text = text.Remove(text.Length - 1);
-                    return;
-                }
-                TxtIdentification.Text = "";
-                return;
-            }
-
-            if (keyPressed == "Clear")
-            {
-                TxtIdentification.Text = "";
-                return;
-            }
-
-            TxtIdentification.Text += keyPressed;
-            await Task.Delay(100);
-        }
-
         private void TxtInvoice_TextChanged(object sender, TextChangedEventArgs e)
         {
             _viewModel.StatusMsg = "";

@@ -76,8 +76,8 @@ namespace WPFCootreguaV2.Domain.ApiService
 
                 // Registrar los datos enviados antes de encriptar
                 EventLogger.SaveLog(EventType.Info, "DATA ENVIADA "+ " "+endpoint + JsonConvert.SerializeObject(data));
-
                 var encryptedData = Encryptor.Encrypt(JsonConvert.SerializeObject(data), Key);
+
 
 
 

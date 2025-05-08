@@ -7,24 +7,24 @@ using WPFCootreguaV2.Domain.UIServices;
 namespace WPFCootreguaV2.UserControls
 {
 
-    public class AppUserControl: UserControl
+    public class AppUserControl : UserControl
     {
         protected Navigator _nav = Navigator.Instance;
         protected void GoTo(UserControl view)
         {
-            
+
             _nav.NavigateTo(view);
         }
 
         protected void EnableView()
         {
-           Dispatcher.Invoke((Action)delegate
+            Dispatcher.Invoke((Action)delegate
             {
                 this.IsEnabled = true;
                 this.Opacity = 1;
             });
 
-           
+
         }
 
         protected void DisableView()

@@ -55,7 +55,9 @@ namespace WPFCootreguaV2.Presentation.UserControls
                 ChangeBackground(EBackground.Identificate);
 
                 // Navegamos a la vista de identificación
-                GoTo(new IdentificationUC());
+                Navegar(new IdentificationUC());
+                //Navegar(new AuthenticationUC());
+                //Navegar(new ListProductsUC());
             }
             catch (Exception ex)
             {
@@ -368,38 +370,14 @@ namespace WPFCootreguaV2.Presentation.UserControls
             ChangeBackground(background);
             GoTo(view);
         }
-        public void Navegar(UserControlView newPage, Transaction ts)
+        public void Navegar(AppUserControl newPage)
         {
             try
             {
                 Dispatcher.BeginInvoke((Action)delegate
                 {
                     this.cc_View.Content = null;
-
-                    switch (newPage)
-                    {
-                        case UserControlView.Identification:
-                            this.cc_View.Content = new IdentificationUC();
-                            break;
-                        case UserControlView.Authentication:
-                            this.cc_View.Content = new AuthenticationUC();
-                            break;
-                        case UserControlView.Products:
-                            this.cc_View.Content = new ListProductsUC();
-                            break;
-                        case UserControlView.Pay:
-                            this.cc_View.Content = new PaymentUC();
-                            break;
-                        case UserControlView.PaySuccess:
-                            this.cc_View.Content = new SuccessUC();
-                            break;
-                        case UserControlView.Withdrawal:
-                            this.cc_View.Content = new WithdrawalUC();
-                            break;
-                        case UserControlView.CancelPay:
-                            this.cc_View.Content = new CancelUC();
-                            break;
-                    }
+                    this.cc_View.Content = newPage;
                 });
                 GC.Collect();
             }
@@ -408,6 +386,46 @@ namespace WPFCootreguaV2.Presentation.UserControls
                 // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+        //public void Navegar(UserControlView newPage, Transaction ts)
+        //{
+        //    try
+        //    {
+        //        Dispatcher.BeginInvoke((Action)delegate
+        //        {
+        //            this.cc_View.Content = null;
+
+        //            switch (newPage)
+        //            {
+        //                case UserControlView.Identification:
+        //                    this.cc_View.Content = new IdentificationUC();
+        //                    break;
+        //                case UserControlView.Authentication:
+        //                    this.cc_View.Content = new AuthenticationUC();
+        //                    break;
+        //                case UserControlView.Products:
+        //                    this.cc_View.Content = new ListProductsUC();
+        //                    break;
+        //                case UserControlView.Pay:
+        //                    this.cc_View.Content = new PaymentUC();
+        //                    break;
+        //                case UserControlView.PaySuccess:
+        //                    this.cc_View.Content = new SuccessUC();
+        //                    break;
+        //                case UserControlView.Withdrawal:
+        //                    this.cc_View.Content = new WithdrawalUC();
+        //                    break;
+        //                case UserControlView.CancelPay:
+        //                    this.cc_View.Content = new CancelUC();
+        //                    break;
+        //            }
+        //        });
+        //        GC.Collect();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
         private void GoTimer()
         {
             // Implementación del método GoTimer

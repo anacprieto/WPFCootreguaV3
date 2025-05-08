@@ -44,9 +44,6 @@ namespace WPFCootreguaV2.UserControls
         private string _regexFechaVencimiento = @"\u001d96(\d*)";
 
         private string _referencia = string.Empty;
-        private string _valorPagar = string.Empty;
-        private string _fechaPago = string.Empty;
-        private string _NoConvenio = string.Empty;
         #endregion
 
         public IdentificationUC()
@@ -247,8 +244,7 @@ namespace WPFCootreguaV2.UserControls
                     Authentication authentication = new Authentication
                     {
                         Identification = AppConfig.Get("AuthenticationUser"),
-                        Password = "texto ejmplo"
-                        //EncryptorEcity.Encrypt(AppConfig.Get("AuthenticationPass"), AppConfig.Get("KeyCootregua")),
+                        Password =EncryptorEcity.Encrypt(AppConfig.Get("AuthenticationPass"), AppConfig.Get("KeyCootregua")),
                     };
 
                     var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateUsers", authentication);

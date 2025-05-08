@@ -19,6 +19,7 @@
           "System.Drawing.Common": "8.0.0",
           "System.IO.Ports": "8.0.0",
           "WpfAnimatedGif": "2.0.2",
+          "Encryptor.Ecity.Dll": "1.0.0.0",
           "KioskosLib": "1.1.1.0",
           "MPOST": "1.0.0.0"
         },
@@ -642,6 +643,14 @@
           }
         }
       },
+      "Encryptor.Ecity.Dll/1.0.0.0": {
+        "runtime": {
+          "Encryptor.Ecity.Dll.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "KioskosLib/1.1.1.0": {
         "runtime": {
           "KioskosLib.dll": {
@@ -1011,6 +1020,11 @@
     },
     "DB/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Encryptor.Ecity.Dll/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     },

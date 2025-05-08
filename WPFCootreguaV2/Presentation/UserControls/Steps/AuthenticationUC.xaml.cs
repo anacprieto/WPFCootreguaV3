@@ -1,11 +1,13 @@
 ﻿using ControlzEx.Standard;
 using DB;
+using Ecity.DigitalPersona.ReaderUareU;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Security;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,13 +15,16 @@ using System.Windows.Markup;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
 using WPFCootreguaV2.Domain;
+using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
 using WPFCootreguaV2.Domain.UIServices;
 using WPFCootreguaV2.Domain.UIServices.Integrations;
 using WPFCootreguaV2.Modals;
+using WPFCootreguaV2.Models;
 using WPFCootreguaV2.Presentation.UserControls;
+
 
 namespace WPFCootreguaV2.UserControls
 {
@@ -33,6 +38,7 @@ namespace WPFCootreguaV2.UserControls
         private Transaction _ts;
         private AuthenticationUCViewModel _viewModel;
         private ModalWindow? _currentLoadModal = null;
+        private int CantIntentos;
 
         #region Regex properies
         private string _regexReferencia = @"8020(0*[1-9]\d*)\u001d3900";
@@ -45,20 +51,126 @@ namespace WPFCootreguaV2.UserControls
         private string _NoConvenio = string.Empty;
         #endregion
 
+
         public AuthenticationUC()
         {
-            InitializeComponent();
-            _ts = Transaction.Instance;
+            InitializeComponent(); 
 
-            _viewModel = new AuthenticationUCViewModel();
-            this.DataContext = _viewModel;
-            this.Unloaded += OnUnloaded;
-            this.Loaded += Onloaded;
-            GoTimer();
+            //try
+            //{
+            //    _ts = Transaction.Instance;
+            //    CantIntentos = 0;
+            //    if (_ts.Type == ETransactionType.Registros)
+            //    {
+            //        ChangeBackground(EBackground.Autenticate2);
+            //    }
+            //    else
+            //    {
+            //        ChangeBackground(EBackground.Autenticate);
+            //    }
 
-           
+            //    LoadReader();
 
-        }
+            //    //Switcher.Timer(true);
+
+            //    //Utilities.Speak("Ubica tu dedo en el lector biometrico.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+
+
+
+        //}
+        //private void LoadReader()
+        //{
+        //    try
+        //    {
+        //        EcityReader.callbackError = Error =>
+        //        {
+        //            EcityReader.callbackTemplate = null;
+        //            EcityReader.callbackError = null;
+
+        //            AdminPayPlus.SaveErrorControl("ERROR DEL HUELLERO: " + Error, "", EError.Aplication, ELevelError.Medium);
+        //        };
+
+        //        if (EcityReader.OpenReader())
+        //        {
+        //            EcityReader.callbackTemplate = Template =>
+        //            {
+        //                EcityReader.callbackTemplate = null;
+        //                EcityReader.callbackError = null;
+
+        //                EcityReader.CancelCaptureAndCloseReader(EcityReader.OnCaptured);
+
+        //                if (!string.IsNullOrEmpty(Template))
+        //                {
+        //                    ValidateUser(Template);
+        //                }
+        //                else
+        //                {
+        //                    Switcher.Timer(false);
+        //                    Switcher.ModalMS("No se pudo capturar la huella, por favor intentalo de nuevo.");
+        //                    Switcher.Timer(true);
+        //                    LoadReader();
+        //                }
+        //            };
+
+        //            EcityReader.StartCaptureAsync(EcityReader.OnCaptured);
+        //        }
+        //        else
+        //        {
+        //            Switcher.Timer(false);
+        //            Switcher.ModalMS("El huellero no se pudo habilitar, por favor intentalo de nuevo.");
+        //            Switcher.Navigate(UserControlView.Identification, null);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
+        //public void ChangeBackground(EBackground eBackground)
+        //{
+        //    try
+        //    {
+        //        Dispatcher.BeginInvoke((Action)delegate
+        //        {
+        //            switch (eBackground)
+        //            {
+        //                case EBackground.Identificate:
+        //                    bg.Background = "/Images/Backgrounds/identificate.jpg";
+        //                    break;
+        //                case EBackground.Identificate2:
+        //                    bg.Background = "/Images/Backgrounds/identificate2.jpg";
+        //                    break;
+        //                case EBackground.Autenticate:
+        //                    bg.Background = "/Images/Backgrounds/autenticate.jpg";
+        //                    break;
+        //                case EBackground.Autenticate2:
+        //                    bg.Background = "/Images/Backgrounds/autenticate2.jpg";
+        //                    break;
+        //                case EBackground.Productos:
+        //                    bg.Background = "/Images/Backgrounds/elige.jpg";
+        //                    break;
+        //                case EBackground.Paga:
+        //                    bg.Background = "/Images/Backgrounds/paga.jpg";
+        //                    break;
+        //                case EBackground.Generico:
+        //                    bg.Background = "/Images/Backgrounds/generic.jpg";
+        //                    break;
+        //            }
+
+        //            this.DataContext = bg;
+        //        });
+        //        GC.Collect();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             CloseLoadModal();

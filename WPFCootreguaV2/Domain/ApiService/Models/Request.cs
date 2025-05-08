@@ -14,7 +14,7 @@ namespace WPFCootreguaV2.Domain.ApiService.Models
     }
     public class ResponseCootregua
     {
-        public StateTransaction ResponseCode { get; set; }
+        public EResponseCode ResponseCode { get; set; }
         public string ResponseMessage { get; set; }
         public object ResponseData { get; set; }
     }

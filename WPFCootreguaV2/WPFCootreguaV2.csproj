@@ -347,6 +347,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Ecity.DigitalPersona.Reader">
+      <HintPath>..\..\WPFCootregua\WPFCootregua\bin\Debug\Ecity.DigitalPersona.Reader.dll</HintPath>
+    </Reference>
+    <Reference Include="Encryptor.Ecity.Dll">
+      <HintPath>..\..\WPFCootregua\WPFCootregua\bin\Debug\Encryptor.Ecity.Dll.dll</HintPath>
+    </Reference>
     <Reference Include="KioskosLib">
       <HintPath>..\DLLS\Datafono\KioskosLib.dll</HintPath>
     </Reference>

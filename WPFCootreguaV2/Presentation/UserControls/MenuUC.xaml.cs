@@ -23,7 +23,6 @@ using System.Reflection;
 using WPFCootreguaV2.Domain.ApiService.Models;
 using System.Diagnostics;
 using WPFCootreguaV2.Domain.Enumerables;
-using static WPFCootreguaV2.Domain.Enumerables.Switcher;
 using WPFCootreguaV2.Models;
 
 namespace WPFCootreguaV2.Presentation.UserControls

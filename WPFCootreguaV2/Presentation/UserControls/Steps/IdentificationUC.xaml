@@ -35,20 +35,12 @@
             FontSize="50"
             TextChanged="TxtIdentification_TextChanged" BorderBrush="{x:Null}"
         />
-            <Label 
-            x:Name="lblErrorIdentification"
-            Content=""
-            Foreground="Red"
-            FontSize="25"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Center"
-            Margin="0,0,0,80"
-            FontWeight="Bold" 
-        />
         </Grid>
 
         <Grid Grid.Row="1">
-            <local:NumericKeyboard x:Name="Keyboard" Margin="10,61,10,206" />
+            <TextBlock  x:Name="TxtStatusMsg" Text="{Binding StatusMsg}" Style="{StaticResource StatusTextStyle}" Margin="0,82,0,0"/>
+
+            <local:NumericKeyboard x:Name="Keyboard" Margin="10,257,10,10" />
         </Grid>
 
         <Grid Grid.Row="2">
@@ -58,7 +50,7 @@
             Height="90"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Margin="0,923,21,0"
+            Margin="0,183,33,0"
             Stretch="Uniform" 
             Opacity="0.3"
             IsEnabled="False"
@@ -70,7 +62,7 @@
             Height="90"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Margin="73,1013,0,0"
+            Margin="42,183,0,0"
             Stretch="Uniform"
             TouchDown="Btn_Cancelar_Touch" RenderTransformOrigin="0.502,-0.244"
         />

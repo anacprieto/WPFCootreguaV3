@@ -43,6 +43,8 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         public Payer payer { get; set; }
 
+        public int Codigo { get; set; }
+
         public int IdPaypad { get; set; } = 3;
         public string? TipoRecaudo { get; set; }
         public TypeTransaction TipoTransaccion { get; set; }

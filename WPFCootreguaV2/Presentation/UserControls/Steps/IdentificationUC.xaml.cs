@@ -1,6 +1,7 @@
 ﻿using ControlzEx.Standard;
 using DB;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ using System.Windows.Markup;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
 using WPFCootreguaV2.Domain;
+using WPFCootreguaV2.Domain.ApiService;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
@@ -61,6 +63,32 @@ namespace WPFCootreguaV2.UserControls
 
             //IcoReferencia.Visibility = Visibility.Visible;
 
+        }
+
+        private async void OnKeyboardPressed(object? sender, string keyPressed)
+        {
+            if (string.IsNullOrEmpty(keyPressed)) return;
+            if (keyPressed == "Remove")
+            {
+                string text = TxtIdentification.Text;
+                TxtIdentification.Text = (text.Length > 1) ? text.Remove(text.Length - 1) : "";
+                if (text.Length > 1)
+                {
+                    TxtIdentification.Text = text.Remove(text.Length - 1);
+                    return;
+                }
+                TxtIdentification.Text = "";
+                return;
+            }
+
+            if (keyPressed == "Clear")
+            {
+                TxtIdentification.Text = "";
+                return;
+            }
+
+            TxtIdentification.Text += keyPressed;
+            await Task.Delay(100);
         }
 
         private void Btn_Cancelar_Touch(object sender, EventArgs e)
@@ -208,7 +236,80 @@ namespace WPFCootreguaV2.UserControls
             //TxtStatusMsg.Visibility = Visibility.Visible;
             //string doc = TxtIdentification.Text;
             //await RequestDocData(doc);
+            ValidateData();
+
         }
+
+        private void ValidateData()
+        {
+            try
+            {
+                if (TxtIdentification.Text.Length < 5)
+                {
+                    lblErrorIdentification.Content = "Debe ingresar un número de cédula valido.";
+                    return;
+                }
+
+                _ts.Documento = TxtIdentification.Text;
+
+                Authentication();
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+
+        private void Authentication()
+        {
+            try
+            {
+                Task.Run(async () =>
+                {
+                    Authentication authentication = new Authentication
+                    {
+                        Identification = AppConfig.Get("AuthenticationUser"),
+                        Password = "texto ejmplo"
+                        //EncryptorEcity.Encrypt(AppConfig.Get("AuthenticationPass"), AppConfig.Get("KeyCootregua")),
+                    };
+
+                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateUsers", authentication);
+
+                    if (!string.IsNullOrEmpty(authen))
+                    {
+                        var data = JsonConvert.DeserializeObject<Authentication>(authen);
+
+                        if (data.Validate == 1 && data.CodUsuario > 0)
+                        {
+                            _ts.Codigo = Convert.ToInt32(data.CodUsuario);
+
+                            GetPerson();
+                        }
+                        else
+                        {
+                            Switcher.ModalLoad(false);
+                            Switcher.ModalMS("No se pudo autenticar el kiosco con el servicio, por favor intenta de nuevo.");
+                            Switcher.Timer(true);
+                        }
+                    }
+                    else
+                    {
+                        Switcher.ModalLoad(false);
+                        Switcher.ModalMS("No hay comunicación con el servicio, por favor intenta de nuevo.");
+                        Switcher.Timer(true);
+                    }
+                });
+
+
+                Switcher.Timer(false);
+                Switcher.ModalLoad(true);
+            }
+            catch (Exception ex)
+            {
+                Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+
         #endregion
 
         #region ScannerEvents

@@ -246,7 +246,8 @@ namespace WPFCootreguaV2.UserControls
             {
                 if (TxtIdentification.Text.Length < 5)
                 {
-                    lblErrorIdentification.Content = "Debe ingresar un número de cédula valido.";
+                    Dispatcher.Invoke(() => { _viewModel.StatusMsg = "Debe ingresar un número de cédula valido."; });
+
                     return;
                 }
 
@@ -287,26 +288,73 @@ namespace WPFCootreguaV2.UserControls
                         }
                         else
                         {
-                            Switcher.ModalLoad(false);
-                            Switcher.ModalMS("No se pudo autenticar el kiosco con el servicio, por favor intenta de nuevo.");
-                            Switcher.Timer(true);
-                        }
+                            CloseLoadModal();
+                            _nav.ShowLoadModal("Por favor ingrese un número de documento válido.");
+
+                            //CloseLoadModal Switcher.ModalMS("No se pudo autenticar el kiosco con el servicio, por favor intenta de nuevo.");
+                            GoTimer();                        }
                     }
                     else
                     {
-                        Switcher.ModalLoad(false);
-                        Switcher.ModalMS("No hay comunicación con el servicio, por favor intenta de nuevo.");
-                        Switcher.Timer(true);
+                        CloseLoadModal();
+                        _nav.ShowLoadModal("No hay comunicación con el servicio, por favor intenta de nuevo.");
+                        GoTimer();
                     }
                 });
 
 
-                Switcher.Timer(false);
-                Switcher.ModalLoad(true);
+                StopTimer();
+                CloseLoadModal();
             }
             catch (Exception ex)
             {
-                Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+              //  Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+
+
+        private async Task GetPerson()
+        {
+            try
+            {
+                Person person = new Person
+                {
+                    CodPerson = _ts.Codigo,
+                    Identification = _ts.Documento,
+                };
+
+                var pers = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetPerson", person);
+                CloseLoadModal();
+
+
+                if (!string.IsNullOrEmpty(pers))
+                {
+                    var data = JsonConvert.DeserializeObject<Person>(pers);
+
+                    _ts.DataPerson = data;
+                    Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
+
+
+                }
+                else
+                {
+                    //CloseLoadModal();
+                    _nav.ShowLoadModal("No se encontrarón registros con este número de documento, por favor intenta de nuevo.");
+                    StopTimer();
+                }
+            }
+            catch (Exception ex)
+            {
+               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+
+        private void CloseLoadModal()
+        {
+            if (_currentLoadModal != null)
+            {
+                _currentLoadModal.Close();
+                _currentLoadModal = null;
             }
         }
 

@@ -159,6 +159,10 @@
               "target": "Package",
               "version": "[7.0.13, )"
             },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -168,6 +172,10 @@
               "version": "[8.0.0, )"
             },
             "System.IO.Ports": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.Speech": {
               "target": "Package",
               "version": "[8.0.0, )"
             },

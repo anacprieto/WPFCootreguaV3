@@ -309,9 +309,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
@@ -347,6 +349,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DPUruNet">
+      <HintPath>..\..\WPFCootregua\WPFCootregua\bin\Debug\DPUruNet.dll</HintPath>
+    </Reference>
     <Reference Include="Ecity.DigitalPersona.Reader">
       <HintPath>..\..\WPFCootregua\WPFCootregua\bin\Debug\Ecity.DigitalPersona.Reader.dll</HintPath>
     </Reference>

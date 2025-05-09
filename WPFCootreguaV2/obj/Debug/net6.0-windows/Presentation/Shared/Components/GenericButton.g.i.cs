@@ -80,7 +80,8 @@ namespace WPFCootreguaV2.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WPFCootreguaV2;component/presentation/shared/components/genericbutton.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WPFCootreguaV2;V1.0.0.0;component/presentation/shared/components/genericbutton.x" +
+                    "aml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Presentation\Shared\Components\GenericButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

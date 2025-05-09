@@ -1,7 +1,9 @@
 ﻿using ControlzEx.Standard;
 using DB;
+using Domain.UIServices.Audio;
 using Ecity.DigitalPersona.ReaderUareU;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +17,7 @@ using System.Windows.Markup;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
 using WPFCootreguaV2.Domain;
+using WPFCootreguaV2.Domain.ApiService;
 using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
@@ -49,128 +52,318 @@ namespace WPFCootreguaV2.UserControls
         private string _valorPagar = string.Empty;
         private string _fechaPago = string.Empty;
         private string _NoConvenio = string.Empty;
+        //_viewModel.AudioOn = false;
+        public IAudioManager AudioManager = new FileToAudioManager();
+        public static ETransactionType TransactionType { get; set; }
+
         #endregion
 
 
         public AuthenticationUC()
         {
-            InitializeComponent(); 
+            InitializeComponent();
 
-            //try
-            //{
-            //    _ts = Transaction.Instance;
-            //    CantIntentos = 0;
-            //    if (_ts.Type == ETransactionType.Registros)
-            //    {
-            //        ChangeBackground(EBackground.Autenticate2);
-            //    }
-            //    else
-            //    {
-            //        ChangeBackground(EBackground.Autenticate);
-            //    }
+            try
+            {
 
-            //    LoadReader();
+                _ts = Transaction.Instance;
+                CantIntentos = 0;
+                if (_ts.Type == ETransactionType.Registros)
+                {
+                    ChangeBackground(EBackground.Autenticate2);
+                }
+                else
+                {
+                    ChangeBackground(EBackground.Autenticate);
+                }
 
-            //    //Switcher.Timer(true);
+                LoadReader();
 
-            //    //Utilities.Speak("Ubica tu dedo en el lector biometrico.");
-            //}
-            //catch (Exception ex)
-            //{
-            //    Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                //Switcher.Timer(true);
+                var audioName = (string)Application.Current.Resources["AUDIO_BENEFICIO_SELECCIONADO"];
+                AudioManager.PlayLoop(audioName);
+
+               // Utilities.Speak("Ubica tu dedo en el lector biometrico.");
+
             }
+            catch (Exception ex)
+            {
+               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+
+        private void LoadReader()
+        {
+            try
+            {
+                EcityReader.callbackError = Error =>
+                {
+                    EcityReader.callbackTemplate = null;
+                    EcityReader.callbackError = null;
 
 
+                    EventLogger.SaveLog(EventType.Error, "ERROR DEL HUELLERO:"+ Error);
+                };
 
-        //}
-        //private void LoadReader()
-        //{
-        //    try
-        //    {
-        //        EcityReader.callbackError = Error =>
-        //        {
-        //            EcityReader.callbackTemplate = null;
-        //            EcityReader.callbackError = null;
+                if (EcityReader.OpenReader())
+                {
+                    EcityReader.callbackTemplate = Template =>
+                    {
+                        EcityReader.callbackTemplate = null;
+                        EcityReader.callbackError = null;
 
-        //            AdminPayPlus.SaveErrorControl("ERROR DEL HUELLERO: " + Error, "", EError.Aplication, ELevelError.Medium);
-        //        };
+                        EcityReader.CancelCaptureAndCloseReader(EcityReader.OnCaptured);
 
-        //        if (EcityReader.OpenReader())
-        //        {
-        //            EcityReader.callbackTemplate = Template =>
-        //            {
-        //                EcityReader.callbackTemplate = null;
-        //                EcityReader.callbackError = null;
+                        if (!string.IsNullOrEmpty(Template))
+                        {
+                            ValidateUser(Template);
+                        }
+                        else
+                        {
 
-        //                EcityReader.CancelCaptureAndCloseReader(EcityReader.OnCaptured);
+                            EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
+                            _nav.ShowModal($"No se pudo capturar la huella, por favor intentalo de nuevo.", new InfoModal());
+                            GoTimer();
+                            LoadReader();
+                        }
+                    };
 
-        //                if (!string.IsNullOrEmpty(Template))
-        //                {
-        //                    ValidateUser(Template);
-        //                }
-        //                else
-        //                {
-        //                    Switcher.Timer(false);
-        //                    Switcher.ModalMS("No se pudo capturar la huella, por favor intentalo de nuevo.");
-        //                    Switcher.Timer(true);
-        //                    LoadReader();
-        //                }
-        //            };
+                    EcityReader.StartCaptureAsync(EcityReader.OnCaptured);
+                }
+                else
+                {
+                    StopTimer();
+                    _nav.ShowModal($"El huellero no se pudo habilitar, por favor intentalo de nuevo.", new InfoModal());
+                    Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Info, "Metodo : LoadReader()");
 
-        //            EcityReader.StartCaptureAsync(EcityReader.OnCaptured);
-        //        }
-        //        else
-        //        {
-        //            Switcher.Timer(false);
-        //            Switcher.ModalMS("El huellero no se pudo habilitar, por favor intentalo de nuevo.");
-        //            Switcher.Navigate(UserControlView.Identification, null);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
-        //public void ChangeBackground(EBackground eBackground)
-        //{
-        //    try
-        //    {
-        //        Dispatcher.BeginInvoke((Action)delegate
-        //        {
-        //            switch (eBackground)
-        //            {
-        //                case EBackground.Identificate:
-        //                    bg.Background = "/Images/Backgrounds/identificate.jpg";
-        //                    break;
-        //                case EBackground.Identificate2:
-        //                    bg.Background = "/Images/Backgrounds/identificate2.jpg";
-        //                    break;
-        //                case EBackground.Autenticate:
-        //                    bg.Background = "/Images/Backgrounds/autenticate.jpg";
-        //                    break;
-        //                case EBackground.Autenticate2:
-        //                    bg.Background = "/Images/Backgrounds/autenticate2.jpg";
-        //                    break;
-        //                case EBackground.Productos:
-        //                    bg.Background = "/Images/Backgrounds/elige.jpg";
-        //                    break;
-        //                case EBackground.Paga:
-        //                    bg.Background = "/Images/Backgrounds/paga.jpg";
-        //                    break;
-        //                case EBackground.Generico:
-        //                    bg.Background = "/Images/Backgrounds/generic.jpg";
-        //                    break;
-        //            }
+            }
+        }
+        private void ValidateUser(string template)
+        {
+            try
+            {
+                Task.Run(async () =>
+                {
+                    AuthenticationBiomety biomety = new AuthenticationBiomety
+                    {
+                        CodSession = _ts.Codigo,
+                        Identification = _ts.Documento,
+                        TypeReader = 1,
+                        Template = template
+                    };
 
-        //            this.DataContext = bg;
-        //        });
-        //        GC.Collect();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
+                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
+
+                    if (!string.IsNullOrEmpty(authen))
+                    {
+                        var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(authen);
+
+                        if (data.Validate == 1)
+                        {
+                            if (_ts.Type == ETransactionType.Registros)
+                            {
+                                SaveTransaction(_ts.DataPerson);
+                            }
+                            else
+                            {
+                                GetProducts();
+                            }
+                        }
+                        else
+                        {
+                            _nav.CloseModal();//load modal
+                            StopTimer();
+
+                            _nav.ShowLoadModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo."+ _ts.DataPerson.FirstName, new InfoModal()));
+                            GoTimer();
+                            CantIntentos++;
+                            LoadReader();
+                        }
+                    }
+                    else
+                    {
+                        _nav.CloseModal();//load modal
+                        StopTimer();
+                        if (CantIntentos == 2)
+                        {
+                            _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName),new InfoModal());
+                            _nav.CloseModal();
+
+                        }
+                        else
+                        {
+                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName), new InfoModal());
+                            CantIntentos++;
+                            GoTimer();                            
+                            LoadReader();
+                        }
+                    }
+                });
+                StopTimer();
+                _nav.ShowLoadModal(string.Format("Sale del metodo"));
+
+            }
+            catch (Exception ex)
+            {
+               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        private void SaveTransaction(Domain.UIServices.Person person)
+        {
+            try
+            {
+                Task.Run(async () =>
+                {
+                    _ts.Type = TransactionType;
+                    _ts.EstadoTransaccion = StateTransaction.Iniciada;
+                    _ts.Total = 0;
+                    _ts.payer = new Payer
+                    {
+                        IDENTIFICATION = person.CodPerson.ToString(),
+                        NAME = string.Concat(person.FirstName, " ", person.SecondName),
+                        EMAIL = person.Email,
+                        LAST_NAME = string.Concat(person.FirstLastName, " ", person.SecondLastName),
+                        PHONE = person.Phone,
+                        ADDRESS = person.Adress,
+                    };
+
+
+                    _nav.ShowLoadModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName, new InfoModal()));
+
+
+                    if (this._ts.IdTransaccionApi == 0)
+                    {
+                        _nav.ShowLoadModal(string.Format("Estimado {0}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo." +_ts.DataPerson.FirstName));
+                        _nav.CloseModal();
+
+                    }
+                    else
+                    {
+                        string NameUser = _ts.DataPerson.FirstName;
+                        int Time = DateTime.Now.Hour;
+                        string ms = string.Empty;
+
+                        if (Time >= 6 && Time < 12)
+                        {
+                            ms = "Buenos días " + NameUser;
+                        }
+                        else
+                        if (Time >= 12 && Time < 16)
+                        {
+                            ms = "Buenas tardes " + NameUser;
+                        }
+                        else
+                        if (Time >= 16 && Time <= 24)
+                        {
+                            ms = "Buenas noches " + NameUser;
+                        }
+                        else
+                        {
+                            ms = "Bienvenido " + NameUser;
+                        }
+
+                        //Utilities.Speak(ms);
+                        //Utilities.ShowModal(ms + " Has sido registrad@ en el sistema.", EModalType.Error, true);
+                        //Switcher.CLose();
+                    }
+                });
+
+                //Switcher.Timer(false);
+            }
+            catch (Exception ex)
+            {
+                Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        private async Task SaveTransaction()
+        {
+            try
+            {
+                if (_paymentViewModel == null) throw new InvalidOperationException("PaymentViewModel is null");
+                _paymentViewModel.IsPayCompleted = true;
+                _ts = Transaction.Instance ?? throw new InvalidOperationException("Transaction instance is null");
+                _ts.paymentProcess.TotalIngresado = _paymentViewModel.EnteredAmount;
+                _ts.paymentProcess.TotalDevuelta = _paymentViewModel.DispensedAmount;
+
+                SetTransactionDescription();
+
+                if ((_tranStateTemp == StateTransaction.Aprobada || _tranStateTemp == StateTransaction.Cancelada)
+                    && !_ts.paymentProcess.DevueltaCorrecta)
+                {
+                    // Si el estado de transacción es aprobada o cancelada y además hay error de devuelta se cambia a su respectivo estado
+                    // CanceladoErrorDevuelta o AprobadaErrorDevuelta
+                    _ts.transactionProcess.EstadoTransaccion = (StateTransaction)((int)_tranStateTemp + 2);
+                    _ts.paymentProcess.ValorFaltante = _paymentViewModel.RemainingAmount;
+                }
+                else
+                {
+                    _ts.transactionProcess.EstadoTransaccion = _tranStateTemp;
+                }
+
+                ApiDashboard.UpdateTransaction();
+
+                CloseLoadModal();
+                Dispatcher.Invoke(() => GoTo(new FinishUC()));
+
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+                if (!_isPayCanceled)
+                {
+                    EventLogger.SaveLog(EventType.Info, "Pago cancelado por error guardando el pago");
+                    await CancelPay();
+                }
+
+                CloseLoadModal();
+                _currentLoadModal = _nav.ShowLoadModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+            }
+        }
+        public void ChangeBackground(EBackground eBackground)
+        {
+            try
+            {
+                Dispatcher.BeginInvoke((Action)delegate
+                {
+                    switch (eBackground)
+                    {
+                        case EBackground.Identificate:
+                            bg.Background = "/Images/Backgrounds/identificate.jpg";
+                            break;
+                        case EBackground.Identificate2:
+                            bg.Background = "/Images/Backgrounds/identificate2.jpg";
+                            break;
+                        case EBackground.Autenticate:
+                            bg.Background = "/Images/Backgrounds/autenticate.jpg";
+                            break;
+                        case EBackground.Autenticate2:
+                            bg.Background = "/Images/Backgrounds/autenticate2.jpg";
+                            break;
+                        case EBackground.Productos:
+                            bg.Background = "/Images/Backgrounds/elige.jpg";
+                            break;
+                        case EBackground.Paga:
+                            bg.Background = "/Images/Backgrounds/paga.jpg";
+                            break;
+                        case EBackground.Generico:
+                            bg.Background = "/Images/Backgrounds/generic.jpg";
+                            break;
+                    }
+
+                    this.DataContext = bg;
+                });
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+             //   Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             CloseLoadModal();

@@ -38,6 +38,7 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         public Person DataPerson { get; set; }
 
+
         public List<ProductsState> DataProducts { get; set; }
         public ProductsState ProductSelect { get; set; }
 

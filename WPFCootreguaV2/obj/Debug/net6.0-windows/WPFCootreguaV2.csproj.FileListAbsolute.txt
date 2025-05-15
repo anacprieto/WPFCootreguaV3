@@ -628,3 +628,14 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\WithdrawalUC.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelUC.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\Encryptor.Ecity.Dll.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.Asio.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.Core.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.Midi.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.Wasapi.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.WinForms.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\NAudio.WinMM.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\System.Speech.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Speech.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\DPUruNet.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\bin\Debug\net6.0-windows\Ecity.DigitalPersona.Reader.dll

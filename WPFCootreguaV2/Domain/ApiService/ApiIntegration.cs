@@ -17,6 +17,9 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography.Xml;
 using Microsoft.VisualBasic;
+using System.Windows.Markup;
+using System.Runtime.CompilerServices;
+using WPFCootreguaV2.Domain.UIServices;
 
 
 namespace WPFCootreguaV2.Domain.ApiService
@@ -54,9 +57,283 @@ namespace WPFCootreguaV2.Domain.ApiService
             };
         }
 
+
+        /*
+        public static async Task<string> TestApiConnection()
+        {
+            try
+            {
+                string data="";
+                string url = "https://apicootregua.e-city.co/Login/ValidateUsers";
+
+                // Objeto RequestGlobal como en tu código
+                RequestGlobal requestGlobal = new RequestGlobal
+                {
+                    Data = "9EKCAGz0C2QZL+sxeAHBwndQykLr81oDdD/G3EcYLnQug4MvZmUsYUb1IqquI6tUuoKUHW48RzaBFPWlZZhAyTHm2/1JvP4/RkerSCRXrSd24SWUXpF94Si2V3CHaHhk",
+                    CallDate = DateTime.Now
+                };
+
+                string payload = JsonConvert.SerializeObject(requestGlobal);
+
+                // Usar HttpClient directamente para el diagnóstico
+                using (HttpClient client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30); // Aumentar el timeout
+
+                    var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                    // Configurar los headers exactamente como en Postman si es necesario
+                    // client.DefaultRequestHeaders.Add("User-Agent", "Your-User-Agent");
+
+                    var response = await client.PostAsync(url, content);
+
+                    // Registrar todos los detalles de la respuesta
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    EventLogger.SaveLog(EventType.Info, $"Respuesta HTTP: {response.StatusCode}");
+                    EventLogger.SaveLog(EventType.Info, $"Cuerpo de respuesta: {responseBody}");
+
+                    // El método debe devolver bool, no string
+                    // Sólo verificamos si la comunicación fue exitosa
+                    if (response.IsSuccessStatusCode)
+                    {
+                        EventLogger.SaveLog(EventType.Info, $"Conexión exitosa con código: {(int)response.StatusCode}");
+
+                        // Si quieres intentar desencriptar la respuesta para validar completamente
+                        try
+                        {
+                            // Asumiendo que la respuesta tiene una estructura similar a ResponseCootregua
+                            var responseObj = JsonConvert.DeserializeObject<dynamic>(responseBody);
+
+                            if (responseObj?.ResponseData != null)
+                            {
+                                string dataApi = responseObj.ResponseData.ToString();
+                                EventLogger.SaveLog(EventType.Info, $"DATA RECIBIDA DESENCRYPTADA: {dataApi}");
+                                data = dataApi;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EventLogger.SaveLog(EventType.Warning, $"No se pudo desencriptar respuesta: {ex.Message}");
+                            // Aún así consideramos la conexión exitosa si el status code fue OK
+                        }
+                       
+                        return data;
+                    }
+                    else
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error HTTP: {(int)response.StatusCode} - {response.ReasonPhrase}");
+                        data = response.StatusCode.ToString();
+
+                        return data;
+                    }
+
+              
+
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error en TestApiConnection: {ex.Message}");
+                EventLogger.SaveLog(EventType.Error, $"Stack Trace: {ex.StackTrace}");
+                //return false;
+            }
+
+        }*/
+        public static async Task<string> TestApiConnection()
+        {
+            try
+            {
+                string data = "";
+                string url = "https://apicootregua.e-city.co/Login/ValidateUsers";
+
+                // Objeto RequestGlobal como en tu código
+                RequestGlobal requestGlobal = new RequestGlobal
+                {
+                    Data = "9EKCAGz0C2QZL+sxeAHBwndQykLr81oDdD/G3EcYLnQug4MvZmUsYUb1IqquI6tUuoKUHW48RzaBFPWlZZhAyTHm2/1JvP4/RkerSCRXrSd24SWUXpF94Si2V3CHaHhk",
+                    CallDate = DateTime.Now
+                };
+
+                string payload = JsonConvert.SerializeObject(requestGlobal);
+
+                // Usar HttpClient directamente para el diagnóstico
+                using (HttpClient client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30); // Aumentar el timeout
+
+                    var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                    // Configurar los headers exactamente como en Postman si es necesario
+                    // client.DefaultRequestHeaders.Add("User-Agent", "Your-User-Agent");
+
+                    var response = await client.PostAsync(url, content);
+
+                    // Registrar todos los detalles de la respuesta
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    EventLogger.SaveLog(EventType.Info, $"Respuesta HTTP: {response.StatusCode}");
+                    EventLogger.SaveLog(EventType.Info, $"Cuerpo de respuesta: {responseBody}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        EventLogger.SaveLog(EventType.Info, $"Conexión exitosa con código: {(int)response.StatusCode}");
+
+                        try
+                        {
+                            // Asumiendo que la respuesta tiene una estructura similar a ResponseCootregua
+                            var responseObj = JsonConvert.DeserializeObject<dynamic>(responseBody);
+
+                            if (responseObj?.ResponseData != null)
+                            {
+                                string dataApi = responseObj.ResponseData.ToString();
+                                EventLogger.SaveLog(EventType.Info, $"DATA RECIBIDA: {dataApi}");
+                                data = dataApi;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EventLogger.SaveLog(EventType.Warning, $"No se pudo procesar respuesta JSON: {ex.Message}");
+                            data = "Error al procesar JSON: " + ex.Message;
+                        }
+
+                        return data;
+                    }
+                    else
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error HTTP: {(int)response.StatusCode} - {response.ReasonPhrase}");
+                        data = response.StatusCode.ToString();
+                        return data;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error en TestApiConnection: {ex.Message}");
+                EventLogger.SaveLog(EventType.Error, $"Stack Trace: {ex.StackTrace}");
+                return "Error: " + ex.Message; // Añadido return para el caso de excepción
+            }
+        }
         public static async Task<string> CallApiCootregua(string controller, object data)
         {
             try
+            {
+                if (controller == "ControllerCootreguaValidateUsers" || controller == "ControllerCootreguaGetPerson")
+                {
+                    // Usar reflexión para obtener propiedades del objeto
+                    var propiedades = data.GetType().GetProperties();
+                    foreach (var propiedad in propiedades)
+                    {
+                        var valor = propiedad.GetValue(data);
+                        Console.WriteLine($"{propiedad.Name}: {valor}");
+                    }
+                }
+                if (controller == "ControllerCootreguaValidateUsers")
+                {
+                    var propiedades = data.GetType().GetProperties();
+                    foreach (var propiedad in propiedades)
+                    {
+                        var valor = propiedad.GetValue(data);
+                        Console.WriteLine($"{propiedad.Name}: {valor}");
+                    }
+                    //AuthenticationBiomety biomety = new AuthenticationBiomety
+                    //{
+                    //    CodSession = ,
+                    //    Identification = transaction.Document,
+                    //    TypeReader = 1,
+                    //    Template = template
+                    //};
+                }
+                ;
+                string dataBack = "";
+                // Construir la URL
+                string url = string.Concat(AppConfig.Get("basseAddressCootregua"), AppConfig.Get(controller));
+
+                // Log de datos enviados
+                EventLogger.SaveLog(EventType.Info, "DATA ENVIADA " + " " + url + JsonConvert.SerializeObject(data));
+
+                var dataSerialized = JsonConvert.SerializeObject(data);
+                // Encriptar los datos
+                var requestClient = EncryptorEcity.Encrypt(dataSerialized, Key);
+                EventLogger.SaveLog(EventType.Info, "DATA ENVIADA ENCRYPTADA {endpoint}: " + requestClient, "");
+
+                // Crear el objeto RequestGlobal
+                RequestGlobal requestGlobal = new RequestGlobal
+                {
+                    Data = requestClient,
+                    CallDate = DateTime.Now
+                };
+
+                //string data = "";
+                //string url1 = "https://apicootregua.e-city.co/Login/ValidateUsers";
+
+                // Objeto RequestGlobal como en tu código
+                /*RequestGlobal requestGlobal = new RequestGlobal
+                {
+                    Data = "9EKCAGz0C2QZL+sxeAHBwndQykLr81oDdD/G3EcYLnQug4MvZmUsYUb1IqquI6tUuoKUHW48RzaBFPWlZZhAyTHm2/1JvP4/RkerSCRXrSd24SWUXpF94Si2V3CHaHhk",
+                    CallDate = DateTime.Now
+                };*/
+
+
+
+                string payload = JsonConvert.SerializeObject(requestGlobal);
+
+                // Usar HttpClient directamente para el diagnóstico
+                using (HttpClient client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30); // Aumentar el timeout
+
+                    var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                    // Configurar los headers exactamente como en Postman si es necesario
+                    // client.DefaultRequestHeaders.Add("User-Agent", "Your-User-Agent");
+
+                    var response = await client.PostAsync(url, content);
+
+                    // Registrar todos los detalles de la respuesta
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    EventLogger.SaveLog(EventType.Info, $"Respuesta HTTP: {response.StatusCode}");
+                    EventLogger.SaveLog(EventType.Info, $"Cuerpo de respuesta: {responseBody}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        EventLogger.SaveLog(EventType.Info, $"Conexión exitosa con código: {(int)response.StatusCode}");
+
+                        try
+                        {
+                            // Asumiendo que la respuesta tiene una estructura similar a ResponseCootregua
+                            var responseObj = JsonConvert.DeserializeObject<dynamic>(responseBody);
+
+                            if (responseObj?.ResponseData != null)
+                            {
+                                string dataApi = responseObj.ResponseData.ToString();
+                                EventLogger.SaveLog(EventType.Info, $"DATA RECIBIDA: {dataApi}");
+                                dataBack = dataApi;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EventLogger.SaveLog(EventType.Warning, $"No se pudo procesar respuesta JSON: {ex.Message}");
+                            dataBack = "Error al procesar JSON: " + ex.Message;
+                        }
+
+                        return dataBack;
+                    }
+                    else
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error HTTP: {(int)response.StatusCode} - {response.ReasonPhrase}");
+                        data = response.StatusCode.ToString();
+                        return dataBack;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error en TestApiConnection: {ex.Message}");
+                EventLogger.SaveLog(EventType.Error, $"Stack Trace: {ex.StackTrace}");
+                return "Error: " + ex.Message; // Añadido return para el caso de excepción
+            }
+            /*try
             {
                 // Configuración de URL base constante si AppConfig no está funcionando
                 string baseAddress = AppConfig.Get("basseAddressCootregua");
@@ -122,15 +399,21 @@ namespace WPFCootreguaV2.Domain.ApiService
                 EventLogger.SaveLog(EventType.Info, "DATA ENVIADA " + " " + url + JsonConvert.SerializeObject(data));
 
                 // Encriptar los datos
-                var requestClient = EncryptorEcity.Encrypt(JsonConvert.SerializeObject(data), Key);
-                EventLogger.SaveLog(EventType.Info, $"DATA ENVIADA ENCRYPTADA {endpoint}: {requestClient}");
+               // var requestClient = EncryptorEcity.Encrypt(JsonConvert.SerializeObject(data), Key);
 
+
+              
+
+                var requestClient = "9EKCAGz0C2QZL+sxeAHBwndQykLr81oDdD/G3EcYLnQug4MvZmUsYUb1IqquI6tUuoKUHW48RzaBFPWlZZhAyTHm2/1JvP4/RkerSCRXrSd24SWUXpF94Si2V3CHaHhk";
+                EventLogger.SaveLog(EventType.Info, $"DATA ENVIADA ENCRYPTADA {endpoint}: {requestClient}");
                 // Crear el objeto RequestGlobal
                 RequestGlobal requestGlobal = new RequestGlobal
                 {
                     Data = requestClient,
                     CallDate = DateTime.Now
                 };
+
+
 
                 // Serializar el cuerpo de la solicitud
                 string payload = JsonConvert.SerializeObject(requestGlobal);
@@ -169,10 +452,10 @@ namespace WPFCootreguaV2.Domain.ApiService
                 EventLogger.SaveLog(EventType.Error, $"Stack Trace: {ex.StackTrace}");
             }
 
-            return string.Empty;
+            return string.Empty;*/
         }
-        /*
-        public static async Task<string> CallApiCootregua(string controller, object data)
+        
+      /*  public static async Task<string> CallApiCootregua(string controller, object data)
         {
             try
             {
@@ -200,9 +483,9 @@ namespace WPFCootreguaV2.Domain.ApiService
 
                 // Configurar headers
                 var headers = new Dictionary<string, string>
-        {
-            { "Content-Type", "application/json" }
-        };
+                {
+                    { "Content-Type", "application/json" }
+                };
 
                 // Realizar la solicitud usando _httpHelper
                 var response = await _httpHelper.DoPostRequest<ResponseCootregua>(url, content, headers);

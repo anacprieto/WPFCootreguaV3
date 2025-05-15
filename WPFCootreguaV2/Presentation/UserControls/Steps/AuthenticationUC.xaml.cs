@@ -36,6 +36,9 @@ namespace WPFCootreguaV2.UserControls
     /// </summary>
     public partial class AuthenticationUC : AppUserControl
     {
+
+        private MenuBackground bg;
+
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
@@ -210,7 +213,61 @@ namespace WPFCootreguaV2.UserControls
             }
             catch (Exception ex)
             {
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                EventLogger.SaveLog(EventType.Info, " private void ValidateUser(string template)");
+
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        private async Task GetProducts()
+        {
+            try
+            {
+                ProductsState products = new ProductsState
+                {
+                    CodSession = _ts.Codigo,
+                    Identititfy = _ts.Documento,
+                };
+
+                var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
+
+                var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
+
+                _nav.ShowLoadModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", new InfoModal()));
+
+                //Switcher.ModalLoad(false);
+
+                if (!string.IsNullOrEmpty(prodct))
+                {
+                    var data = JsonConvert.DeserializeObject<List<ProductsState>>(prodct);
+
+                    if (data.Count >= 1)
+                    {
+                        _ts.DataProducts = data;
+
+                        Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
+                        });
+                        GC.Collect();
+                    }
+                    else
+                    {
+                        _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+
+                        CloseLoadModal();
+                    }
+                }
+                else
+                {
+                    _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+
+                    CloseLoadModal();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Info, MethodBase.GetCurrentMethod().Name);
+
             }
         }
         private void SaveTransaction(Domain.UIServices.Person person)
@@ -277,51 +334,9 @@ namespace WPFCootreguaV2.UserControls
             }
             catch (Exception ex)
             {
-                Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
-        private async Task SaveTransaction()
-        {
-            try
-            {
-                if (_paymentViewModel == null) throw new InvalidOperationException("PaymentViewModel is null");
-                _paymentViewModel.IsPayCompleted = true;
-                _ts = Transaction.Instance ?? throw new InvalidOperationException("Transaction instance is null");
-                _ts.paymentProcess.TotalIngresado = _paymentViewModel.EnteredAmount;
-                _ts.paymentProcess.TotalDevuelta = _paymentViewModel.DispensedAmount;
+                EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
 
-                SetTransactionDescription();
-
-                if ((_tranStateTemp == StateTransaction.Aprobada || _tranStateTemp == StateTransaction.Cancelada)
-                    && !_ts.paymentProcess.DevueltaCorrecta)
-                {
-                    // Si el estado de transacción es aprobada o cancelada y además hay error de devuelta se cambia a su respectivo estado
-                    // CanceladoErrorDevuelta o AprobadaErrorDevuelta
-                    _ts.transactionProcess.EstadoTransaccion = (StateTransaction)((int)_tranStateTemp + 2);
-                    _ts.paymentProcess.ValorFaltante = _paymentViewModel.RemainingAmount;
-                }
-                else
-                {
-                    _ts.transactionProcess.EstadoTransaccion = _tranStateTemp;
-                }
-
-                ApiDashboard.UpdateTransaction();
-
-                CloseLoadModal();
-                Dispatcher.Invoke(() => GoTo(new FinishUC()));
-
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-                if (!_isPayCanceled)
-                {
-                    EventLogger.SaveLog(EventType.Info, "Pago cancelado por error guardando el pago");
-                    await CancelPay();
-                }
-
-                CloseLoadModal();
-                _currentLoadModal = _nav.ShowLoadModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
         public void ChangeBackground(EBackground eBackground)

@@ -230,7 +230,7 @@ namespace WPFCootreguaV2.UserControls
                                 MaxAmountAhorroVista = Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVistaWithdrawal"));
                             }
 
-                            _currentLoadModal = _nav.ShowLoadModal("Estamos procesando el pago...");
+                            _currentLoadModal = _nav.ShowModal("Estamos procesando el pago...");
                             //TENGO UN MODAL AQUIIII, QUE DEBE SER VISIBLE
                             //ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
                             //modal.ShowDialog();
@@ -655,7 +655,7 @@ namespace WPFCootreguaV2.UserControls
                 });
 
                 StopTimer();
-                _currentLoadModal = _nav.ShowLoadModal("Hubo un error inesperado al realizar la consulta intenta nuevamente...");
+                _currentLoadModal = _nav.ShowModal("Hubo un error inesperado al realizar la consulta intenta nuevamente...");
 
             }
             catch (Exception ex)

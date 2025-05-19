@@ -167,7 +167,7 @@ namespace WPFCootreguaV2.UserControls
             await _peripherals.StopAceptance();
 #endif
 
-            _currentLoadModal = _nav.ShowLoadModal("Estamos procesando el pago...");
+            _currentLoadModal = _nav.ShowModal("Estamos procesando el pago...");
             await Task.Delay(3000);
             EventLogger.SaveLog(EventType.Info, "Iniciando Proceso de pago...");
 
@@ -193,7 +193,7 @@ namespace WPFCootreguaV2.UserControls
             }
             else
             {
-                _currentLoadModal = _nav.ShowLoadModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+                _currentLoadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
                 await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
                 _ts.DevueltaCorrecta = false;
                 await SavePay();
@@ -304,7 +304,7 @@ namespace WPFCootreguaV2.UserControls
             {
 
                 CloseLoadModal();
-                _currentLoadModal = _nav.ShowLoadModal("Pago completado con éxito devolución en curso...");
+                _currentLoadModal = _nav.ShowModal("Pago completado con éxito devolución en curso...");
                 await Task.Delay(3000);
                 EventLogger.SaveLog(EventType.Info, $"Iniciando devuelta de {_paymentViewModel.ReturnAmount}");
                 ReturnMoney(_paymentViewModel.ReturnAmount);
@@ -358,7 +358,7 @@ namespace WPFCootreguaV2.UserControls
                 }
 
                 CloseLoadModal();
-                _currentLoadModal = _nav.ShowLoadModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+                _currentLoadModal = _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
             }
         }
 
@@ -388,12 +388,12 @@ namespace WPFCootreguaV2.UserControls
                 if (_paymentViewModel.EnteredAmount > 0)
                 {
                     _paymentViewModel.ReturnAmount = _paymentViewModel.EnteredAmount;
-                    _currentLoadModal = _nav.ShowLoadModal("Transacción cancelada. Devolución en curso...");
+                    _currentLoadModal = _nav.ShowModal("Transacción cancelada. Devolución en curso...");
                     ReturnMoney(_paymentViewModel.EnteredAmount);
                 }
                 else
                 {
-                    _currentLoadModal = _nav.ShowLoadModal("Transacción cancelada");
+                    _currentLoadModal = _nav.ShowModal("Transacción cancelada");
                     _ts.DevueltaCorrecta = true;
                     await SavePay();
                 }

@@ -73,7 +73,7 @@ namespace WPFCootreguaV2.Domain.UIServices
             return result;
         }
 
-        public ModalWindow? ShowLoadModal(string msg)
+        public ModalWindow? ShowModal(string msg)
         {
             ModalWindow? loadWindow = null;
 

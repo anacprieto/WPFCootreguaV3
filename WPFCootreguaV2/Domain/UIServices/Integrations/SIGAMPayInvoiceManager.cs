@@ -61,7 +61,7 @@ namespace WPFCootreguaV2.Domain.UIServices.Integrations
             try
             {
 
-                var modal = _nav.ShowLoadModal("Consultando Coincidencias...");
+                var modal = _nav.ShowModal("Consultando Coincidencias...");
 
                 Application.Current.Dispatcher.Invoke(() => _nav.NavigateTo(new DataPayUC()));
 

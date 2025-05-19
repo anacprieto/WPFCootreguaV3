@@ -132,6 +132,7 @@ public class FileToAudioManager : IAudioManager, IDisposable
     private async Task VoiceLoop(string audioName)
     {
         var mp3Path = Path.Combine(AppInfo.APP_DIR, "Assets/Audios/"+audioName.ToLower() + ".mp3");
+        //var mp3Path = Path.Combine(AppInfo.APP_DIR, "Assets/Audios/" + audioName.ToLower() + ".mp3");
         _audioFile = new AudioFileReader(mp3Path);
         _outputDevice = new WaveOutEvent();
         _outputDevice.Init(_audioFile);

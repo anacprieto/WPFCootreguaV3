@@ -383,7 +383,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                         StopTimer();
                         CloseLoadModal();
-                        _currentLoadModal = _nav.ShowLoadModal("Transacción en verificación, un momento por favor mientras se realizan las validaciones pertinentes.");
+                        _currentLoadModal = _nav.ShowModal("Transacción en verificación, un momento por favor mientras se realizan las validaciones pertinentes.");
                         GoTimer();
                         _intentos++;
                         _IntentosTimer++;
@@ -567,7 +567,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
 
 
-                _nav.ShowLoadModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+                _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
             }
         }
 

@@ -169,7 +169,7 @@ namespace WPFCootreguaV2.UserControls
 
             if (!_ts.DevueltaCorrecta)
             {
-                var loadModal = _nav.ShowLoadModal(
+                var loadModal = _nav.ShowModal(
                     "No se pudo entregar la totalidad del dinero hay un faltante de:" +
                     $" {_ts.DatosPago.RemainingAmount.ToString("C0")} " +
                     ". Por favor comunícate con un administrador.");

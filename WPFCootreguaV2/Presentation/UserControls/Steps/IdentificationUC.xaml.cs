@@ -276,14 +276,14 @@ namespace WPFCootreguaV2.UserControls
                         else
                         {
                             CloseLoadModal();
-                            _nav.ShowLoadModal("Por favor ingrese un número de documento válido.");
+                            _nav.ShowModal("Por favor ingrese un número de documento válido.");
 
                             GoTimer();                        }
                     }
                     else
                     {
                         CloseLoadModal();
-                        _nav.ShowLoadModal("No hay comunicación con el servicio, por favor intenta de nuevo.");
+                        _nav.ShowModal("No hay comunicación con el servicio, por favor intenta de nuevo.");
                         GoTimer();
                     }
                 });
@@ -304,7 +304,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 if (string.IsNullOrEmpty(_ts.Documento))
                 {
-                    _nav.ShowLoadModal("No se encontró un número de documento válido.");
+                    _nav.ShowModal("No se encontró un número de documento válido.");
                     StopTimer();
                     return;
                 }
@@ -330,13 +330,13 @@ namespace WPFCootreguaV2.UserControls
                     }
                     else
                     {
-                        _nav.ShowLoadModal("Ocurrió un error procesando la información de la persona.");
+                        _nav.ShowModal("Ocurrió un error procesando la información de la persona.");
                         StopTimer();
                     }
                 }
                 else
                 {
-                    _nav.ShowLoadModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
+                    _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
                     StopTimer();
                 }
             }
@@ -401,7 +401,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 if (document.Length < 6)
                 {
-                    loadModal = _nav.ShowLoadModal("Por favor ingrese un número de referencia valido.");
+                    loadModal = _nav.ShowModal("Por favor ingrese un número de referencia valido.");
 
                     return;
                 }

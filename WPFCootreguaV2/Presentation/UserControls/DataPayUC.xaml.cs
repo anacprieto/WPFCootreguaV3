@@ -211,7 +211,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
             ModalWindow? loadModal = null;
             try
             {
-                loadModal = _nav.ShowLoadModal(Messages.VALIDATING_INFO);
+                loadModal = _nav.ShowModal(Messages.VALIDATING_INFO);
 
                 var tsCreated = await Api.CreateTransaction();
                 if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");

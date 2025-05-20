@@ -262,7 +262,8 @@ namespace WPFCootreguaV2.Domain.ApiService
                     Data = requestClient,
                     CallDate = DateTime.Now
                 };
-
+                var analisisData = requestGlobal.Data;
+                var resultado=EncryptorEcity.Decrypt(analisisData, Key);
                 //string data = "";
                 //string url1 = "https://apicootregua.e-city.co/Login/ValidateUsers";
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using WPFCootreguaV2.Domain;
 using WPFCootreguaV2.Domain.UIServices;
+using WPFCootreguaV2.Models;
 using WPFCootreguaV2.UserControls;
 
 namespace WPFCootreguaV2.Presentation.UserControls
@@ -33,10 +34,20 @@ namespace WPFCootreguaV2.Presentation.UserControls
         {
             InitializeComponent();
             Transaction.Reset();
+            //_validatePaypad = true;
             Init();
             this.Unloaded += OnUnLoaded;
-            LoadFiles();
-            StartSlideshow();
+            //LoadFiles();
+            //StartSlideshow();
+        }
+
+        private void Grid_TouchDown(object sender, EventArgs e)
+        {
+            //_imageSleader.Stop();
+            //_validatePaypad = false;
+           // Dispatcher.Invoke(() => GoTo(new TypeTrans()));
+
+            //Utilities.navigator.Navigate(UserControlView.TypeTrans);
         }
 
         #region Publish Config

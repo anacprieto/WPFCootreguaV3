@@ -269,6 +269,7 @@ namespace WPFCootreguaV2.UserControls
                         //if (data != null && data.Validate == 1 && data.CodUsuario > 0)
                         if (data != null && data.CodUsuario > 0)
                         {
+                           
                             _ts.Codigo = Convert.ToInt32(data.CodUsuario);
 
                             var person=GetPerson();
@@ -326,6 +327,7 @@ namespace WPFCootreguaV2.UserControls
                     if (data != null)
                     {
                         _ts.DataPerson = data;
+                        _ts.Codigo = Convert.ToInt32(data.CodPerson);
                         Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
                     }
                     else

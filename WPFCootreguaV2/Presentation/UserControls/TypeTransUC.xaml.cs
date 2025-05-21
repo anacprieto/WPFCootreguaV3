@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Security;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,22 +45,70 @@ namespace WPFCootreguaV2.UserControls
         {
             InitializeComponent();
             _ts = Transaction.Instance;
-
+            InitializeComponent();
+            //Utilities.Speak("Bienvenido, selecciona la operación a realizar.");
 
             _viewModel = new TypeTransViewModel();
             this.DataContext = _viewModel;
             this.Unloaded += OnUnloaded;
             this.Loaded += Onloaded;
-            Keyboard.KeyboardPressed += OnKeyboardPressed;
-            GoTimer();
 
-            IcoReferencia.Visibility = Visibility.Visible;
+        }
+        private void typeTrans_TouchDown(object sender, EventArgs e)
+        {
+            try
+            {
 
+                int Type = Convert.ToInt32((sender as Image).Tag);
+
+                if (Type == 1)
+                {
+                    _ts.Type = ETransactionType.Withdrawal;
+                }
+                else
+                if (Type == 2)
+                {
+                    _ts.Type = ETransactionType.Payment;
+                }
+                else
+                {
+                    _ts.Type = ETransactionType.Registros;
+                }
+
+                ValidateStatus();
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        private void ValidateStatus()
+        {
+            var tsCreated = Api.CreateTransaction();
+            if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
+
+            // Agregar un retraso de 2 segundos antes de iniciar la cámara
+            //await Task.Delay(2000, cancellationToken); // 2000 milisegundos = 2 segundos
+
+
+
+#if NO_PERIPHERALS
+
+#else
+#endif
+
+            //if (loadModal != null)
+            //{
+            //    loadModal.Close();
+            //    loadModal = null;
+            //}
+
+            if (_ts.TipoPago == TypePayment.Efectivo)
+             Dispatcher.Invoke(() => GoTo(new PaymentUC()));
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             CloseLoadModal();
-            StopTimer();
             ScannerController.Stop();
             ScannerController.ScannerDataReceived -= OnScannerDataReceived;
         }
@@ -69,42 +119,6 @@ namespace WPFCootreguaV2.UserControls
             //       _viewModel.HelpMessage = "Ingresa número de cuenta o referente";
         }
 
-        #region UI EVENTS
-        private async void OnKeyboardPressed(object? sender, string keyPressed)
-        {
-            if (string.IsNullOrEmpty(keyPressed)) return;
-            if (keyPressed == "Remove")
-            {
-                string text = InputInvoice.Text;
-                InputInvoice.Text = (text.Length > 1) ? text.Remove(text.Length - 1) : "";
-                if (text.Length > 1)
-                {
-                    InputInvoice.Text = text.Remove(text.Length - 1);
-                    return;
-                }
-                InputInvoice.Text = "";
-                return;
-            }
-
-            if (keyPressed == "Clear")
-            {
-                InputInvoice.Text = "";
-                return;
-            }
-
-            InputInvoice.Text += keyPressed;
-            await Task.Delay(100);
-        }
-
-        private void TxtInvoice_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.StatusMsg = "";
-            if (InputInvoice.Text.Length > 26)
-            {
-                InputInvoice.Text = InputInvoice.Text.Substring(0, InputInvoice.Text.Length - 1);
-                return;
-            }
-        }
         private void BtnAtras_MouseDown(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() => GoTo(new SelectOptionUC()));
@@ -116,14 +130,7 @@ namespace WPFCootreguaV2.UserControls
             Dispatcher.Invoke(() => GoTo(new MainUC()));
 
         }
-        private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            TxtStatusMsg.Visibility = Visibility.Visible;
-            string doc = InputInvoice.Text;
-            await RequestDocData(doc);
-        }
-        #endregion
-
+      
         #region ScannerEvents
         private async void OnScannerDataReceived(string data)
         {
@@ -213,72 +220,7 @@ namespace WPFCootreguaV2.UserControls
             }
         }
 
-        #region Timer
-        public void GoTimer()
-        {
-            try
-            {
-                _timer = new TimerGeneric(STR_TIMER);
-
-                TxtTimer.Text = STR_TIMER;
-
-                _timer.CallBackTimeOut = () =>
-                {
-
-                    //         Dispatcher.Invoke(() => GoTo(new SelectInputUC()));
-
-
-                };
-
-                _timer.CallBackTick = stringTimer =>
-                {
-                    Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        TxtTimer.Text = stringTimer;
-
-                    });
-                };
-
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-            }
-        }
-
-        public void StopTimer()
-        {
-            try
-            {
-                if (_timer != null)
-                {
-                    _timer.CallBackTimeOut = null;
-                    _timer.CallBackTick = null;
-                    _timer.CallBackStop?.Invoke();
-                }
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-            }
-        }
-
-
-        #endregion
-
-
-        private void BtnLimpiar_Touch(object sender, EventArgs e)
-        {
-            Image key = (Image)sender;
-            string tag = key.Tag.ToString() ?? "";
-
-            if (tag == "Clear")
-            {
-                InputInvoice.Text = "";
-                return;
-            }
-
-        }
+        
     }
 
     public class TypeTransViewModel : INotifyPropertyChanged

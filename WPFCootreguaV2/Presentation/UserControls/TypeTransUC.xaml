@@ -10,53 +10,48 @@
              d:DesignHeight="1920" d:DesignWidth="1080">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+            <ImageBrush ImageSource="/Images/Backgrounds/type.jpg" Stretch="Uniform"/>
         </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="300"/>
+        </Grid.RowDefinitions>
 
-        <!-- HEADER -->
-        <Image x:Name="BtnAtras" Source="{StaticResource BTN_ATRAS}" Margin="47,38,867,1778"
-            MouseDown="BtnAtras_MouseDown"/>
-        <Image x:Name="BtnSalir" Source="{StaticResource BTN_SALIR}" Margin="888,38,19,1778"
-            MouseDown="BtnSalir_MouseDown"/>
-        <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
+        <Image 
+        Source="/Images/Buttons/BtnPagar.png"
+        Height="150"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Top"
+        Margin="0,788,108,0"
+        Tag="2"
+        Grid.Row="1"
+        Stretch="Uniform"
+        MouseDown="typeTrans_TouchDown" Width="516"
+    />
 
+        <!--<Image 
+        Source="/Images/Buttons/retirar2.png"
+        Height="150"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Margin="0,500,150,0"
+        Tag="1"
+        Grid.Row="1"
+        Stretch="Uniform"
+        TouchDown="typeTrans_TouchDown"
+    />-->
 
-        <!-- BODY -->
-        <TextBlock 
-            Text="Digita tu referencia de pago o escanea tu factura" Style="{StaticResource TitleStyle}"
-            Margin="332,357,0,0"
-            x:Name="TxtTypeConsult"
-            FontSize="40"
-            Width="640" Height="126" HorizontalAlignment="Left"
-        />
-
-        <Image x:Name="IcoReferencia" Visibility="Visible" Source="{StaticResource ICO_REFERENCIA}" Margin="130,338,762,1447" />
-
-        <Border Background="LightGray" Visibility="Visible" Height="134" CornerRadius="20" VerticalAlignment="Top" Margin="47,638,32,0" >
-            <TextBox x:Name="InputInvoice" FontSize="65" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black" d:Text="0001000000010008000000000" VerticalContentAlignment="Center" 
-                     TextChanged="TxtInvoice_TextChanged" Background="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" BorderBrush="{x:Null}" Height="114" Margin="10,0,10,0"/>
-        </Border>
-
-
-        <TextBlock  x:Name="TxtStatusMsg"
-                    md:HintAssist.Hint="Usuario"
-                    Text="{Binding StatusMsg}"
-                    Style="{StaticResource StatusTextStyle}" 
-                    Margin="0,665,0,0"/>
-
-        <local:NumericKeyboard  x:Name="Keyboard"  Margin="319,840,319,541"  />
-
-
-
-        <Image
-            x:Name="BtnPagar"
-            Source="{StaticResource BTN_CONSULTAR}" Margin="0,1534,0,0"
-            MouseDown="BtnConsultar_Touch" HorizontalAlignment="Center" Width="394" Height="104" VerticalAlignment="Top"
-            />
-
-        <!--FOOTER-->
-
-        <Image Source="{StaticResource ATENTION_LINE}" Margin="292,1740,292,50" />
-
+        <Image 
+        Source="/Images/BtnIngreso.png"
+        Height="150"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Top"
+        Margin="0,972,134,0"
+        Tag="3"
+        Grid.Row="1"
+        Stretch="Uniform"
+        MouseDown="typeTrans_TouchDown" Width="576"
+    />
     </Grid>
 </local:AppUserControl>

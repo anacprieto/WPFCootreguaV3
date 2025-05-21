@@ -340,13 +340,13 @@ namespace WPFCootreguaV2.UserControls
                             CloseLoadModal();
                             _nav.ShowModal("Por favor ingrese un número de documento válido.");
 
-                            GoTimer();                        }
+                        }
                     }
                     else
                     {
                         CloseLoadModal();
                         _nav.ShowModal("No hay comunicación con el servicio, por favor intenta de nuevo.");
-                        GoTimer();
+                       
                     }
                 });
 

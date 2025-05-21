@@ -9,7 +9,7 @@
 
     <Grid MouseDown="Grid_MouseDown">
         <Grid.Background>
-            <ImageBrush ImageSource="/Images/Backgrounds/Publicidad.jpg"/>
+            <ImageBrush ImageSource="/Images/Backgrounds/elige.jpg"/>
         </Grid.Background>
     </Grid>
 </local:AppUserControl>

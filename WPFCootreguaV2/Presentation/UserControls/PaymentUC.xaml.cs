@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
 using WPFCootreguaV2.Domain;
+using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
@@ -34,10 +36,21 @@ namespace WPFCootreguaV2.UserControls
         private ModalWindow? _currentLoadModal;
 
         private StateTransaction _tranStateTemp = StateTransaction.Iniciada;
+        private MenuBackground bg;
+
         public PaymentUC()
         {
             InitializeComponent();
+            bg = new MenuBackground();
+            _ts = Transaction.Instance;
 
+            //this.transaction.statePaySuccess = false;
+
+            ChangeBackground(EBackground.Paga);
+
+            //Utilities.Speak("Por favor ingresa el dinero.");
+
+            OrganizeValues();
             EventLogger.SaveLog(EventType.Info, "Comienza proceso de pago, Iniciando PaymentUC.");
 
             
@@ -88,8 +101,8 @@ namespace WPFCootreguaV2.UserControls
             {
                 OnCashIn(50000);
             }
-            MainGrid.Children.Add(dynamicButton);
-            MainGrid.Children.Add(dynamicButton2);
+            //MainGrid.Children.Add(dynamicButton);
+            //MainGrid.Children.Add(dynamicButton2);
 #else
             _peripherals = ArduinoController.Instance;
             _peripherals.CashIn += OnCashIn;
@@ -103,7 +116,88 @@ namespace WPFCootreguaV2.UserControls
             this.Loaded += OnLoaded;
             
         }
+        private async void BtnCancel_TouchDown(object sender, MouseButtonEventArgs e)
+        {
+            _ = Dispatcher.BeginInvoke(() => BtnCancel.Visibility = Visibility.Collapsed);
 
+            if (!_nav.ShowModal(Messages.CANCEL_TRANSACTION, new ConfirmationModal()))
+            {
+                _ = Dispatcher.BeginInvoke(() => BtnCancel.Visibility = Visibility.Visible);
+                return;
+            }
+            EventLogger.SaveLog(EventType.Info, "Pago cancelado por el usuario.");
+            await CancelPay();
+        }
+
+        private void OrganizeValues()
+        {
+            try
+            {
+                _paymentViewModel = new PaymentViewModel
+                {
+                    PayAmount = _ts.Total,
+                    RemainingAmount = _ts.Total,
+                    ReturnAmount = 0,
+                    EnteredAmount = 0,
+                    Denominations = new List<Denomination>(),
+                    DispensedAmount = 0
+                };
+
+                this.DataContext = _paymentViewModel;
+
+                InitViewModel();
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        public void ChangeBackground(EBackground eBackground)
+        {
+
+            try
+            {
+                //if (bg == null)
+                //{
+                //    bg = new MenuBackground(); // Tipo correcto
+                //}
+
+                Dispatcher.Invoke(() =>
+                {
+                    switch (eBackground)
+                    {
+                        case EBackground.Identificate:
+                            // Usar el recurso estático
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
+                            break;
+                        case EBackground.Identificate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
+                            break;
+                        case EBackground.Autenticate:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
+                            break;
+                        case EBackground.Autenticate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
+                            break;
+                        case EBackground.Productos:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
+                            break;
+                        case EBackground.Paga:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
+                            break;
+                        case EBackground.Generico:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
+                            break;
+                    }
+
+                    this.DataContext = bg;
+                });
+            }
+            catch (Exception ex)
+            {
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
 
@@ -125,9 +219,7 @@ namespace WPFCootreguaV2.UserControls
                 Denominations = new List<Denomination>(),
                 DispensedAmount = 0
             };
-            DataView.DataContext = _paymentViewModel;
             this.DataContext = _paymentViewModel;
-            DataView.ItemsSource = _paymentViewModel.Denominations;
 
         }
 
@@ -156,7 +248,6 @@ namespace WPFCootreguaV2.UserControls
 
             SendTransactionDetail(TypeOperation.AP, value);
 
-            _ = RefreshView(); // Se refresca la vista asincronamente
 
             if (_paymentViewModel.EnteredAmount < _paymentViewModel.PayAmount) return;
             
@@ -215,13 +306,7 @@ namespace WPFCootreguaV2.UserControls
         #endregion
 
         #region UI control methods
-        private async Task RefreshView()
-        {
-            await Dispatcher.BeginInvoke(() =>
-            {
-                DataView.Items.Refresh();
-            });
-        }
+      
         private void CloseLoadModal()
         {
             if (_currentLoadModal != null)

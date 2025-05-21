@@ -5,117 +5,233 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="1920" d:DesignWidth="1080"
-             >
-    <Grid x:Name="MainGrid">
-        <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
-        </Grid.Background>
+             Height="1720" 
+             Width="680" >
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="530" />
+            <RowDefinition Height="300" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock 
+             Text="Ingrese el dinero"
+             FontSize="60"
+             Width="500"
+             TextAlignment="Center"
+             TextWrapping="Wrap"
+             Margin="0,0,0,0"
+             FontFamily="Arial"
+             FontWeight="Bold"
+             VerticalAlignment="Bottom"
+             HorizontalAlignment="Center" />
 
-        <!-- BODY -->
-        <Border  Height="1100" BorderThickness="10" BorderBrush="#326ea5" CornerRadius="50" Padding="40" Width="1000">
-            <Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <TextBlock 
+             Text="Denominación"
+             FontSize="30"
+             TextAlignment="Center"
+             Margin="20,0,0,0"
+             FontFamily="Arial"
+             FontWeight="Bold"
+             VerticalAlignment="Bottom"
+             HorizontalAlignment="Left" Grid.Row="6" />
 
-                <Grid.RowDefinitions>
+            <TextBlock 
+             Text="Cantidad"
+             FontSize="30"
+             TextAlignment="Center"
+             Margin="0,0,0,0"
+             FontFamily="Arial"
+             FontWeight="Bold"
+             VerticalAlignment="Bottom"
+             HorizontalAlignment="Center" />
 
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="4*" />
-                    <RowDefinition Height="2*" />
+            <TextBlock 
+             Text="Total ($)"
+             FontSize="30"
+             TextAlignment="Center"
+             Margin="0,0,80,0"
+             FontFamily="Arial"
+             FontWeight="Bold"
+             VerticalAlignment="Bottom"
+             HorizontalAlignment="Right" />
+        </Grid>
 
-                </Grid.RowDefinitions>
-                <TextBlock  Text="INGRESE EL DINERO"  Style="{StaticResource TitleStyle}" Width="900" Grid.Row="0"/>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+        <Grid Grid.Row="2">
+            <ListView x:Name="lv_denominations" 
+                 Margin="0,0,0,0"
+                 Background="Transparent"
+                 BorderBrush="Transparent"
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Top"
+                 ItemsSource="{Binding}">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1"
+                              HorizontalAlignment="Center"
+                                  VerticalAlignment="Top"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                    <Border Margin="30, 15" Grid.Column="0" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
-                        <TextBlock Text="Denominación" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="30"/>
-                    </Border>
-                    <Border Margin="30, 15" Grid.Column="1" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
-                        <TextBlock Text="Cantidad" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="30"/>
-                    </Border>
-                    <Border Margin="30, 15" Grid.Column="2" Grid.Row="0" Background="{StaticResource PRIMARYCOLOR}" CornerRadius="15" Height="70">
-                        <TextBlock Text="Total ($)" Style="{StaticResource CommonTextStyle}" Foreground="{StaticResource LIGTHCOLOR}" VerticalAlignment="Center" FontSize="30"/>
-                    </Border>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Center"
+                         VerticalAlignment="Top" Background="Transparent"
+                         Margin="0,0,0,0"
+                         Width="600"
+                         Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock 
+                                 Text="{Binding Denominacion, StringFormat={}{0:C0}}"
+                                 FontSize="35"
+                                 FontFamily="Arial"
+                                 TextWrapping="Wrap"
+                                 Margin="0,0,0,0"
+                                 Width="200"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 Grid.Column="0"
+                                 TextAlignment="Center"
+                        />
+                            <TextBlock 
+                                 Text="{Binding Quantity}"
+                                 FontSize="35"
+                                 FontFamily="Arial"
+                                 Width="80"
+                                 TextAlignment="Center"
+                                 TextWrapping="Wrap"
+                                 Margin="0,0,0,0"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 FontWeight="Bold"
+                                 Grid.Column="1"
+                        />
+                            <TextBlock 
+                                 Text="{Binding Total, StringFormat={}{0:C0}}"
+                                 FontSize="30"
+                                 FontFamily="Arial"
+                                 TextWrapping="Wrap"
+                                 Margin="0,0,0,0"
+                                 Width="200"
+                                 TextAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 FontWeight="Bold"
+                                 Grid.Column="2" 
+                        />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <Grid Grid.Row="3">
+            <TextBlock 
+             Text="Valor ingresado"
+             FontSize="35"
+             TextAlignment="Center"
+             Margin="10,0,0,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Left"
+          />
+            <TextBlock 
+             Text="{Binding ValorIngresado, StringFormat={}{0:C0}}"
+             FontSize="40"
+             TextAlignment="Center"
+             Margin="0,0,100,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             FontWeight="Bold"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Right"
+          />
+            <TextBlock 
+             Text="Valor faltante"
+             FontSize="30"
+             TextAlignment="Center"
+             Margin="10,60,0,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Left"
+          />
+            <TextBlock 
+             Text="{Binding ValorFaltante, StringFormat={}{0:C0}}"
+             FontSize="35"
+             TextAlignment="Center"
+             Margin="0,60,100,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             FontWeight="Bold"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Right"
+          />
 
-                    <!--LISTBOX-->
-                    <ListBox x:Name="DataView" Background="Transparent" BorderThickness="0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="810"  >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Columna Denominación -->
-                                    <TextBlock  Text="{Binding DenominationValue, StringFormat={}{0:C0}}" Style="{StaticResource ViewBoxTextStyle}" Margin="5" Grid.Column="0" HorizontalAlignment="Left"/>
-                                    <!-- Columna de Cantidad -->
-                                    <TextBlock  Text="{Binding Quantity}" Style="{StaticResource ViewBoxTextStyle}" Margin="5" Grid.Column="1" HorizontalAlignment="center"/>
-                                    <!-- Columna de Total -->
-                                    <TextBlock  Text="{Binding TotalDenomAmount, StringFormat=\{0:C0\}}" Style="{StaticResource ViewBoxTextStyle}" FontWeight="Bold" Grid.Column="2" HorizontalAlignment="Right"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Valor ingresado:" Style="{StaticResource ViewBoxTextStyle}" Grid.Row="0" />
-                        <TextBlock Text="Valor faltante:" Style="{StaticResource ViewBoxTextStyle}" Grid.Row="1" />
-                        <TextBlock Text="Valor sobrante:" Style="{StaticResource ViewBoxTextStyle}" Grid.Row="2" />
-                        <TextBlock Text="Valor total:" Style="{StaticResource ViewBoxTextStyle}" FontSize="40" FontWeight="Bold" Foreground="{StaticResource PRIMARYCOLOR}" Grid.Row="3" />
-                    </Grid>
-
-                    <Grid Grid.Column="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding EnteredAmount, StringFormat=\{0:C0\}}" Style="{StaticResource ViewBoxTextStyle}" HorizontalAlignment="Right" Grid.Row="0" />
-                        <TextBlock Text="{Binding RemainingAmount, StringFormat=\{0:C0\}}" Style="{StaticResource ViewBoxTextStyle}" HorizontalAlignment="Right" Grid.Row="1" />
-                        <TextBlock Text="{Binding ReturnAmount, StringFormat=\{0:C0\}}" Style="{StaticResource ViewBoxTextStyle}" HorizontalAlignment="Right" Grid.Row="2" />
-                        <TextBlock Text="{Binding PayAmount, StringFormat=\{0:C0\}}" Style="{StaticResource ViewBoxTextStyle}" HorizontalAlignment="Right" FontSize="40" FontWeight="Bold" Foreground="{StaticResource TITLECOLOR}" Grid.Row="3" />
-
-                    </Grid>
-                </Grid>
-            </Grid>
-
-        </Border>
-
-        <Image x:Name="BtnCancel" Source="{StaticResource BTN_CANCELAR}" Margin="392,1552,392,283"
-            MouseDown="BtnCancel_TouchDown"/>
-
-        <!--FOOTER-->
-
-        <Image Source="{StaticResource ATENTION_LINE}" Margin="353,1758,353,44" />
-
-
+            <TextBlock 
+             Text="Valor sobrante"
+             FontSize="30"
+             TextAlignment="Center"
+             Margin="10,120,0,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Left"
+          />
+            <TextBlock 
+             Text="{Binding ValorSobrante, StringFormat={}{0:C0}}"
+             FontSize="35"
+             TextAlignment="Center"
+             Margin="0,120,100,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             FontWeight="Bold"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Right"
+          />
+            <TextBlock 
+             Text="Valor total transacción"
+             FontSize="30"
+             TextAlignment="Center"
+             Margin="10,180,0,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Left"
+          />
+            <TextBlock 
+             Text="{Binding PayValue, StringFormat={}{0:C0}}"
+             FontSize="35"
+             TextAlignment="Center"
+             Margin="0,180,100,0"
+             FontFamily="Arial"
+             Foreground="#FF606060"
+             FontWeight="Bold"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Right"
+          />
+        </Grid>
+        <Grid Grid.Row="4">
+            <Image 
+             Name="BtnCancel"
+             Source="/Images/Buttons/btnSalir2.png"
+             Height="90"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top"
+             Margin="30,50,0,0"
+             Visibility="{Binding ImgCancel}"
+             Stretch="Uniform"
+             TouchDown="BtnCancel_TouchDown"
+         />
+        </Grid>
     </Grid>
 </local:AppUserControl>

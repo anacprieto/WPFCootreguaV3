@@ -300,11 +300,8 @@ namespace WPFCootreguaV2.UserControls
                         _ts.DataProducts = data;
 
                         //Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                        Dispatcher.BeginInvoke((Action)delegate
-                        {
-                            Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                        });
-                        GC.Collect();
+                         Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
+                        //GC.Collect();
                     }
                     else
                     {

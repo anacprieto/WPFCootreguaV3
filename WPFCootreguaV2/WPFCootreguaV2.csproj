@@ -323,6 +323,9 @@
 
 
   <ItemGroup>
+    <Compile Update="Presentation\UserControls\TypeTransUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Presentation\UserControls\ManualInputUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

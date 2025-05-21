@@ -21,13 +21,13 @@
         </Grid>
 
         <Grid Grid.Row="1" >
-            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="87,268,87,106" RenderTransformOrigin="-1.019,-0.023" >
+            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="87,226,87,188" RenderTransformOrigin="-1.019,-0.023" >
                 <local:GifViewer.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
-                        <SkewTransform/>
+                        <SkewTransform AngleX="-0.277"/>
                         <RotateTransform/>
-                        <TranslateTransform Y="546.012"/>
+                        <TranslateTransform Y="546.012" X="-2.993"/>
                     </TransformGroup>
                 </local:GifViewer.RenderTransform>
             </local:GifViewer>

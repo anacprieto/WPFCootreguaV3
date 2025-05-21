@@ -38,6 +38,9 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         public Person DataPerson { get; set; }
 
+        public Person Persona { get; set; }
+
+
 
         public List<ProductsState> DataProducts { get; set; }
         public ProductsState ProductSelect { get; set; }
@@ -99,21 +102,7 @@ namespace WPFCootreguaV2.Domain.UIServices
         public string IdTransaccion { get; set; }
 
     }
-    public class Person
-    {
-        public long CodPerson { get; set; }
-        public string Identification { get; set; }
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public string FirstLastName { get; set; }
-        public string SecondLastName { get; set; }
-        public string Adress { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string CellPhone { get; set; }
-        public int CodOficine { get; set; }
-    }
-
+    
     public class AuthenticationBiomety
     {
         public int IdBiometry { get; set; }

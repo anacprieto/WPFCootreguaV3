@@ -217,33 +217,6 @@ namespace WPFCootreguaV2.Domain.ApiService
         {
             try
             {
-                if (controller == "ControllerCootreguaValidateUsers" || controller == "ControllerCootreguaGetPerson")
-                {
-                    // Usar reflexión para obtener propiedades del objeto
-                    var propiedades = data.GetType().GetProperties();
-                    foreach (var propiedad in propiedades)
-                    {
-                        var valor = propiedad.GetValue(data);
-                        Console.WriteLine($"{propiedad.Name}: {valor}");
-                    }
-                }
-                if (controller == "ControllerCootreguaValidateUsers")
-                {
-                    var propiedades = data.GetType().GetProperties();
-                    foreach (var propiedad in propiedades)
-                    {
-                        var valor = propiedad.GetValue(data);
-                        Console.WriteLine($"{propiedad.Name}: {valor}");
-                    }
-                    //AuthenticationBiomety biomety = new AuthenticationBiomety
-                    //{
-                    //    CodSession = ,
-                    //    Identification = transaction.Document,
-                    //    TypeReader = 1,
-                    //    Template = template
-                    //};
-                }
-                ;
                 string dataBack = "";
                 // Construir la URL
                 string url = string.Concat(AppConfig.Get("basseAddressCootregua"), AppConfig.Get(controller));

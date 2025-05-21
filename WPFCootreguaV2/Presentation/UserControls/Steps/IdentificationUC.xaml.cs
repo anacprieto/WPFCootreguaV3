@@ -16,6 +16,7 @@ using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
 using WPFCootreguaV2.Domain;
 using WPFCootreguaV2.Domain.ApiService;
+using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
@@ -24,6 +25,8 @@ using WPFCootreguaV2.Domain.UIServices.Integrations;
 using WPFCootreguaV2.Domain.Variables;
 using WPFCootreguaV2.Modals;
 using WPFCootreguaV2.Presentation.UserControls;
+using static WPFCootreguaV2.UserControls.IdentificationUC;
+
 
 namespace WPFCootreguaV2.UserControls
 {
@@ -46,16 +49,29 @@ namespace WPFCootreguaV2.UserControls
         private string _referencia = string.Empty;
         #endregion
 
+        private MenuBackground bg;
+
+
         public IdentificationUC()
         {
             InitializeComponent();
             _ts = Transaction.Instance;
-
+            bg = new MenuBackground();
             _viewModel = new IdentificationViewModel();
             this.DataContext = _viewModel;
             this.Unloaded += OnUnloaded;
             this.Loaded += Onloaded;
             Keyboard.KeyboardPressed += OnKeyboardPressed;
+
+            if (_ts.Type == ETransactionType.Registros)
+            {
+                ChangeBackground(EBackground.Identificate2);
+            }
+            else
+            {
+                ChangeBackground(EBackground.Identificate);
+
+            }
             GoTimer();
 
             //IcoReferencia.Visibility = Visibility.Visible;
@@ -64,7 +80,52 @@ namespace WPFCootreguaV2.UserControls
 
         // Fix for CS0121: The issue arises because there are two identical method signatures for OnKeyboardPressed in the same class.
         // To resolve this, one of the duplicate methods must be removed.
+        public void ChangeBackground(EBackground eBackground)
+        {
 
+            try
+            {
+                //if (bg == null)
+                //{
+                //    bg = new MenuBackground(); // Tipo correcto
+                //}
+
+                Dispatcher.Invoke(() =>
+                {
+                    switch (eBackground)
+                    {
+                        case EBackground.Identificate:
+                            // Usar el recurso estático
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
+                            break;
+                        case EBackground.Identificate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
+                            break;
+                        case EBackground.Autenticate:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
+                            break;
+                        case EBackground.Autenticate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
+                            break;
+                        case EBackground.Productos:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
+                            break;
+                        case EBackground.Paga:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
+                            break;
+                        case EBackground.Generico:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
+                            break;
+                    }
+
+                    this.DataContext = bg;
+                });
+            }
+            catch (Exception ex)
+            {
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
         private async void OnKeyboardPressed(object? sender, string keyPressed)
         {
             if (string.IsNullOrEmpty(keyPressed)) return;
@@ -300,7 +361,6 @@ namespace WPFCootreguaV2.UserControls
         }
         private async Task GetPerson()
         {
-            
             try
             {
                 if (string.IsNullOrEmpty(_ts.Documento))
@@ -309,6 +369,7 @@ namespace WPFCootreguaV2.UserControls
                     StopTimer();
                     return;
                 }
+
                 Person person = new Person
                 {
                     CodPerson = _ts.Codigo,
@@ -317,36 +378,134 @@ namespace WPFCootreguaV2.UserControls
 
                 var persEncrypt = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetPerson", person);
                 var pers = EncryptorEcity.Decrypt(persEncrypt);
+
+                // Move CloseLoadModal() after checking if persEncrypt is empty
+                if (string.IsNullOrEmpty(persEncrypt))
+                {
+                    CloseLoadModal();
+                    _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
+                    StopTimer();
+                    return;
+                }
+
+                var data = JsonConvert.DeserializeObject<Person>(pers);
                 CloseLoadModal();
 
-
-                if (!string.IsNullOrEmpty(pers))
+                if (data != null)
                 {
-                    var data = JsonConvert.DeserializeObject<Person>(pers);
+                    // Initialize if needed
+                    if (_ts.Persona == null)
+                    {
+                        _ts.Persona = new Domain.ApiService.Models.Person();
+                    }
 
-                    if (data != null)
-                    {
-                        _ts.DataPerson = data;
-                        _ts.Codigo = Convert.ToInt32(data.CodPerson);
-                        Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
-                    }
-                    else
-                    {
-                        _nav.ShowModal("Ocurrió un error procesando la información de la persona.");
-                        StopTimer();
-                    }
+                    // Assign values with null handling
+                    _ts.Persona.CodPerson = data.CodPerson;
+                    _ts.Persona.Identification = _ts.Documento;
+                    _ts.Persona.FirstName = data.FirstName ?? string.Empty;
+                    _ts.Persona.SecondName = data.SecondName ?? string.Empty;
+                    _ts.Persona.FirstLastName = data.FirstLastName ?? string.Empty;
+                    _ts.Persona.SecondLastName = data.SecondLastName ?? string.Empty;
+                    _ts.Persona.Adress = data.Adress ?? string.Empty;
+                    _ts.Persona.Phone = data.Phone ?? string.Empty;
+                    _ts.Persona.Email = data.Email ?? string.Empty;
+                    _ts.Persona.CellPhone = data.CellPhone ?? string.Empty;
+                    _ts.Persona.CodOficine = data.CodOficine;
+
+                    _ts.Codigo = Convert.ToInt32(data.CodPerson);
+                    Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
                 }
                 else
                 {
-                    _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
+                    _nav.ShowModal("Ocurrió un error procesando la información de la persona.");
                     StopTimer();
                 }
             }
             catch (Exception ex)
             {
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                CloseLoadModal(); // Make sure to close modal if exception occurs
+                _nav.ShowModal("Ocurrió un error: " + ex.Message);
+                StopTimer();
             }
         }
+        //private async Task GetPerson()
+        //{
+
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(_ts.Documento))
+        //        {
+        //            _nav.ShowModal("No se encontró un número de documento válido.");
+        //            StopTimer();
+        //            return;
+        //        }
+        //        Person person = new Person
+        //        {
+        //            CodPerson = _ts.Codigo,
+        //            Identification = _ts.Documento,
+        //        };
+
+        //        var persEncrypt = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetPerson", person);
+        //        var pers = EncryptorEcity.Decrypt(persEncrypt);
+        //        var data = JsonConvert.DeserializeObject<Person>(pers);
+
+        //        CloseLoadModal();
+
+        //        if (!string.IsNullOrEmpty(persEncrypt))
+        //        {
+        //            if (data != null)
+        //            {
+        //                // Initialize if needed
+        //                if (_ts.Persona == null)
+        //                {
+        //                    _ts.Persona = new Domain.ApiService.Models.Person();  // Replace with actual type
+        //                }
+
+        //                _ts.Persona.CodPerson = data.CodPerson;
+        //                _ts.Persona.Identification = data.Identification;
+        //                _ts.Persona.FirstName = data.FirstName;
+        //                _ts.Persona.SecondName = data.SecondName;
+        //                _ts.Persona.FirstLastName = data.FirstLastName;
+        //                _ts.Persona.SecondLastName = data.SecondLastName;
+
+        //                _ts.Persona.Adress = data.Adress;
+        //                _ts.Persona.Phone = data.Phone;
+        //                _ts.Persona.Email = data.Email;
+        //                _ts.Persona.CellPhone = data.CellPhone;
+        //                _ts.Persona.CodOficine = data.CodOficine;
+
+
+        //                _ts.Codigo = Convert.ToInt32(data.CodPerson);
+        //                Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
+        //            StopTimer();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //       // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
+        public class Person
+        {
+            public long CodPerson { get; set; }
+            public string Identification { get; set; }
+            public string FirstName { get; set; }
+            public string SecondName { get; set; }
+            public string FirstLastName { get; set; }
+            public string SecondLastName { get; set; }
+            public string Adress { get; set; }
+            public string Phone { get; set; }
+            public string Email { get; set; }
+            public string CellPhone { get; set; }
+            public int CodOficine { get; set; }
+        }
+
 
         private void CloseLoadModal()
         {

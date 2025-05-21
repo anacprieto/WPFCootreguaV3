@@ -38,6 +38,9 @@ namespace WPFCootreguaV2.UserControls
     /// </summary>
     public partial class ListProductsUC : AppUserControl
     {
+
+        private MenuBackground bg;
+
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
@@ -59,21 +62,88 @@ namespace WPFCootreguaV2.UserControls
         public ListProductsUC()
         {
             InitializeComponent();
-            _ts = Transaction.Instance;
 
-            //_viewModel = new ListProductsViewModel();
-            //this.DataContext = _viewModel;
-            this.Unloaded += OnUnloaded;
-            this.Loaded += Onloaded;
-            GoTimer();
-            //InitViewModel();
-            lstPager = new ObservableCollection<ProductsState>();
+            try
+            {
+                _ts = Transaction.Instance;
+                _ts.Total = 0;
+                MaxAmountAhorroVista = Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVista"));
+                view = new CollectionViewSource();
+                lstPager = new ObservableCollection<ProductsState>();
+                ProductsSelected = new ProductsState();
+                bg = new MenuBackground();
+                ChangeBackground(EBackground.Productos);
+                InitView();
+                if (_ts.Type == ETransactionType.Withdrawal)
+                {
+                    //Utilities.Speak("Selecciona el producto con el que vas a retirar.");
+                }
+                else
+                {
+                    //Utilities.Speak("Selecciona el producto con el que vas a pagar.");
+                }
+                this.Unloaded += OnUnloaded;
+                this.Loaded += Onloaded;
+                //InitViewModel();
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
 
+        public void ChangeBackground(EBackground eBackground)
+        {
+
+            try
+            {
+                //if (bg == null)
+                //{
+                //    bg = new MenuBackground(); // Tipo correcto
+                //}
+
+                Dispatcher.Invoke(() =>
+                {
+                    switch (eBackground)
+                    {
+                        case EBackground.Identificate:
+                            // Usar el recurso estático
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
+                            break;
+                        case EBackground.Identificate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
+                            break;
+                        case EBackground.Autenticate:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
+                            break;
+                        case EBackground.Autenticate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
+                            break;
+                        case EBackground.Productos:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
+                            break;
+                        case EBackground.Paga:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
+                            break;
+                        case EBackground.Generico:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
+                            break;
+                    }
+
+                    this.DataContext = bg;
+                });
+            }
+            catch (Exception ex)
+            {
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
         }
         private void InitView()
         {
             try
             {
+
+
                 if (_ts.TipoTransaccion == TypeTransaction.Retiro)
                 {
                     btnPagar.Source = new BitmapImage(new Uri("/Images/Buttons/retirar.png", UriKind.Relative));

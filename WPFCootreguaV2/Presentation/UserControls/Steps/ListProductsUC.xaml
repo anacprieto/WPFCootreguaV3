@@ -7,11 +7,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="1920" d:DesignWidth="1080">
+              Height="1720" 
+             Width="680" >
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource BTN_PRODUCTOS}" Stretch="Uniform"/>
-        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="0" />
             <RowDefinition Height="*" />
@@ -147,7 +145,7 @@
          Height="90"
          HorizontalAlignment="Left"
          VerticalAlignment="Top"
-         Margin="400,50,0,0"
+         Margin="10,50,0,0"
          Stretch="Uniform"
          TouchDown="btnCancelar_TouchDown"
      />

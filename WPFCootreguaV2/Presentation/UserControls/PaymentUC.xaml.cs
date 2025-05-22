@@ -53,6 +53,8 @@ namespace WPFCootreguaV2.UserControls
             //Utilities.Speak("Por favor ingresa el dinero.");
 
             OrganizeValues();
+            Utilities.Speak("Por favor ingresa el dinero.");
+
             EventLogger.SaveLog(EventType.Info, "Comienza proceso de pago, Iniciando PaymentUC.");
 
             

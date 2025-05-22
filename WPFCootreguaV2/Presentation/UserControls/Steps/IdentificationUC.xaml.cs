@@ -73,7 +73,7 @@ namespace WPFCootreguaV2.UserControls
 
             }
             GoTimer();
-            Utilities.Speak("Ubica tu dedo en el lector biometrico.");
+            Utilities.Speak("Digita tu número de documento.");
             //IcoReferencia.Visibility = Visibility.Visible;
 
         }

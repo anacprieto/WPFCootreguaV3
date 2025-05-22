@@ -49,6 +49,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
             _ts = Transaction.Instance;
             bg = new MenuBackground();
             ChangeBackground(EBackground.Generico);
+            Utilities.Speak("Gracias por utilizar nuestros servicios, esperamos verte nuevamente pronto. No olvides retirar tu recibo.");
+
             FinishTransaction();
             //GoTimer();
 

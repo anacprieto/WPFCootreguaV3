@@ -76,11 +76,11 @@ namespace WPFCootreguaV2.UserControls
                 InitView();
                 if (_ts.Type == ETransactionType.Withdrawal)
                 {
-                    //Utilities.Speak("Selecciona el producto con el que vas a retirar.");
+                    Utilities.Speak("Selecciona el producto con el que vas a retirar.");
                 }
                 else
                 {
-                    //Utilities.Speak("Selecciona el producto con el que vas a pagar.");
+                    Utilities.Speak("Selecciona el producto con el que vas a pagar.");
                 }
                 this.Unloaded += OnUnloaded;
                 this.Loaded += Onloaded;

@@ -45,8 +45,7 @@ namespace WPFCootreguaV2.UserControls
         {
             InitializeComponent();
             _ts = Transaction.Instance;
-            InitializeComponent();
-            //Utilities.Speak("Bienvenido, selecciona la operación a realizar.");
+            Utilities.Speak("Bienvenido, selecciona la operación a realizar.");
 
             _viewModel = new TypeTransViewModel();
             this.DataContext = _viewModel;

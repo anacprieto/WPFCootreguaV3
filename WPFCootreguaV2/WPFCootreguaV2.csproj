@@ -332,9 +332,6 @@
     <Compile Update="Presentation\UserControls\FinishUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Presentation\UserControls\CancelUC.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Presentation\UserControls\Steps\AuthenticationUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

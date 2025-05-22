@@ -30,8 +30,9 @@ namespace WPFCootreguaV2.Domain.UIServices
         {
             _instance = null;
         }
-
+        public string StatePay { get; set; }
         private Transaction() { }
+        public bool statePaySuccess { get; set; }
 
         public TransactionDto ApiDto { get; set; }
         public int IdTransaccionApi { get; set; }

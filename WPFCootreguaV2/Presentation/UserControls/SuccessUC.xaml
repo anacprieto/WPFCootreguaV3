@@ -5,53 +5,22 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
       mc:Ignorable="d" 
-      d:DesignHeight="1920" d:DesignWidth="1080">
-    <!--
+      Height="1720" 
+Width="680">
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
-        </Grid.Background>
-
-        <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
-
-        <Image x:Name="BtnAtras" Source="{StaticResource BTN_ATRAS}" Margin="48,48,858,1808"
-        MouseDown="BtnAtras_MouseDown"/>
-
-        <Image x:Name="BtnSalir" Source="{StaticResource BTN_SALIR}" Margin="861,40,33,1796"
-        MouseDown="BtnSalir_MouseDown"/>
-
-
-        <Image Source="{StaticResource TXTPAGAAQUI}" Margin="312,226,330,1568" />
-
-
-
-        <Image x:Name="BtnPredial" Source="{StaticResource BTN_PREDIAL}" Margin="109,789,599,691"
-        MouseDown="BtnPay_Predial"/>
-
-
-        <Image  x:Name="BtnICA" Source="{StaticResource BTN_ICA}" Margin="637,789,117,691"
-        MouseDown="BtnPay_ICA"/>
-
-
-        <Image Source="{StaticResource ATENTION_LINE}" Margin="292,1740,292,50" />
-
-    </Grid>-->
-    <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="{Binding Background}"/>
-        </Grid.Background>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
             <RowDefinition Height="*" />
+            <RowDefinition Height="400"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock x:Name="TxtTimer" Text="" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}"/>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <ContentControl Name="cc_View" />
-        </Grid>
+        <Image 
+        Source="/Images/Others/gracias.jpg"
+        Height="1000"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Margin="0,0,0,0"
+        Grid.Row="1"
+        Stretch="Uniform"
+    />
     </Grid>
 </local:AppUserControl>

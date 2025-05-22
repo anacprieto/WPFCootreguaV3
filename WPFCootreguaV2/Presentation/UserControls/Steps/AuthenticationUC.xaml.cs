@@ -83,6 +83,7 @@ namespace WPFCootreguaV2.UserControls
                 {
                     ChangeBackground(EBackground.Autenticate);
                 }
+                Utilities.Speak("Ubica tu dedo en el lector biometrico.");
 
                 LoadReader();
 

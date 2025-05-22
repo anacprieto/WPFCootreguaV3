@@ -320,7 +320,6 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Components\NumericKeyboard.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Components\ResourceText.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\ModalWindow.g.cs
-C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelUC.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CardPaymentUC.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\ConfigUC.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\DataPayUC.g.cs
@@ -612,7 +611,6 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Components\ResourceText.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\ModalWindow.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\ResourceDictionaries\Styles\MiscellaneousStyles.baml
-C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelUC.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CardPaymentUC.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\ConfigUC.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\DataPayUC.baml
@@ -643,3 +641,7 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\WPFCootreguaV2.pdb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\WPFCootreguaV2.genruntimeconfig.cache
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\ref\WPFCootreguaV2.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\BillReportWindow.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelPayUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\BillReportWindow.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelPayUC.baml

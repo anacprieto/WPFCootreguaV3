@@ -274,7 +274,7 @@ namespace WPFCootreguaV2.UserControls
 
             Dispatcher.Invoke(() => GoTo(new SuccessUC()));
             _ts.Documento = TxtIdentification.Text;
-            //ValidateData();
+            ValidateData();
 
         }
 
@@ -555,59 +555,6 @@ namespace WPFCootreguaV2.UserControls
 
         //}
         //#endregion
-
-
-        private async Task RequestDocData(string document)
-        {
-            ModalWindow? loadModal = null;
-
-            try
-            {
-                if (document.Length < 6)
-                {
-                    loadModal = _nav.ShowModal("Por favor ingrese un número de referencia valido.");
-
-                    return;
-                }
-
-                if (_ts.TipoConsulta == "Documento")
-                {
-                    _ts.Documento = document;
-                }
-
-                _ts.Referencia = document;
-
-
-                RequestConsultData request = new RequestConsultData();
-
-                request.idComercio = AppConfig.Get("idComercioAlcaldia");
-                request.password = AppConfig.Get("passwordAlcaldia");
-                request.idCliente = _ts.Referencia;
-                request.claveConsulta = "01";
-
-                await _ts.ProcedureManager.GetDataPay();
-
-
-
-            }
-            catch (ProcedureException ex)
-            {
-
-                Dispatcher.Invoke(() => { _viewModel.StatusMsg = ex.Message; });
-            }
-            catch (Exception ex)
-            {
-                Dispatcher.Invoke(() => { _viewModel.StatusMsg = "Ocurrió un error durante la consulta de los datos. Por favor intenta de nuevo."; });
-
-            }
-
-            if (loadModal != null)
-            {
-                loadModal.Close();
-                loadModal = null;
-            }
-
-        }
 
         #region Timer
         public void GoTimer()

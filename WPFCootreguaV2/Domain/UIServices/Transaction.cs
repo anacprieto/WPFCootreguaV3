@@ -150,10 +150,14 @@ namespace WPFCootreguaV2.Domain.UIServices
         public int RetirarProducto { get; set; }
         public decimal Cuota { get; set; }
         public int TipoProducto { get; set; }
-        public string img { get; set; }
         public decimal ValorPagar { get; set; }
         public decimal ValorAPagar { get; set; }
         public string ColorState { get; set; }
+
+        public bool IsSelected { get; set; }
+
+        // También puedes tener una imagen para representar selección visual
+        public string img { get; set; }
     }
 
 

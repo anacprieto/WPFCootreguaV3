@@ -226,12 +226,12 @@ namespace WPFCootreguaV2.UserControls
                     view.Source = lstPager;
                     lv_Products.DataContext = view;
                 }
-                //else
-                //{
-                //    string ms = string.Format("Estimado {0}, {1} No se encontrarón productos para este tipo de trámite.", transaction.DataPerson.FirstName, Environment.NewLine);
-                //    Switcher.ModalMS(ms);
-                //    Switcher.CLose();
-                //}
+                else
+                {
+                    string ms = string.Format("Estimado {0}, {1} No se encontrarón productos para este tipo de trámite.", _ts.DataPerson.FirstName, Environment.NewLine);
+                    //Switcher.ModalMS(ms);
+                    //Switcher.CLose();
+                }
             }
             catch (Exception ex)
             {

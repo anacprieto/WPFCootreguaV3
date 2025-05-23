@@ -316,7 +316,7 @@ namespace WPFCootreguaV2.UserControls
 
                         //Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
                          Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                         //GC.Collect();
+                         GC.Collect();
                     }
                     else
                     {

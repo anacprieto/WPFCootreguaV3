@@ -1,8 +1,11 @@
 ﻿using ControlzEx.Standard;
 using DB;
+using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -11,10 +14,16 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media.Imaging;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
+using WPFCootreguaV2.ApiService.Models;
 using WPFCootreguaV2.Domain;
+using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
@@ -22,14 +31,6 @@ using WPFCootreguaV2.Domain.UIServices;
 using WPFCootreguaV2.Domain.UIServices.Integrations;
 using WPFCootreguaV2.Modals;
 using WPFCootreguaV2.Presentation.UserControls;
-using WPFCootreguaV2.ApiService.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Windows.Media.Imaging;
-using System.Collections.ObjectModel;
-using System.Windows.Data;
-using System.Windows.Documents;
-using MahApps.Metro.Controls;
-using WPFCootreguaV2.Domain.ApiService.Models;
 
 namespace WPFCootreguaV2.UserControls
 {
@@ -50,7 +51,6 @@ namespace WPFCootreguaV2.UserControls
         private ListProductsViewModel _listProductsViewModel;
         private ObservableCollection<ProductsState> lstPager;
         private CollectionViewSource view;
-        private ProductsState ProductsSelected;
         private decimal MaxAmountAhorroVista;
 
         #region Regex properies
@@ -59,6 +59,7 @@ namespace WPFCootreguaV2.UserControls
 
         public TypeTransaction TransactionType { get; private set; }
         #endregion
+        private ProductsState ProductsSelected = null;
 
         public ListProductsUC()
         {
@@ -93,6 +94,89 @@ namespace WPFCootreguaV2.UserControls
             }
         }
 
+        private void ListViewItem_TouchDown(object sender, TouchEventArgs e)
+        {
+            HandleItemSelection(sender);
+        }
+
+        private void ListViewItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            HandleItemSelection(sender);
+        }
+
+        private void HandleItemSelection(object sender)
+        {
+            try
+            {
+                var listViewItem = sender as ListViewItem;
+                var service = listViewItem?.DataContext as ProductsState;
+
+                if (service != null && service.ValorPagar > 0)
+                {
+                    // Deseleccionar producto anterior
+                    if (ProductsSelected != null)
+                    {
+                        ProductsSelected.IsSelected = false;
+                        ProductsSelected.img = GetImage(false);
+                    }
+
+                    // Seleccionar nuevo producto
+                    service.IsSelected = true;
+                    service.img = GetImage(true);
+                    ProductsSelected = service;
+
+                    // Actualizar vista
+                    lv_Products.Items.Refresh();
+
+                    // Tu lógica existente
+                    _ts.ProductSelect = service;
+                    _ts.Total = RoundValue(service.ValorPagar, true);
+
+                    Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        this.Opacity = 0.3;
+                        StopTimer();
+
+                        if (service.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
+                        {
+                            MaxAmountAhorroVista = TransactionType == TransactionType ? (service.Saldo - 100) : MaxAmountAhorroVista;
+                            if (service.TipoProducto == 2)
+                            {
+                                MaxAmountAhorroVista = service.Saldo - 100;
+                            }
+                            if (service.TipoProducto == 2 && MaxAmountAhorroVista > Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVistaWithdrawal")))
+                            {
+                                MaxAmountAhorroVista = Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVistaWithdrawal"));
+                            }
+
+                            // Tu modal aquí
+                            ModalPrueba();
+                        }
+                        else
+                        {
+                            // Tu modal aquí para otros tipos de producto
+                        }
+
+                        this.Opacity = 1;
+
+                        if (_ts.Total == 0)
+                        {
+                            _ts.Total = RoundValue(service.ValorPagar, true);
+                        }
+                        else
+                        {
+                            SaveTransaction();
+                        }
+                    });
+
+                    GC.Collect();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+            }
+        }
         public void ChangeBackground(EBackground eBackground)
         {
 
@@ -139,6 +223,7 @@ namespace WPFCootreguaV2.UserControls
                 // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+        /*
         private void InitView()
         {
             try
@@ -238,6 +323,106 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
 
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        */
+        private void InitView()
+        {
+            try
+            {
+                if (_ts.TipoTransaccion == TypeTransaction.Retiro)
+                {
+                    btnPagar.Source = new BitmapImage(new Uri("/Images/Buttons/retirar.png", UriKind.Relative));
+                }
+
+                foreach (var product in _ts.DataProducts.OrderByDescending(f => f.ProxDate))
+                {
+                    decimal total = product.ValorAPagar == 0 ? product.Cuota : product.ValorAPagar;
+                    string color = string.Empty;
+
+                    if (product.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
+                    {
+                        total = 100;
+                    }
+
+                    if (product.ProxDate <= DateTime.Now.AddDays(1))
+                    {
+                        color = "Red";
+                    }
+                    else if (product.ProxDate <= DateTime.Now.AddDays(30) && product.ProxDate >= DateTime.Now.AddDays(1))
+                    {
+                        color = "Yellow";
+                    }
+                    else
+                    {
+                        color = "Green";
+                    }
+
+                    if (_ts.TipoTransaccion == TypeTransaction.Retiro)
+                    {
+                        if (product.RetirarProducto == 1)
+                        {
+                            lstPager.Add(new ProductsState
+                            {
+                                CodSession = product.CodSession,
+                                CreationDate = product.CreationDate,
+                                Identititfy = product.Identititfy,
+                                NameLine = product.NameLine.ToString().ToLower(),
+                                NameProduct = product.NameProduct,
+                                NumberProduct = product.NumberProduct,
+                                PaymentMethod = product.PaymentMethod,
+                                ProxDate = product.ProxDate,
+                                Saldo = product.Saldo,
+                                TipoProducto = product.TipoProducto,
+                                img = GetImage(false),
+                                Cuota = RoundValue(product.Cuota, true),
+                                ValorPagar = RoundValue(total, true),
+                                ColorState = color,
+                                RetirarProducto = product.RetirarProducto,
+                                IsSelected = false, // NUEVA PROPIEDAD
+                                SelectionColor = "LightGray" // NUEVA PROPIEDAD
+                            });
+                        }
+                    }
+                    else
+                    {
+                        lstPager.Add(new ProductsState
+                        {
+                            CodSession = product.CodSession,
+                            CreationDate = product.CreationDate,
+                            Identititfy = product.Identititfy,
+                            NameLine = product.NameLine.ToString().ToLower(),
+                            NameProduct = product.NameProduct,
+                            NumberProduct = product.NumberProduct,
+                            PaymentMethod = product.PaymentMethod,
+                            ProxDate = product.ProxDate,
+                            Saldo = product.Saldo,
+                            TipoProducto = product.TipoProducto,
+                            img = GetImage(false),
+                            Cuota = RoundValue(product.Cuota, true),
+                            ValorPagar = RoundValue(total, true),
+                            ColorState = color,
+                            RetirarProducto = product.RetirarProducto,
+                            IsSelected = false, // NUEVA PROPIEDAD
+                            SelectionColor = "LightGray" // NUEVA PROPIEDAD
+                        });
+                    }
+                }
+
+                if (lstPager.Count > 0)
+                {
+                    view.Source = lstPager;
+                    lv_Products.DataContext = view;
+                }
+                else
+                {
+                    string ms = string.Format("Estimado {0}, {1} No se encontrarón productos para este tipo de trámite.", _ts.DataPerson.FirstName, Environment.NewLine);
+                    // Tu lógica de mensaje aquí
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
             }
         }
         private string GetImage(bool flag)
@@ -450,65 +635,65 @@ namespace WPFCootreguaV2.UserControls
 
         #region UI EVENTS
 
-        private void ListViewItem_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
-        {
-            try {
-                //var service = (Products)(sender as ListViewItem).Content;
+        //private void ListViewItem_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        //{
+        //    try {
+        //        var service = (Products)(sender as ListViewItem).Content;
 
-                //if (service.ValorPagar > 0)
-                //{
-                //    ProductsSelected.img = GetImage(false);
+        //        if (service.ValorPagar > 0)
+        //        {
+        //            ProductsSelected.img = GetImage(false);
 
-                //    service.img = GetImage(true);
+        //            service.img = GetImage(true);
 
-                //    lv_Products.Items.Refresh();
+        //            lv_Products.Items.Refresh();
 
-                //    ProductsSelected = service;
+        //            ProductsSelected = service;
 
-                //    transaction.ProductSelect = service;
+        //            transaction.ProductSelect = service;
 
-                //    transaction.Amount = Utilities.RoundValue(service.ValorPagar, true);
+        //            transaction.Amount = Utilities.RoundValue(service.ValorPagar, true);
 
-                //    Dispatcher.BeginInvoke((Action)delegate
-                //    {
-                //        this.Opacity = 0.3;
-                //        Switcher.Timer(false);
+        //            Dispatcher.BeginInvoke((Action)delegate
+        //            {
+        //                this.Opacity = 0.3;
+        //                Switcher.Timer(false);
 
-                //        if (service.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
-                //        {
-                //            MaxAmountAhorroVista = Utilities.TransactionType == ETransactionType.Withdrawal ? (service.Saldo - 100) : MaxAmountAhorroVista;
+        //                if (service.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
+        //                {
+        //                    MaxAmountAhorroVista = Utilities.TransactionType == ETransactionType.Withdrawal ? (service.Saldo - 100) : MaxAmountAhorroVista;
 
-                //            ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista);
-                //            modal.ShowDialog();
-                //            transaction.Amount = modal.ValueToPay;
-                //        }
-                //        else
-                //        {
-                //            ModalAmountWindow modal = new ModalAmountWindow(transaction.Amount);
-                //            modal.ShowDialog();
-                //            transaction.Amount = modal.ValueToPay;
-                //        }
+        //                    ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista);
+        //                    modal.ShowDialog();
+        //                    transaction.Amount = modal.ValueToPay;
+        //                }
+        //                else
+        //                {
+        //                    ModalAmountWindow modal = new ModalAmountWindow(transaction.Amount);
+        //                    modal.ShowDialog();
+        //                    transaction.Amount = modal.ValueToPay;
+        //                }
 
-                //        this.Opacity = 1;
-                //        Switcher.Timer(true);
+        //                this.Opacity = 1;
+        //                Switcher.Timer(true);
 
-                //        if (transaction.Amount == 0)
-                //        {
-                //            transaction.Amount = Utilities.RoundValue(service.ValorPagar, true);
-                //        }
-                //        else
-                //        {
-                //            SaveTransaction();
-                //        }
-                //    });
-                //    GC.Collect();
-                //}
-            }
-            catch (Exception ex)
-            {
-                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
+        //                if (transaction.Amount == 0)
+        //                {
+        //                    transaction.Amount = Utilities.RoundValue(service.ValorPagar, true);
+        //                }
+        //                else
+        //                {
+        //                    SaveTransaction();
+        //                }
+        //            });
+        //            GC.Collect();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
 
         //private async void OnKeyboardPressed(object? sender, string keyPressed)
         //{

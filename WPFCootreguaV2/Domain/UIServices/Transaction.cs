@@ -158,6 +158,9 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         // También puedes tener una imagen para representar selección visual
         public string img { get; set; }
+
+        public string SelectionColor { get; set; } = "#FF000000"; // Color
+
     }
 
 

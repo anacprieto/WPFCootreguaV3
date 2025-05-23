@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              Height="1720" 
              Width="680">
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="300" />
             <RowDefinition Height="*" />
@@ -21,7 +21,7 @@
         </Grid>
 
         <Grid Grid.Row="1" >
-            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="87,226,87,188" RenderTransformOrigin="-1.019,-0.023" >
+            <!-- <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="87,226,87,188" RenderTransformOrigin="-1.019,-0.023" >
                 <local:GifViewer.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
@@ -31,6 +31,7 @@
                     </TransformGroup>
                 </local:GifViewer.RenderTransform>
             </local:GifViewer>
+             -->
             <TextBlock x:Name="TxtStatusMsg"
                Text="{Binding StatusMsg}"
                Style="{StaticResource StatusTextStyle}" 

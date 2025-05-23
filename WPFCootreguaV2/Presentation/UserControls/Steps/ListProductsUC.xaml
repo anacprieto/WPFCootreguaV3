@@ -119,8 +119,8 @@
                              Grid.Column="2"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Center"
-                             TouchDown="btnCheck_TouchDown"
-                         />
+                             MouseDown="btnCheck_TouchDown"
+                             />
 
                             </Grid>
                         </StackPanel>

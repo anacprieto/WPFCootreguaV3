@@ -40,7 +40,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
             Transaction.Reset();
             //_validatePaypad = true;
             Init();
-            this.Unloaded += OnUnLoaded;
+           // this.Unloaded += OnUnLoaded;
             //LoadFiles();
             //StartSlideshow();
             _validatePaypad = true;

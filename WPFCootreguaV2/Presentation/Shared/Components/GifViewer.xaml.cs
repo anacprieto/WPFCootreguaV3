@@ -30,7 +30,7 @@ namespace WPFCootreguaV2.UserControls
         public GifViewer()
         {
             InitializeComponent();
-            this.Loaded += OnLoaded;
+            //this.Loaded += OnLoaded;
         }
 
         public void OnLoaded(object sender, RoutedEventArgs e)

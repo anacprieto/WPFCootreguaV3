@@ -38,6 +38,7 @@ namespace WPFCootreguaV2.UserControls
     /// </summary>
     public partial class ListProductsUC : AppUserControl
     {
+        private DocumentFormat _document = new();
 
         private MenuBackground bg;
 
@@ -239,6 +240,24 @@ namespace WPFCootreguaV2.UserControls
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+        private string GetImage(bool flag)
+        {
+            try
+            {
+                if (!flag)
+                {
+                    return "/Images/Others/circle.png";
+                }
+
+                return "/Images/Others/ok.png";
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+            return string.Empty;
+        }
+
         private void txtSaldo_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
         {
             try
@@ -262,7 +281,7 @@ namespace WPFCootreguaV2.UserControls
             }
         }
 
-        private void btnCheck_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        private void btnCheck_TouchDown(object sender, System.Windows.Input.MouseEventArgs e)
         {
             try
             {
@@ -290,7 +309,7 @@ namespace WPFCootreguaV2.UserControls
                         if (service.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
                         {
 
-                            // MaxAmountAhorroVista = TransactionType == TransactionType ? (service.Saldo - 100) : MaxAmountAhorroVista;
+                             MaxAmountAhorroVista = TransactionType == TransactionType ? (service.Saldo - 100) : MaxAmountAhorroVista;
                             if (service.TipoProducto==2)
                             {
                                 MaxAmountAhorroVista = service.Saldo - 100;
@@ -302,7 +321,8 @@ namespace WPFCootreguaV2.UserControls
 
                             _currentLoadModal = _nav.ShowModal("Estamos procesando el pago...");
                             //TENGO UN MODAL AQUIIII, QUE DEBE SER VISIBLE
-                            //ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
+                            ModalPrueba();
+                             //ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
                             //modal.ShowDialog();
                             //_ts.Total = modal.ValueToPay;
                         }
@@ -315,7 +335,7 @@ namespace WPFCootreguaV2.UserControls
                         }
 
                         this.Opacity = 1;
-                        GoTimer();
+                       // GoTimer();
 
                         if (_ts.Total == 0)
                         {
@@ -335,7 +355,28 @@ namespace WPFCootreguaV2.UserControls
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+        private bool ModalPrueba()
+        {
+            bool result = false;
 
+            BillReportViewModel model = new BillReportViewModel
+            {
+                Title = "Estimado Cliente: "
+            };
+
+
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                var _currentModal = new BillReportWindow(model, _document.header, _document.body, _document.footer);
+                _currentModal.ShowDialog();
+                if (_currentModal.DialogResult.HasValue)
+                {
+                    result = _currentModal.DialogResult.Value;
+                   // if (result) PrintVoucher();
+                }
+            });
+            return result;
+        }
         public static decimal RoundValue(decimal Total, bool arriba)
         {
             try
@@ -393,27 +434,6 @@ namespace WPFCootreguaV2.UserControls
         //    DataView.ItemsSource = _listProductsViewModel.Denominations;
 
         //}
-        private string GetImage(bool flag)
-        {
-            try
-            {
-                if (!flag)
-                {
-                    return "/Images/Others/circle.png";
-                }
-
-                return "/Images/Others/ok.png";
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-            return string.Empty;
-        }
-
-
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             CloseModal();

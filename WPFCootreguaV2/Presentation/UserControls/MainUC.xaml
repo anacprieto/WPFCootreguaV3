@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
        d:DesignHeight="1920" d:DesignWidth="1080">
 
-    <Grid MouseDown="Grid_TouchDown">
+    <Grid  MouseDown="Grid_TouchDown">
         <Grid.Background>
             <ImageBrush ImageSource="{Binding sourse}"/>
         </Grid.Background>

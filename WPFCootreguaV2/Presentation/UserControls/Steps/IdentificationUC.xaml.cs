@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Security;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -80,6 +81,18 @@ namespace WPFCootreguaV2.UserControls
 
         // Fix for CS0121: The issue arises because there are two identical method signatures for OnKeyboardPressed in the same class.
         // To resolve this, one of the duplicate methods must be removed.
+
+        private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private static readonly Regex _regex = new Regex(@"^[0-9]+$"); // Solo números
+
+        private static bool IsTextAllowed(string text)
+        {
+            return _regex.IsMatch(text);
+        }
         public void ChangeBackground(EBackground eBackground)
         {
 

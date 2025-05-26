@@ -9,7 +9,8 @@
              mc:Ignorable="d" 
               Height="1720" 
              Width="680" >
-    <Grid Background="Transparent">
+    
+     <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="0" />
             <RowDefinition Height="*" />
@@ -27,6 +28,7 @@
             </Grid.RowDefinitions>
 
             <ListView x:Name="lv_Products"
+          SelectionChanged="lv_Products_SelectionChanged"
           HorizontalAlignment="Center" 
           VerticalAlignment="Top"
           ItemsSource="{Binding}"
@@ -144,7 +146,7 @@
          VerticalAlignment="Top"
          Margin="0,50,30,0"
          Stretch="Uniform"
-         TouchDown="btnPagar_TouchDown"
+         MouseDown="btnPagar_TouchDown"
      />
             <Image 
          Name="btnCancelar"
@@ -154,7 +156,7 @@
          VerticalAlignment="Top"
          Margin="10,50,0,0"
          Stretch="Uniform"
-         TouchDown="btnCancelar_TouchDown"
+         MouseDown="btnCancelar_TouchDown"
      />
         </Grid>
     </Grid>

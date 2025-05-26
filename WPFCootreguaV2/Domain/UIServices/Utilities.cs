@@ -54,6 +54,44 @@ namespace WPFCootreguaV2.Domain.UIServices
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "Utilities", ex, ex.ToString());
             }
         }
+        public static decimal RoundValue(decimal Total, bool arriba)
+        {
+            try
+            {
+                decimal roundTotal = 0;
+
+                if (arriba)
+                {
+                    roundTotal = Math.Ceiling(Total / 100) * 100;
+                }
+                else
+                {
+                    roundTotal = Math.Floor(Total / 100) * 100;
+                }
+
+                return roundTotal;
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "Utilities", ex);
+                return Total;
+            }
+        }
+
+        public static bool ValidateModule(decimal module, decimal amount)
+        {
+            try
+            {
+                var result = (amount % module);
+                return result == 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "Utilities", ex);
+                return false;
+            }
+        }
+
 
 
     }

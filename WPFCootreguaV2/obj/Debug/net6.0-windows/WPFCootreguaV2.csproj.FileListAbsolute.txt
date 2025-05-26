@@ -645,3 +645,5 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelPayUC.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\BillReportWindow.baml
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\CancelPayUC.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\ModalAmountWindow.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\Shared\Modals\ModalAmountWindow.baml

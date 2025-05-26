@@ -462,7 +462,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
 
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
 
@@ -494,8 +494,8 @@ namespace WPFCootreguaV2.UserControls
                         if (service.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
                         {
 
-                             MaxAmountAhorroVista = TransactionType == TransactionType ? (service.Saldo - 100) : MaxAmountAhorroVista;
-                            if (service.TipoProducto==2)
+                            MaxAmountAhorroVista = TransactionType == TransactionType ? (service.Saldo - 100) : MaxAmountAhorroVista;
+                            if (service.TipoProducto == 2)
                             {
                                 MaxAmountAhorroVista = service.Saldo - 100;
                             }
@@ -506,8 +506,8 @@ namespace WPFCootreguaV2.UserControls
 
                             _currentLoadModal = _nav.ShowModal("Estamos procesando el pago...");
                             //TENGO UN MODAL AQUIIII, QUE DEBE SER VISIBLE
-                            ModalPrueba();
-                             //ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
+                            //ModalPrueba();
+                            //ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
                             //modal.ShowDialog();
                             //_ts.Total = modal.ValueToPay;
                         }
@@ -516,11 +516,11 @@ namespace WPFCootreguaV2.UserControls
                             //TENGO UN MODAL AQUIIII, QUE DEBE SER VISIBLE
                             //ModalAmountWindow modal = new ModalAmountWindow(_ts.Total, service.TipoProducto);
                             //modal.ShowDialog();
-                           // _ts.Total = modal.ValueToPay;
+                            // _ts.Total = modal.ValueToPay;
                         }
 
                         this.Opacity = 1;
-                       // GoTimer();
+                        // GoTimer();
 
                         if (_ts.Total == 0)
                         {
@@ -557,7 +557,7 @@ namespace WPFCootreguaV2.UserControls
                 if (_currentModal.DialogResult.HasValue)
                 {
                     result = _currentModal.DialogResult.Value;
-                   // if (result) PrintVoucher();
+                    // if (result) PrintVoucher();
                 }
             });
             return result;
@@ -583,7 +583,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
 
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "Utilities", ex);
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "Utilities", ex);
                 return Total;
             }
         }
@@ -740,12 +740,12 @@ namespace WPFCootreguaV2.UserControls
         {
             Dispatcher.Invoke(() => GoTo(new MainUC()));
 
-        //}
-        //private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    TxtStatusMsg.Visibility = Visibility.Visible;
-        //    string doc = InputInvoice.Text;
-        //    await RequestDocData(doc);
+            //}
+            //private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
+            //{
+            //    TxtStatusMsg.Visibility = Visibility.Visible;
+            //    string doc = InputInvoice.Text;
+            //    await RequestDocData(doc);
         }
         #endregion
 
@@ -890,7 +890,7 @@ namespace WPFCootreguaV2.UserControls
                 {
                     string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
 
-                   // Utilities.ShowModal(ms, EModalType.Error);
+                    // Utilities.ShowModal(ms, EModalType.Error);
                 }
 
                 Task.Run(async () =>
@@ -908,24 +908,24 @@ namespace WPFCootreguaV2.UserControls
                     CloseModal();
                     Dispatcher.Invoke(() => GoTo(new FinishUC()));
 
-                if (_ts.IdTransaccionApi == 0)
-                {
-                        //_nav.ShowModal($"Hubo un error inesperado al realizar la consulta intenta nuevamente", new InfoModal());
-                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.",new InfoModal());
-                         GoTimer();
-                }
-                else
-                {
-                    if (_ts.TipoTransaccion == TransactionType)
+                    if (_ts.IdTransaccionApi == 0)
                     {
-                        //Dispatcher.Invoke(() => GoTo(new WithdrawalUC(_ts)));
-                           // Switcher.Navigate(UserControlView.Withdrawal, transaction);
+                        //_nav.ShowModal($"Hubo un error inesperado al realizar la consulta intenta nuevamente", new InfoModal());
+                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
+                        GoTimer();
                     }
                     else
                     {
+                        if (_ts.TipoTransaccion == TransactionType)
+                        {
+                            //Dispatcher.Invoke(() => GoTo(new WithdrawalUC(_ts)));
+                            // Switcher.Navigate(UserControlView.Withdrawal, transaction);
+                        }
+                        else
+                        {
                             //Dispatcher.Invoke(() => GoTo(new WithdrawalUC(_ts)));
                             //Switcher.Navigate(UserControlView.Pay, transaction);
-                    }
+                        }
                     }
                 });
 
@@ -937,7 +937,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución:SaveTransaction de listProducts {ex.Message}", ex);
 
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
 
@@ -987,25 +987,70 @@ namespace WPFCootreguaV2.UserControls
         //    }
         //}
 
-        private void btnCancelar_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        private void btnCancelar_TouchDown(object sender, System.Windows.Input.MouseEventArgs e)
         {
             StopTimer();
             //Switcher.CLose();
         }
 
-        private void btnPagar_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        private void btnCheck_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
         {
             try
             {
-                if (ProductsSelected != null && _ts.Total > 0)
+                var service = (sender as Image).DataContext as ProductsState;
+
+                if (service.ValorPagar > 0)
                 {
-                    SaveTransaction();
-                }
-                else
-                {
-                    StopTimer();
-                   // Switcher.ModalMS(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", transaction.DataPerson.FirstName));
-                    GoTimer();
+                    ProductsSelected.img = GetImage(false);
+
+                    service.img = GetImage(true);
+
+                    lv_Products.Items.Refresh();
+
+                    ProductsSelected = service;
+
+                    _ts.ProductSelect = service;
+
+                    _ts.Total = Utilities.RoundValue(service.ValorPagar, true);
+
+                    Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        this.Opacity = 0.3;
+                        //Switcher.Timer(false);
+
+                        if (service.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
+                        {
+                            MaxAmountAhorroVista = _ts.Type == ETransactionType.Withdrawal ? (service.Saldo - 100) : MaxAmountAhorroVista;
+
+                            if (_ts.Type == ETransactionType.Withdrawal && MaxAmountAhorroVista > Convert.ToDecimal(Utilities.GetConfiguration("MaxAmountAhorroVistaWithdrawal")))
+                            {
+                                MaxAmountAhorroVista = Convert.ToDecimal(Utilities.GetConfiguration("MaxAmountAhorroVistaWithdrawal"));
+                            }
+
+                            ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
+                            modal.ShowDialog();
+                            _ts.Total = modal.ValueToPay;
+                        }
+                        else
+                        {
+                            ModalAmountWindow modal = new ModalAmountWindow(_ts.Total, service.TipoProducto);
+                            modal.ShowDialog();
+                            _ts.Total = modal.ValueToPay;
+                        }
+
+                        this.Opacity = 1;
+                       // Switcher.Timer(true);
+
+                        if (_ts.Total == 0)
+                        {
+                            _ts.Total = Utilities.RoundValue(service.ValorPagar, true);
+                        }
+                        else
+                        {
+                            SaveTransaction();
+                        }
+                    });
+                    GC.Collect();
                 }
             }
             catch (Exception ex)
@@ -1013,6 +1058,113 @@ namespace WPFCootreguaV2.UserControls
                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+        private void lv_Products_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListView listView = sender as ListView;
+            if (listView.SelectedItem != null)
+            {
+                // Asume que tu clase de producto se llama Product
+                ProductsSelected = listView.SelectedItem as ProductsState; // o el tipo que corresponda
+                _ts.ProductSelect = ProductsSelected;
+
+                _ts.Total = Utilities.RoundValue(ProductsSelected.ValorPagar, true);
+
+                Dispatcher.BeginInvoke((Action)delegate
+                {
+                    this.Opacity = 0.3;
+                    //Switcher.Timer(false);
+
+                    if (ProductsSelected.TipoProducto == (int)ETypeProductCootregua.AhorrosVista)
+                    {
+                        MaxAmountAhorroVista = _ts.Type == ETransactionType.Withdrawal ? (ProductsSelected.Saldo - 100) : MaxAmountAhorroVista;
+
+                        if (_ts.Type == ETransactionType.Withdrawal && MaxAmountAhorroVista > Convert.ToDecimal(Utilities.GetConfiguration("MaxAmountAhorroVistaWithdrawal")))
+                        {
+                            MaxAmountAhorroVista = Convert.ToDecimal(Utilities.GetConfiguration("MaxAmountAhorroVistaWithdrawal"));
+                        }
+
+                        ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, ProductsSelected.TipoProducto);
+                        modal.ShowDialog();
+                        _ts.Total = modal.ValueToPay;
+                    }
+                    else
+                    {
+                        ModalAmountWindow modal = new ModalAmountWindow(_ts.Total, ProductsSelected.TipoProducto);
+                        modal.ShowDialog();
+                        _ts.Total = modal.ValueToPay;
+                    }
+
+                    this.Opacity = 1;
+                    // Switcher.Timer(true);
+
+                    if (_ts.Total == 0)
+                    {
+                        _ts.Total = Utilities.RoundValue(ProductsSelected.ValorPagar, true);
+                    }
+                    else
+                    {
+                        SaveTransaction();
+                    }
+                });
+                GC.Collect();
+
+                // Si necesitas el índice
+               // int selectedIndex = listView.SelectedIndex;
+
+                Console.WriteLine($"Producto seleccionado: {ProductsSelected?.NumberProduct}");
+            }
+            else
+            {
+                ProductsSelected = null;
+            }
+        }
+        private void btnPagar_TouchDown(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            try
+            {
+                // Obtener el item seleccionado directamente del ListView
+                var selectedProduct = lv_Products.SelectedItem as ProductsState; // Cambia Product por tu tipo
+
+                if (selectedProduct != null && _ts.Total > 0)
+                {
+                    ProductsSelected = selectedProduct;
+                    SaveTransaction();
+                   // _nav.ShowModal("Estamos procesando el pago...", new ModalAmountWindow()); // Mostrar modal de procesamiento
+                }
+                else
+                {
+                    //StopTimer();
+                    // Switcher.ModalMS(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", transaction.DataPerson.FirstName));
+                    //GoTimer();
+                    _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        //private void btnPagar_TouchDown(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (ProductsSelected != null && _ts.Total > 0)
+        //        {
+        //            SaveTransaction();
+        //        }
+        //        else
+        //        {
+        //            StopTimer();
+        //           // Switcher.ModalMS(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", transaction.DataPerson.FirstName));
+        //            GoTimer();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //       // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
 
 
         public class ListProductsViewModel : INotifyPropertyChanged

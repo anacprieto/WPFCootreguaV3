@@ -93,16 +93,16 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
                                Grid.Column="0">
-                        <Run Foreground="Gray" FontWeight="Bold" Text="Número del producto" /><LineBreak/>
-                        <Run Foreground="Black" Text="{Binding NumberProduct}"/>
-                        <Run Foreground="Gray" FontWeight="Bold" Text="-" />
-                        <Run Foreground="Black" FontSize="22" Text="{Binding NameLine}"/><LineBreak/>
-                        <Run Foreground="Gray" FontWeight="Bold" Text="Fecha del próximo pago: " /><LineBreak/>
-                        <Run Foreground="{Binding ColorState}" Text="{Binding ProxDate,StringFormat='{}{0:dd/MM/yyyy}'}"/><LineBreak/>
-                        <Run Foreground="Gray" FontWeight="Bold" Text="Valor de la cuota: " /><LineBreak/>
-                        <Run Foreground="Black" Text="{Binding Cuota,StringFormat={}{0:C0}}"/><LineBreak/>
-                        <Run Foreground="Gray" FontWeight="Bold" Text="Saldo: " /><LineBreak/>
-                        <Run Foreground="Black" Text="********" Tag="{Binding Saldo}" Name="txtSaldo" TouchDown="txtSaldo_TouchDown"/><LineBreak/>
+                                <Run Foreground="Gray" FontWeight="Bold" Text="Número del producto" /><LineBreak/>
+                                <Run Foreground="Black" Text="{Binding NumberProduct}"/>
+                                <Run Foreground="Gray" FontWeight="Bold" Text="-" />
+                                <Run Foreground="Black" FontSize="22" Text="{Binding NameLine}"/><LineBreak/>
+                                <Run Foreground="Gray" FontWeight="Bold" Text="Fecha del próximo pago: " /><LineBreak/>
+                                <Run Foreground="{Binding ColorState}" Text="{Binding ProxDate,StringFormat='{}{0:dd/MM/yyyy}'}"/><LineBreak/>
+                                <Run Foreground="Gray" FontWeight="Bold" Text="Valor de la cuota: " /><LineBreak/>
+                                <Run Foreground="Black" Text="{Binding Cuota,StringFormat={}{0:C0}}"/><LineBreak/>
+                                <Run Foreground="Gray" FontWeight="Bold" Text="Saldo: " /><LineBreak/>
+                                <Run Foreground="Black" Text="********" Tag="{Binding Saldo}" Name="txtSaldo" TouchDown="txtSaldo_TouchDown"/><LineBreak/>
                                 </TextBlock>
 
                                 <TextBlock Text="{Binding ValorPagar, StringFormat={}{0:C0}}"

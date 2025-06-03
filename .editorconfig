@@ -77,6 +77,9 @@ csharp_style_prefer_extended_property_pattern = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 csharp_space_around_binary_operators = before_and_after
 csharp_indent_labels = one_less_than_current
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_prefer_system_threading_lock = true:suggestion
+csharp_using_directive_placement = outside_namespace:silent
 
 [*.vb]
 #### Estilos de nomenclatura ####
@@ -134,3 +137,4 @@ dotnet_style_readonly_field = true:suggestion
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
 indent_size = 4
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent

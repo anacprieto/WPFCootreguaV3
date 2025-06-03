@@ -50,7 +50,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
             _imageSleader.Stop();
             _validatePaypad = false;
             GC.Collect();
-            Dispatcher.Invoke(() => GoTo(new MenuUC()));
+            Dispatcher.Invoke(() => GoTo(new TypeTransUC()));
         }
         private async void Init()
         {

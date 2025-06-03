@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -118,8 +119,8 @@ namespace WPFCootreguaV2.ApiService
             var transactionToCreate = new TransactionDto
             {
                 Document = ts.Documento,
-                Reference = ts.Referencia,
-                Product = ts.TipoRecaudo,
+                Reference = ts.ProductSelect.NumberProduct,//
+                Product = ts.ProductSelect.NameLine.ToString(),
                 TotalAmount = Convert.ToDouble(ts.Total),
                 RealAmount = Convert.ToDouble(ts.TotalSinRedondear),
                 IncomeAmount = 0,
@@ -128,7 +129,7 @@ namespace WPFCootreguaV2.ApiService
                 IdStateTransaction = (int)ts.EstadoTransaccion,
                 StateTransaction = ts.EstadoTransaccion.ToString(),
                 IdTypeTransaction = (int) ts.TipoTransaccion,
-                IdTypePayment = (int)ts.TipoPago,
+                IdTypePayment = (int)ts.TipoPago,//
             };
 
             
@@ -244,13 +245,17 @@ namespace WPFCootreguaV2.ApiService
 
         }
 
+
         public static void CreateTransactionDetail(TypeOperation op, int value)
         {
+            int quantity = 1;
             var detail = new TransactionDetailDto
             {
                 IdTransaction = Transaction.Instance.IdTransaccionApi,
                 CurrencyDenomination = value,
-                IdTypeOperation = (int)op
+                IdTypeOperation = (int)op,
+                Quantity = quantity
+
             };
 
 

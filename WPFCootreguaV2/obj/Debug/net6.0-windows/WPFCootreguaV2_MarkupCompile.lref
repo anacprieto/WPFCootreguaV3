@@ -1,8 +1,14 @@
-﻿C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
+﻿
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\App.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\MainWindow.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\GenericButton.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\GifViewer.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\Keyboard\DefaultKeyboardHost.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\Keyboard\ResourceDictionaries\KeyboardCore.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\Keyboard\Views\AlphabetView.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\Keyboard\Views\KeyboardValueView.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\Keyboard\Views\SpecialCharactersView.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\Keyboard\Views\VirtualKeyboardView.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\NumericKeyboard.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Components\ResourceText.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\Shared\Modals\BillReportWindow.xaml;;

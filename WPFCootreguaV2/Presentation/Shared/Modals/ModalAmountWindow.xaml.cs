@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.UIServices;
+using WPFCootreguaV2.UserControls;
 
 namespace WPFCootreguaV2.Modals
 {
@@ -67,6 +68,7 @@ namespace WPFCootreguaV2.Modals
         #endregion
 
         #region "Eventos"
+
         private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed(e.Text);
@@ -101,12 +103,12 @@ namespace WPFCootreguaV2.Modals
             }
         }
 
-        private void BtnCancel_TouchDown(object sender, TouchEventArgs e)
+        private void BtnCancel_TouchDown(object sender, MouseEventArgs e)
         {
             DialogResult = false;
         }
 
-        private void btnAceptar_TouchDown(object sender, TouchEventArgs e)
+        private void btnAceptar_TouchDown(object sender, MouseEventArgs e)
         {
             Validate();
         }

@@ -11,9 +11,9 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         Height="550" Width="800">
-    <!-- <Window.Background>
-       <ImageBrush ImageSource="/Images/Backgrounds/generico-modal.png"/>
-    </Window.Background>-->
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/Backgrounds/generico-modal.png"/>
+    </Window.Background>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -21,7 +21,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="230" />
-            <RowDefinition Height="320" />
+            <RowDefinition Height="313.328" />
+            <RowDefinition Height="6.672"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2"  >
             <TextBlock
@@ -42,10 +43,10 @@
                 Margin="0,30,45,70"
                 Height="90"  
                 Stretch="Uniform"
-                TouchDown="BtnCancel_TouchDown"
+                MouseDown="BtnCancel_TouchDown"
             />
         </Grid>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <TextBlock
                 Name="txtMsInformacion"
                 Text="Ingrese el valor que desea pagar"
@@ -78,27 +79,17 @@
                 HorizontalAlignment="Center"
                 Margin="0,0,0,0"
             />
-            <TextBox x:Name="TxtNombre"
-             FontSize="40" 
-             TextAlignment="Center"
-             d:Text="JHOSEF STIVEN" 
-             Style="{StaticResource KeyboardTextBoxStyle}" 
-             Foreground="{StaticResource SECONDARYCOLOR}"
-             Margin="0,160,0,0" 
-             Height="74"
-             Width="652" 
-             VerticalAlignment="Top" Background="{x:Null}"/>
-            
+
         </Grid>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.ColumnSpan="2" Margin="0,212,0,11" Grid.RowSpan="2">
             <Image 
                 Name="btnAceptar"
-                Source="/Images/Buttons/pagar.png"
-                Height="80"
-                Margin="0,0,0,30"
-                VerticalAlignment="Bottom" 
+                Source="/Images/pagar.png"
+                Height="98"
+                Margin="0,192,0,0"
+                VerticalAlignment="Top" 
                 HorizontalAlignment="Center"
-                TouchDown="btnAceptar_TouchDown"
+                MouseDown="btnAceptar_TouchDown" Width="313"
                 />
         </Grid>
     </Grid>

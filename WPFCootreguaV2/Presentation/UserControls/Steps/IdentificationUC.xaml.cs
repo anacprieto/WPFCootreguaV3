@@ -410,29 +410,31 @@ namespace WPFCootreguaV2.UserControls
                 if (data != null)
                 {
                     // Initialize if needed
-                    if (_ts.Persona == null)
+                    if (_ts.DataPerson == null)
                     {
-                        _ts.Persona = new Domain.ApiService.Models.Person();
+                        _ts.DataPerson = new Domain.ApiService.Models.Person();
                     }
 
                     // Assign values with null handling
-                    _ts.Persona.CodPerson = data.CodPerson;
-                    _ts.Persona.Identification = _ts.Documento;
-                    _ts.Persona.FirstName = data.FirstName ?? string.Empty;
-                    _ts.Persona.SecondName = data.SecondName ?? string.Empty;
-                    _ts.Persona.FirstLastName = data.FirstLastName ?? string.Empty;
-                    _ts.Persona.SecondLastName = data.SecondLastName ?? string.Empty;
-                    _ts.Persona.Adress = data.Adress ?? string.Empty;
-                    _ts.Persona.Phone = data.Phone ?? string.Empty;
-                    _ts.Persona.Email = data.Email ?? string.Empty;
-                    _ts.Persona.CellPhone = data.CellPhone ?? string.Empty;
-                    _ts.Persona.CodOficine = data.CodOficine;
+                    _ts.DataPerson.CodPerson = data.CodPerson;
+                    _ts.DataPerson.Identification = _ts.Documento;
+                    _ts.DataPerson.FirstName = data.FirstName ?? string.Empty;
+                    _ts.DataPerson.SecondName = data.SecondName ?? string.Empty;
+                    _ts.DataPerson.FirstLastName = data.FirstLastName ?? string.Empty;
+                    _ts.DataPerson.SecondLastName = data.SecondLastName ?? string.Empty;
+                    _ts.DataPerson.Adress = data.Adress ?? string.Empty;
+                    _ts.DataPerson.Phone = data.Phone ?? string.Empty;
+                    _ts.DataPerson.Email = data.Email ?? string.Empty;
+                    _ts.DataPerson.CellPhone = data.CellPhone ?? string.Empty;
+                    _ts.DataPerson.CodOficine = data.CodOficine;
 
                     _ts.Codigo = Convert.ToInt32(data.CodPerson);
+
                     Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
                 }
                 else
                 {
+
                     _nav.ShowModal("Ocurrió un error procesando la información de la persona.");
                     StopTimer();
                 }

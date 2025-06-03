@@ -229,6 +229,7 @@ namespace WPFCootreguaV2.UserControls
 
                         if (data.Validate == 1)
                         {
+                            _ts.TipoTransaccion=_ts.TipoTransaccion == TypeTransaction.Registro ? TypeTransaction.Registro : _ts.TipoTransaccion;
                             //if (Utilities.TransactionType == ETransactionType.Registros)
                             if (_ts.Type == ETransactionType.Registros)
                             {
@@ -295,7 +296,7 @@ namespace WPFCootreguaV2.UserControls
                 ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
                 //var desencrypted1120 = EncryptorEcity.Decrypt(respuesta1120557056);
                 //_nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", new InfoModal()));
-                var desncrypted = EncryptorEcity.Decrypt(prodct);   
+                 var desncrypted = EncryptorEcity.Decrypt(prodct);   
                 //Switcher.ModalLoad(false);
 
                 if (!string.IsNullOrEmpty(desncrypted))
@@ -505,7 +506,7 @@ namespace WPFCootreguaV2.UserControls
         {
             ScannerController.ScannerDataReceived += OnScannerDataReceived;
             ScannerController.Start();
-            //       _viewModel.HelpMessage = "Ingresa número de cuenta o referente";
+            // _viewModel.HelpMessage = "Ingresa número de cuenta o referente";
         }
 
 

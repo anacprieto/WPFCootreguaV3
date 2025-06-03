@@ -111,7 +111,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                         GetProducts();
                     });
 
-                    _nav.ShowModal("realizar otra transacción");
+                   // _nav.ShowModal("realizar otra transacción");
                 }
                 else
                 {

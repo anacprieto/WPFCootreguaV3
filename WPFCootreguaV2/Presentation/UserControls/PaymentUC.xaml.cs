@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -45,21 +46,13 @@ namespace WPFCootreguaV2.UserControls
             InitializeComponent();
             bg = new MenuBackground();
             _ts = Transaction.Instance;
-
-            //this.transaction.statePaySuccess = false;
-
-            ChangeBackground(EBackground.Paga);
-
-            //Utilities.Speak("Por favor ingresa el dinero.");
-
-            OrganizeValues();
-            Utilities.Speak("Por favor ingresa el dinero.");
-
-            EventLogger.SaveLog(EventType.Info, "Comienza proceso de pago, Iniciando PaymentUC.");
-
-            
-            _ts = Transaction.Instance;
             _ts.DevueltaCorrecta = false;
+
+            // Inicializar el ViewModel AQUÍ
+            OrganizeValues();
+
+            // Cambiar el fondo
+            ChangeBackground(EBackground.Paga);
 
 #if NO_PERIPHERALS
             Button dynamicButton = new Button();
@@ -71,7 +64,7 @@ namespace WPFCootreguaV2.UserControls
             dynamicButton.VerticalAlignment = VerticalAlignment.Top;
             dynamicButton.HorizontalAlignment = HorizontalAlignment.Left;
             // Set background color
-            dynamicButton.Background = new SolidColorBrush(Colors.Transparent); // Change to the desired color
+            dynamicButton.Background = new SolidColorBrush(Colors.Red); // Change to the desired color
             dynamicButton.Foreground = new SolidColorBrush(Colors.White); // Change to the desired color
 
             // Set border brush and thickness
@@ -98,26 +91,29 @@ namespace WPFCootreguaV2.UserControls
 
             void ExecuteScanner(object sender, EventArgs e)
             {
+                
                 OnCashIn(20000);
+                NotifyPay();
             }
 
             void ExecuteScanner2(object sender, EventArgs e)
             {
                 OnCashIn(50000);
             }
-            //MainGrid.Children.Add(dynamicButton);
-            //MainGrid.Children.Add(dynamicButton2);
+            MainGrid.Children.Add(dynamicButton);
+
 #else
-            _peripherals = ArduinoController.Instance;
-            _peripherals.CashIn += OnCashIn;
-            _peripherals.CashDispensed += OnCashDispensed;
-            _peripherals.DispenserReject += OnDispenserReject;
-            _peripherals.PeripheralError += OnPeripheralError;
+    _peripherals = ArduinoController.Instance;
+    _peripherals.CashIn += OnCashIn;
+    _peripherals.CashDispensed += OnCashDispensed;
+    _peripherals.DispenserReject += OnDispenserReject;
+    _peripherals.PeripheralError += OnPeripheralError;
 #endif
 
-
-            this.Unloaded += OnUnloaded;
+            // Agregar eventos
             this.Loaded += OnLoaded;
+            this.Unloaded += OnUnloaded;
+
             
         }
         private async void BtnCancel_TouchDown(object sender, MouseButtonEventArgs e)
@@ -241,6 +237,121 @@ namespace WPFCootreguaV2.UserControls
 
 
         #region Responses to Peripheral Events
+
+
+        private async void OnCashIn(decimal value)
+        {
+            EventLogger.SaveLog(EventType.Info, "Init view" + _paymentViewModel);
+
+            if (_paymentViewModel?.IsPayCompleted ?? true) return;
+
+            _paymentViewModel.EnteredAmount += value;
+
+            _paymentViewModel.RefreshAmountsList(Convert.ToInt32(value), 1);
+
+            SendTransactionDetail(TypeOperation.AP, value, 1);
+
+
+            if (_paymentViewModel.EnteredAmount < _paymentViewModel.PayAmount) return;
+
+            //Finaliza pago cantidad completa
+            _ = Dispatcher.BeginInvoke(() => BtnCancel.Visibility = Visibility.Collapsed);
+#if NO_PERIPHERALS
+#else
+            await _peripherals.StopAceptance();
+#endif
+
+            //_currentLoadModal = _nav.ShowLoadModal("Estamos procesando el pago...");
+            //await Task.Delay(3000);
+            //EventLogger.SaveLog(EventType.Info, "Iniciando Proceso de pago...");
+
+           // await PaymentProcess(_paymentViewModel);
+            await PaymentProcess();
+
+        }
+        private void SendTransactionDetail(TypeOperation op, decimal denom, int quantity)
+        {
+            try
+            {
+                EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: ${denom:N0} COP, Cantidad: {quantity}");
+                Api.CreateTransactionDetail(op, (int)denom);
+
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+            }
+        }
+        private async Task PaymentProcess(PaymentViewModel? paymentViewModel)
+        {
+            bool isPaySuccess;
+            try
+            {
+                //await _procedureManager.NotifyPay();
+                EventLogger.SaveLog(EventType.Info, "Pago Completado en integración");
+                _tranStateTemp = StateTransaction.Aprobada;
+                isPaySuccess = true;
+            }
+            catch (ProcedureException ex)
+            {
+                if (ex.Message == "El pago está en proceso de verificación. Por favor espere la confirmación.")
+                {
+                    EventLogger.SaveLog(EventType.Error, $"El pago está en proceso de verificación. Por favor espere la confirmación.");
+                    CloseLoadModal();
+                    isPaySuccess = true;
+                    _tranStateTemp = StateTransaction.AprobadaSinNotificar;
+                    _nav.ShowModal(ex.Message, new InfoModal());
+                }
+                else
+                {
+                    CloseLoadModal();
+                    isPaySuccess = false;
+                    _nav.ShowModal(ex.Message, new InfoModal());
+                    await CancelPay();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                CloseLoadModal();
+                isPaySuccess = false;
+                _tranStateTemp = StateTransaction.ErrorServicioTercero;
+                EventLogger.SaveLog(EventType.Error, $"Error durante procedimiento de notificación {ex.Message}", ex);
+                _nav.ShowModal("Se presentó un problema durante el proceso de notificación del pago.", new InfoModal());
+                await CancelPay();
+                return;
+            }
+
+            if (isPaySuccess)
+            {
+                if (paymentViewModel != null)
+                {
+                    await FinishSuccessfulPay();
+                }
+                else
+                {
+                    // Si paymentViewModel es nulo, se guarda el estado de la transacción como "AprobadaSinNotificar"
+                    _ts.DevueltaCorrecta = true;
+                    await SavePay();
+                }
+                return;
+            }
+
+            if (paymentViewModel != null)
+            {
+                paymentViewModel.ReturnAmount = paymentViewModel.EnteredAmount;
+                ReturnMoney(paymentViewModel.ReturnAmount);
+            }
+            else
+            {
+                EventLogger.SaveLog(EventType.Error, "El objeto PaymentViewModel es nulo.");
+                // Manejar el caso cuando paymentViewModel es nulo, por ejemplo:
+                // - Mostrar un mensaje de error al usuario
+                // - Realizar alguna acción de recuperación o cancelación del pago
+                // - Registrar el error en el registro de eventos
+            }
+        }
+        /*
         private async void OnCashIn(decimal value)
         {
 
@@ -264,10 +375,11 @@ namespace WPFCootreguaV2.UserControls
 
             _currentLoadModal = _nav.ShowModal("Estamos procesando el pago...");
             await Task.Delay(3000);
+            
             EventLogger.SaveLog(EventType.Info, "Iniciando Proceso de pago...");
 
             await PaymentProcess();
-        }
+        }*/
 
         private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
         {
@@ -347,6 +459,7 @@ namespace WPFCootreguaV2.UserControls
 
               NotifyPay();
 
+
         }
 
         #region PagoFactura
@@ -376,9 +489,10 @@ namespace WPFCootreguaV2.UserControls
                     ReturnMoney(_paymentViewModel.ReturnAmount);
 
                 });
-              
+                Dispatcher.Invoke(() => GoTo(new SuccessUC()));
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

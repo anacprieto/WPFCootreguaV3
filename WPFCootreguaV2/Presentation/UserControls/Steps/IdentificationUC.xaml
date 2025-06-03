@@ -32,6 +32,7 @@
                HorizontalAlignment="Left" 
                Height="74"
                Width="651" 
+                     BorderBrush="Aqua"
                VerticalAlignment="Top"/>
             <TextBox
             x:Name="TxtIdentification"

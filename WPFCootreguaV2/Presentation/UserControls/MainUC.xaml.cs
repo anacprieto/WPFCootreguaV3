@@ -47,10 +47,12 @@ namespace WPFCootreguaV2.Presentation.UserControls
         }
         private void Grid_TouchDown(object sender, EventArgs e)
         {
+
             _imageSleader.Stop();
             _validatePaypad = false;
             GC.Collect();
             Dispatcher.Invoke(() => GoTo(new TypeTransUC()));
+
         }
         private async void Init()
         {

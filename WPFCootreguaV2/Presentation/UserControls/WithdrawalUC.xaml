@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
       mc:Ignorable="d" 
-      d:DesignHeight="1920" d:DesignWidth="1080">
+       Height="1720" 
+       Width="680">
     <!--
     <Grid>
         <Grid.Background>
@@ -36,11 +37,7 @@
         <Image Source="{StaticResource ATENTION_LINE}" Margin="292,1740,292,50" />
 
     </Grid>-->
-    <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="{Binding Background}"/>
-        </Grid.Background>
-
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
             <RowDefinition Height="*" />
@@ -52,6 +49,61 @@
         <TextBlock x:Name="TxtTimer" Text="" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}"/>
         <Grid Grid.Row="1" Grid.Column="1">
             <ContentControl Name="cc_View" />
+        </Grid>
+    </Grid>-->
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="450" />
+            <RowDefinition Height="600" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock 
+            Text="Transacción en proceso" 
+            FontFamily="pack://application:,,,/fonts/#Ubuntu"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            FontWeight="Bold" 
+            FontSize="90" 
+        />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Label 
+            x:Name="lblTitle"
+            Content="Valor a Retirar" 
+            FontFamily="pack://application:,,,/fonts/#Ubuntu"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontWeight="Bold" 
+            FontSize="80" 
+        />
+            <TextBlock 
+            x:Name="txtValueReturn"
+            Text="********" 
+            Tag="{Binding Amount}"
+            FontFamily="pack://application:,,,/fonts/#Ubuntu"
+            Foreground="Gray"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontWeight="Bold" 
+            FontSize="80"
+            Margin="0,0,0,0"
+            TouchDown="txtValueReturn_TouchDown"
+        />
+        </Grid>
+        <Grid Grid.Row="2">
+            <TextBlock 
+            Text="Por favor espere, estamos contando su dinero" 
+            FontFamily="pack://application:,,,/fonts/#Ubuntu"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontWeight="Bold" 
+            FontSize="70" 
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+        />
         </Grid>
     </Grid>
 </local:AppUserControl>

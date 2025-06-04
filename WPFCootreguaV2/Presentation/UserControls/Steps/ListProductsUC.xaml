@@ -138,26 +138,20 @@
             </ListView>
         </Grid>
         <Grid Grid.Row="2">
-            <Image 
-         Name="btnPagar"
-         Source="/Images/Buttons/BtnContinuar.png"
-         Height="90"
-         HorizontalAlignment="Right"
-         VerticalAlignment="Top"
-         Margin="0,50,30,0"
-         Stretch="Uniform"
-         MouseDown="btnPagar_TouchDown"
-     />
-            <Image 
-         Name="btnCancelar"
-         Source="/Images/Buttons/BtnCancelar.png"
-         Height="90"
-         HorizontalAlignment="Left"
-         VerticalAlignment="Top"
-         Margin="10,50,0,0"
-         Stretch="Uniform"
-         MouseDown="btnCancelar_TouchDown"
-     />
+            <Image x:Name="btnPagar" Source="{StaticResource BTN_CONTINUAR}" Height="90"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0,50,30,0"
+            Stretch="Uniform"
+            MouseDown="btnPagar_TouchDown"/>
+
+            <Image x:Name="btnCancelar" Source="{StaticResource BTN_CANCELAR}" 
+            Height="90"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="10,50,0,0"
+            Stretch="Uniform"
+            MouseDown="btnCancelar_TouchDown"/>
         </Grid>
     </Grid>
 </local:AppUserControl>

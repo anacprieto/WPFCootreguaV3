@@ -1,43 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.Domain;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Peripherals;
+using WPFCootreguaV2.Domain.Peripherals.Printer;
 using WPFCootreguaV2.Domain.UIServices;
-using WPFCootreguaV2.UserControls;
+using WPFCootreguaV2.Modals;
 
-namespace WPFCootreguaV2.Presentation.UserControls
+namespace WPFCootreguaV2.UserControls
 {
-    /// <summary>
-    /// Lógica de interacción para MenuUC.xaml
-    /// </summary>
-    public partial class TypeTransUC : AppUserControl
+    public partial class TypeUC : AppUserControl
     {
-        private const string STR_TIMER = "00:30";
+        private const string STR_TIMER = "00:45";
+        
         private Transaction _ts;
+        private TimerGeneric _timer;
+        private DocumentFormat _document = new();
+
+        private TypeUCViewModel _typeViewModel;
 
 
-        //private TimerGeneric _timer;
-
-        public TypeTransUC()
+        public TypeUC()
         {
             InitializeComponent();
-            Unloaded += OnUnloaded;
+
+            
             _ts = Transaction.Instance;
 
+            this.Loaded += OnLoaded;
+            this.Unloaded += OnUnloaded;
+            
         }
 
         private void typeTrans_TouchDown(object sender, EventArgs e)
@@ -68,6 +67,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+
         private void ValidateStatus()
         {
             var tsCreated = Api.CreateTransaction();
@@ -92,30 +92,58 @@ namespace WPFCootreguaV2.Presentation.UserControls
             if (_ts.TipoPago == TypePayment.Efectivo)
                 Dispatcher.Invoke(() => GoTo(new PaymentUC()));
         }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+        }
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+           
         }
 
-        private void BtnSalir_MouseDown(object sender, EventArgs e)
+        public class TypeUCViewModel : INotifyPropertyChanged
         {
-            //Dispatcher.Invoke(() => GoTo(new WelcomeUC()));
+            private string _statusMsg = string.Empty;
+
+            public string StatusMsg
+            {
+                get
+                {
+                    return _statusMsg;
+                }
+                set
+                {
+                    _statusMsg = value;
+                    OnPropertyRaised(nameof(StatusMsg));
+                }
+            }
+            private string _title = string.Empty;
+            public string HelpMessage
+            {
+                get
+                {
+                    return _title;
+                }
+                set
+                {
+                    _title = value;
+                    OnPropertyRaised(nameof(HelpMessage));
+                }
+            }
+
+
+            public event PropertyChangedEventHandler? PropertyChanged;
+
+            private void OnPropertyRaised(string propertyname)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+
+            }
         }
 
-        private void BtnAtras_MouseDown(object sender, EventArgs e)
-        {
-           // Dispatcher.Invoke(() => GoTo(new WelcomeUC()));
-        }
-        
-
-
-        private void BillPaymentFlow_Touch(object sender, EventArgs e)
-        {
-            // Detener la grabación antes de navegar
-            //  VideoRecorder.Start();
-            
-
-           // Dispatcher.Invoke(() => GoTo(new SelectInputUC()));
-        }
 
     }
+
+
 }

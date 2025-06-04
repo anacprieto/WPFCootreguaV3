@@ -1,57 +1,22 @@
-﻿<local:AppUserControl x:Class="WPFCootreguaV2.UserControls.TypeTransUC"
+﻿<local:AppUserControl x:Class="WPFCootreguaV2.Presentation.UserControls.TypeTransUC"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="1920" d:DesignWidth="1080">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/Images/Backgrounds/type.jpg" Stretch="Uniform"/>
+            <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
         </Grid.Background>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="300" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="300"/>
-        </Grid.RowDefinitions>
-
-        <Image 
-        Source="/Images/pagar2.png"
-        Height="150"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Top"
-        Margin="0,817,134,0"
-        Tag="2"
-        Grid.Row="1"
-        Stretch="Uniform"
-        MouseDown="typeTrans_TouchDown" Width="516"
-    />
-
-        <!--<Image 
-        Source="/Images/Buttons/retirar2.png"
-        Height="150"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Center"
-        Margin="0,500,150,0"
-        Tag="1"
-        Grid.Row="1"
-        Stretch="Uniform"
-        TouchDown="typeTrans_TouchDown"
-    />-->
-
-        <Image 
-        Source="/Images/BtnIngreso.png"
-        Height="150"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Top"
-        Margin="0,972,134,0"
-        Tag="3"
-        Grid.Row="1"
-        Stretch="Uniform"
-        MouseDown="typeTrans_TouchDown" Width="576"
-    />
+        <!-- 
+        <Image Source="{StaticResource LOGODOBLECLICK}" Style="{StaticResource logoHeaderStyle}"/>HEADER -->
+        <Image x:Name="BtnAtras" Tag="1"  Source="{StaticResource BTN_ATRAS}" Margin="554,1356,209,358"
+            PreviewMouseDown="typeTrans_TouchDown"/>
+        <Image x:Name="BtnSalir" Tag="2"  Source="{StaticResource BTN_ATRAS}" Margin="554,1503,210,222"
+            PreviewMouseDown="typeTrans_TouchDown"/>
+        <!-- <Image x:Name="BtnSalir_Copiar" Source="{StaticResource BTN_PAGAR}" Margin="554,1400,214,374"
+            MouseDown="BtnSalir_MouseDown"/> -->
     </Grid>
 </local:AppUserControl>

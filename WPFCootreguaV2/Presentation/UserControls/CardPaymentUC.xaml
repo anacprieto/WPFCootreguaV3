@@ -13,10 +13,10 @@
         </Grid.Background>
 
         <!-- HEADER -->
-        <Image x:Name="BtnAtras" Source="{StaticResource BTN_ATRAS}" Margin="47,38,867,1778"
+        <Image x:Name="BtnAtras" Source="{StaticResource BTN_ATRAS}" Margin="64,329,850,1487"
       MouseDown="BtnAtras_MouseDown"/>
         <Image x:Name="BtnSalir" Source="{StaticResource BTN_SALIR}" Margin="888,38,19,1778"
-      MouseDown="BtnSalir_MouseDown"/>
+      MouseDown="BtnSalir_MouseDown" RenderTransformOrigin="-0.412,5.514"/>
         <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
 
 

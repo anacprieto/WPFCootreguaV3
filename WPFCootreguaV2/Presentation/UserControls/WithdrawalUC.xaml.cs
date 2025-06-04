@@ -40,45 +40,280 @@ namespace WPFCootreguaV2.Presentation.UserControls
         private MenuBackground bg;
         //private ManualInputViewModel _viewModel;
         //private ModalWindow? _currentLoadModal = null;
-
+        private Transaction transaction;
+        private PaymentViewModel _paymentViewModel;
         public WithdrawalUC()
         {
             InitializeComponent();
+            bg = new MenuBackground();
+            _ts = Transaction.Instance;
+            // Cambiar el fondo
+            ChangeBackground(EBackground.Paga);
+            // Inicializar el ViewModel AQUÍ
+            OrganizeValues();
+
+            
+
+#if NO_PERIPHERALS
+            Button dynamicButton = new Button();
+
+            // Set properties of the button
+            dynamicButton.Content = "Add minor value";
+            dynamicButton.Width = 100;
+            dynamicButton.Height = 50;
+            dynamicButton.VerticalAlignment = VerticalAlignment.Top;
+            dynamicButton.HorizontalAlignment = HorizontalAlignment.Left;
+            // Set background color
+            dynamicButton.Background = new SolidColorBrush(Colors.Red); // Change to the desired color
+            dynamicButton.Foreground = new SolidColorBrush(Colors.White); // Change to the desired color
+
+            // Set border brush and thickness
+            dynamicButton.BorderBrush = new SolidColorBrush(Colors.White); // Change to the desired color
+            dynamicButton.BorderThickness = new Thickness(2); // Change thickness as needed
+            dynamicButton.Click += ExecuteScanner;
+
+            Button dynamicButton2 = new Button();
+
+            // Set properties of the button
+            dynamicButton2.Content = "Add mid value";
+            dynamicButton2.Width = 100;
+            dynamicButton2.Height = 50;
+            dynamicButton2.VerticalAlignment = VerticalAlignment.Top;
+            dynamicButton2.HorizontalAlignment = HorizontalAlignment.Center;
+            // Set background color
+            dynamicButton2.Background = new SolidColorBrush(Colors.Transparent); // Change to the desired color
+            dynamicButton2.Foreground = new SolidColorBrush(Colors.White); // Change to the desired color
+
+            // Set border brush and thickness
+            dynamicButton2.BorderBrush = new SolidColorBrush(Colors.White); // Change to the desired color
+            dynamicButton2.BorderThickness = new Thickness(2); // Change thickness as needed
+            dynamicButton2.Click += ExecuteScanner2;
+
+            void ExecuteScanner(object sender, EventArgs e)
+            {
+
+                //OnCashIn(20000);
+                //NotifyPay();
+            }
+
+            void ExecuteScanner2(object sender, EventArgs e)
+            {
+                //OnCashIn(50000);
+            }
+            //MainGrid.Children.Add(dynamicButton);
+
+#else
+    _peripherals = ArduinoController.Instance;
+    _peripherals.CashIn += OnCashIn;
+    _peripherals.CashDispensed += OnCashDispensed;
+    _peripherals.DispenserReject += OnDispenserReject;
+    _peripherals.PeripheralError += OnPeripheralError;
+#endif
+
+            // Agregar eventos
+            this.Loaded += OnLoaded;
+            this.Unloaded += OnUnloaded;
+
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+
+            InitViewModel();
+#if NO_PERIPHERALS
+#else
+            _peripherals.StartAcceptance(_paymentViewModel.PayAmount);
+#endif
+        }
+        private void InitViewModel()
+        {
+
+            _paymentViewModel = new PaymentViewModel
+            {
+                PayAmount = _ts.Total,
+                RemainingAmount = _ts.Total,
+                ReturnAmount = 0,
+                EnteredAmount = 0,
+                Denominations = new List<Denomination>(),
+                DispensedAmount = 0
+            };
+            this.DataContext = _paymentViewModel;
+
+        }
 
 
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+#if NO_PERIPHERALS
+#else
+            _peripherals.CashIn -= OnCashIn;
+            _peripherals.CashDispensed -= OnCashDispensed;
+            _peripherals.DispenserReject -= OnDispenserReject;
+            _peripherals.PeripheralError -= OnPeripheralError;
+#endif
+        }
 
-        } 
-        
-        //private void OrganizeValues()
-        //{
-        //    try
-        //    {
-        //        this.paymentViewModel = new PaymentViewModel
-        //        {
-        //            PayValue = transaction.Amount,
-        //            ValorFaltante = 0,
-        //            ImgContinue = Visibility.Hidden,
-        //            ImgCancel = Visibility.Hidden,
-        //            ImgCambio = Visibility.Hidden,
-        //            ValorSobrante = 0,
-        //            ValorIngresado = 0,
-        //            viewList = new CollectionViewSource(),
-        //            Denominations = new List<DenominationMoney>(),
-        //            ValorDispensado = 0,
-        //            StatePay = false
-        //        };
+        public void ChangeBackground(EBackground eBackground)
+        {
 
-        //        transaction.Payment = this.paymentViewModel;
+            try
+            {
+                //if (bg == null)
+                //{
+                //    bg = new MenuBackground(); // Tipo correcto
+                //}
 
-        //        this.DataContext = transaction;
+                Dispatcher.Invoke(() =>
+                {
+                    switch (eBackground)
+                    {
+                        case EBackground.Identificate:
+                            // Usar el recurso estático
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
+                            break;
+                        case EBackground.Identificate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
+                            break;
+                        case EBackground.Autenticate:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
+                            break;
+                        case EBackground.Autenticate2:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
+                            break;
+                        case EBackground.Productos:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
+                            break;
+                        case EBackground.Paga:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
+                            break;
+                        case EBackground.Generico:
+                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
+                            break;
+                    }
 
-        //        SaveWithdrawal();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
+                    this.DataContext = bg;
+                });
+            }
+            catch (Exception ex)
+            {
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+        private void OrganizeValues()
+        {
+            try
+            {
+                _paymentViewModel = new PaymentViewModel
+                {
+                    PayAmount = _ts.Total,
+                    RemainingAmount = _ts.Total,
+                    ReturnAmount = 0,
+                    EnteredAmount = 0,
+                    Denominations = new List<Denomination>(),
+                    DispensedAmount = 0
+                };
+                this.DataContext = _paymentViewModel;
+
+                this.DataContext = _ts;
+
+                SaveWithdrawal();
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
+        }
+
+        private async void SaveWithdrawal()
+        {
+            try
+            {
+                Task.Run(async () =>
+                {
+                    PymentProduct pay = new PymentProduct
+                    {
+                        Identification = _ts.Documento,
+                        Description = "Retiro",
+                        PayDate = DateTime.Now,
+                        ValueToPay = (long)_ts.Total,
+                        NumberProduct = long.Parse(transaction.ProductSelect.NumberProduct),
+                        TypeProduct = _ts.ProductSelect.TipoProducto,
+                        Coduser = _ts.Codigo,
+                        codOpe = 0,
+                        TipoMovimiento = 1
+                    };
+
+                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
+
+                    Thread.Sleep(500);
+
+                    if (!string.IsNullOrEmpty(authen) && authen != "[]")
+                    {
+                        var data = JsonConvert.DeserializeObject<PymentProduct>(authen);
+
+                        if (data.codOpe >= 1)
+                        {
+                            _ts.PayCode = data.codOpe;
+                            _ts.statePaySuccess = true;
+                            _ts.EstadoTransaccion = StateTransaction.Aprobada;
+
+                            ReturnMoney(_ts.Total);
+                        }
+                        else
+                        {
+                           // Finish(false);
+                        }
+                    }
+                    else
+                    {
+                      //  Finish(false);
+                    }
+                });
+
+               // Switcher.ModalLoad(true);
+            }
+            catch (Exception ex)
+            {
+            //    Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            //    Finish(false);
+            }
+        }
+        private void ReturnMoney(decimal returnValue)
+        {
+            _ts.DevueltaCorrecta = false;
+#if NO_PERIPHERALS
+            OnCashDispensed(returnValue, new Dictionary<int, int>());
+#else
+            _peripherals.StartDispenser(returnValue);
+#endif
+
+        }
+        private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
+        {
+
+            //_paymentViewModel.DispensedAmount = totalDispensed;
+
+            //_paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
+            //string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
+
+            //SendDispenseDetails(details);
+
+            //CloseLoadModal();
+
+            //if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
+            //{
+            //    _ts.DevueltaCorrecta = true;
+            //    await SavePay();
+            //}
+            //else
+            //{
+            //    _currentLoadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+            //    await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
+            //    _ts.DevueltaCorrecta = false;
+            //    await SavePay();
+            //}
+
+        }
 
         //private void ReturnMoney()
         //{
@@ -301,6 +536,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
         //    }
         //}
         //#endregion
+
+
 
         #region "Eventos"
         private void txtValueReturn_TouchDown(object sender, TouchEventArgs e)

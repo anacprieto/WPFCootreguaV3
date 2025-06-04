@@ -10,7 +10,7 @@
              Height="1720" 
              Width="680"
              Panel.ZIndex="1">
-    
+
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="500" />
@@ -52,35 +52,29 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            
+
             <TextBlock  x:Name="TxtStatusMsg" Text="{Binding StatusMsg}" Style="{StaticResource StatusTextStyle}" Margin="0,82,0,0"/>
 
             <local:NumericKeyboard x:Name="Keyboard" Margin="10,257,10,10" />
         </Grid>
 
         <Grid Grid.Row="2">
-            <Image 
-            Name="BtnContinuar"
-            Source="/Images/Buttons/BtnContinuar.png"
-            Height="90"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="0,183,33,0"
-            Stretch="Uniform" 
-            Opacity="0.3"
-            IsEnabled="False"
-            MouseDown="BtnConsultar_Touch"
-        />
-            <Image 
-            Name="BtnCancelar"
-            Source="/Images/Buttons/BtnAnterior.png"
-            Height="90"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="42,183,0,0"
-            Stretch="Uniform"
-            TouchDown="Btn_Cancelar_Touch" RenderTransformOrigin="0.502,-0.244"
-        />
+
+            <Image x:Name="BtnCancelar" Source="{StaticResource BTN_ANTERIOR}" 
+               Height="90"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top"
+             Margin="42,183,0,0"
+             Stretch="Uniform"
+             TouchDown="Btn_Cancelar_Touch" RenderTransformOrigin="0.502,-0.244"/>
+
+            <Image x:Name="BtnContinuar" Source="{StaticResource BTN_CONTINUAR}" Height="90"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              Margin="0,183,52,0"
+              Stretch="Uniform"
+              MouseDown="BtnConsultar_Touch"/>
+
         </Grid>
 
     </Grid>

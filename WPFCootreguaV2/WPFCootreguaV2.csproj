@@ -54,7 +54,6 @@
     <None Remove="Images\Buttons\BtnICA.png" />
     <None Remove="Images\Buttons\Btnlimpiar.png" />
     <None Remove="Images\Buttons\BtnOmitir.png" />
-    <None Remove="Images\Buttons\BtnPagar.png" />
     <None Remove="Images\Buttons\BtnPredial.png" />
     <None Remove="Images\Buttons\BtnReferencia.png" />
     <None Remove="Images\Buttons\BtnSalirTxt.png" />
@@ -323,7 +322,7 @@
 
 
   <ItemGroup>
-    <Compile Update="Presentation\UserControls\TypeTransUC.xaml.cs">
+    <Compile Update="Presentation\UserControls\TypeUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Presentation\UserControls\ManualInputUC.xaml.cs">
@@ -434,9 +433,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\BtnOmitir.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\Buttons\BtnPagar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\BtnPredial.png">

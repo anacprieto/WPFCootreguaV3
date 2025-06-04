@@ -38,16 +38,14 @@
         </Grid>
 
         <Grid Grid.Row="2" >
-            <Image 
-                Name="BtnCancelar"
-                Source="/Images/Buttons/BtnCancelar.png"
-                Height="246"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Margin="0,94,0,0"
-                Stretch="Uniform"
-                PreviewMouseDown="OpcionButton_Click" RenderTransformOrigin="-2.235,1.238" Width="340"
-            />
+            <Image x:Name="BtnCancelar" Source="{StaticResource BTN_CANCELAR}" 
+             Height="150"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Top"
+             Margin="0,94,0,0"
+             Stretch="Uniform"
+             PreviewMouseDown="OpcionButton_Click" RenderTransformOrigin="-2.235,1.238" Width="340"/>
+            
         </Grid>
 
     </Grid>

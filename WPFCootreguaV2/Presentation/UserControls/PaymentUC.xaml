@@ -221,17 +221,14 @@
           />
         </Grid>
         <Grid Grid.Row="4">
-            <Image 
-             Name="BtnCancel"
-             Source="/Images/Buttons/btnSalir2.png"
-             Height="90"
-             HorizontalAlignment="Left"
-             VerticalAlignment="Top"
-             Margin="30,50,0,0"
-             Visibility="{Binding ImgCancel}"
-             Stretch="Uniform"
-             MouseDown="BtnCancel_TouchDown"
-         />
+        
+            <Image x:Name="BtnCancel" Source="{StaticResource BTN_SALIR}" Height="90"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="30,50,0,0"
+            Visibility="{Binding ImgCancel}"
+            Stretch="Uniform"
+            MouseDown="BtnCancel_TouchDown"/>
         </Grid>
     </Grid>
 </local:AppUserControl>

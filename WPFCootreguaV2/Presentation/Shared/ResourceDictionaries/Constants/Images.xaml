@@ -18,6 +18,8 @@
     <BitmapImage x:Key="BTN_AUTENTICATE" UriSource="pack://application:,,,/Images/Backgrounds/autenticate.jpg"/>
     <BitmapImage x:Key="BTN_AUTENTICATE2" UriSource="pack://application:,,,/Images/Backgrounds/autenticate2.jpg"/>
     <BitmapImage x:Key="BTN_PRODUCTOS" UriSource="pack://application:,,,/Images/Backgrounds/elige.jpg"/>
+    
+    
 
     <!-- BUTTONS -->
     <BitmapImage x:Key="BTN_ATRAS" UriSource="pack://application:,,,/Images/Buttons/BtnAtrasTxt.png"/>
@@ -33,10 +35,13 @@
     <BitmapImage x:Key="BTN_CONTINUAR" UriSource="pack://application:,,,/Images/Buttons/BtnContinuar.png"/>
     <BitmapImage x:Key="BTN_CANCELAR" UriSource="pack://application:,,,/Images/Buttons/BtnCancelar.png"/>
     <BitmapImage x:Key="BTN_FINALIZAR" UriSource="pack://application:,,,/Images/Buttons/BtnFinalizar.png"/>
-    <BitmapImage x:Key="BTN_OMITIR" UriSource="pack://application:,,,/Images/Buttons/BtnOmitir.png"/>
+    <BitmapImage x:Key="BTN_OMITIR" UriSource="pack://application:,,,/Images/Buttons/BtnIngreso.png"/>
     <BitmapImage x:Key="BTN_PAGAR" UriSource="pack://application:,,,/Images/Buttons/BtnPagar.png"/>
     <BitmapImage x:Key="BTN_EFECTIVO" UriSource="pack://application:,,,/Images/Buttons/BtnEfectivo.png"/>
-   
+    <BitmapImage x:Key="BTN_ANTERIOR" UriSource="pack://application:,,,/Images/Buttons/BtnAnterior.png"/>
+    <BitmapImage x:Key="BTN_INGRESAR" UriSource="pack://application:,,,/Images/Buttons/BtnIngreso.png"/>
+
+
     <!-- OTHERS -->
     <BitmapImage x:Key="ATENTION_LINE" UriSource="pack://application:,,,/Images/Others/LineaAtencion.png"/>
     <BitmapImage x:Key="ICO_STAR" UriSource="pack://application:,,,/Images/Others/Star.png"/>

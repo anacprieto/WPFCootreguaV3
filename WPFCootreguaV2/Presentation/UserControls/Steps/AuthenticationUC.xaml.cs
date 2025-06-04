@@ -50,9 +50,9 @@ namespace WPFCootreguaV2.UserControls
         private int CantIntentos;
 
         #region Regex properies
-        private string _regexReferencia = @"8020(0*[1-9]\d*)\u001d3900";
-        private string _regexValorPago = @"\u001d3900(0*[1-9]\d*)\u001d96";
-        private string _regexFechaVencimiento = @"\u001d96(\d*)";
+        //private string _regexReferencia = @"8020(0*[1-9]\d*)\u001d3900";
+        //private string _regexValorPago = @"\u001d3900(0*[1-9]\d*)\u001d96";
+        //private string _regexFechaVencimiento = @"\u001d96(\d*)";
 
         private string _referencia = string.Empty;
         private string _valorPagar = string.Empty;

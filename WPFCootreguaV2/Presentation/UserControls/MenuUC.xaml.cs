@@ -51,7 +51,14 @@ namespace WPFCootreguaV2.Presentation.UserControls
                 bg = new MenuBackground();
 
                 // Cambiamos el fondo a Identificación
-                ChangeBackground(EBackground.Identificate);
+                if (_ts.Type == ETransactionType.Registros)
+                {
+                    ChangeBackground(EBackground.Identificate2);
+                }
+                else
+                {
+                    ChangeBackground(EBackground.Identificate);
+                }
 
                 // Navegamos a la vista de identificación
                 Navegar(new IdentificationUC());

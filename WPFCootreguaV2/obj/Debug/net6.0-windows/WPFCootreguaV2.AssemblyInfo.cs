@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WPFCootreguaV2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0e54d3b2a1d3784fa19ca054a0f31a5b1c7afe5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef88847af6a713f7e04041f60373f099748d20c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("WPFCootreguaV2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WPFCootreguaV2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

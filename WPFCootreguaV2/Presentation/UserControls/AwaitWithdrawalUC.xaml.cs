@@ -7,7 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using WPFCootreguaV2.ApiService;
 
 //using WPFCootreguaV2.ApiService.IntegrationsModels;
@@ -42,10 +44,63 @@ namespace WPFCootreguaV2.UserControls
 
             _ts.DevueltaCorrecta = false;
 
+
+
+#if NO_PERIPHERALS
+            Button dynamicButton = new Button();
+
+            // Set properties of the button
+            dynamicButton.Content = "Add minor value";
+            dynamicButton.Width = 100;
+            dynamicButton.Height = 50;
+            dynamicButton.VerticalAlignment = VerticalAlignment.Top;
+            dynamicButton.HorizontalAlignment = HorizontalAlignment.Left;
+            // Set background color
+            dynamicButton.Background = new SolidColorBrush(Colors.Red); // Change to the desired color
+            dynamicButton.Foreground = new SolidColorBrush(Colors.White); // Change to the desired color
+
+            // Set border brush and thickness
+            dynamicButton.BorderBrush = new SolidColorBrush(Colors.White); // Change to the desired color
+            dynamicButton.BorderThickness = new Thickness(2); // Change thickness as needed
+            dynamicButton.Click += ExecuteScanner;
+
+            Button dynamicButton2 = new Button();
+
+            // Set properties of the button
+            dynamicButton2.Content = "Add mid value";
+            dynamicButton2.Width = 100;
+            dynamicButton2.Height = 50;
+            dynamicButton2.VerticalAlignment = VerticalAlignment.Top;
+            dynamicButton2.HorizontalAlignment = HorizontalAlignment.Center;
+            // Set background color
+            dynamicButton2.Background = new SolidColorBrush(Colors.Transparent); // Change to the desired color
+            dynamicButton2.Foreground = new SolidColorBrush(Colors.White); // Change to the desired color
+
+            // Set border brush and thickness
+            dynamicButton2.BorderBrush = new SolidColorBrush(Colors.White); // Change to the desired color
+            dynamicButton2.BorderThickness = new Thickness(2); // Change thickness as needed
+            dynamicButton2.Click += ExecuteScanner2;
+
+            void ExecuteScanner(object sender, EventArgs e)
+            {
+                IsWithdrawalValid();
+                //OnCashIn(20000);
+                //NotifyPay();
+            }
+
+            void ExecuteScanner2(object sender, EventArgs e)
+            {
+                //OnCashIn(50000);
+            }
+            MainGrid.Children.Add(dynamicButton);
+
+#else
             _peripherals = ArduinoController.Instance;
             _peripherals.CashDispensed += OnCashDispensed;
             _peripherals.DispenserReject += OnDispenserReject;
+#endif
 
+            // Agregar eventos
             this.Loaded += OnLoaded;
             this.Unloaded += OnUnloaded;
 
@@ -53,6 +108,10 @@ namespace WPFCootreguaV2.UserControls
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+#if NO_PERIPHERALS
+#else
+            _peripherals.StartAcceptance(_paymentViewModel.PayAmount);
+#endif
             _paymentViewModel = new PaymentViewModel
             {
                 PayAmount = _ts.TotalSinRedondear,
@@ -76,10 +135,13 @@ namespace WPFCootreguaV2.UserControls
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+#if NO_PERIPHERALS
+#else
             _peripherals.CashDispensed -= OnCashDispensed;
             _peripherals.DispenserReject -= OnDispenserReject;
-        }
 
+#endif
+        }
         #region Events
         private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
         {
@@ -98,7 +160,7 @@ namespace WPFCootreguaV2.UserControls
             }
             else
             {
-                _loadModal = _nav.ShowLoadModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + "Este dinero dinero permanecerá en su cuenta.");
+                _loadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + "Este dinero dinero permanecerá en su cuenta.");
                 Thread.Sleep(5000); // Timer para mostrar la modal y que se pueda leer
                 _ts.DevueltaCorrecta = false;
                 await SaveWithdrawal();
@@ -130,8 +192,9 @@ namespace WPFCootreguaV2.UserControls
                     TipoMovimiento = 1
                 };
 
+                //var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
                 var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
-
+                //PARAR EJECUCION PARA VER OBJETO
                 // Reemplazar Thread.Sleep con await Task.Delay para operaciones asíncronas
                 await Task.Delay(500);
 
@@ -152,6 +215,7 @@ namespace WPFCootreguaV2.UserControls
                         return false;
                     }
                 }
+
                 else
                 {
                     Finish(false);
@@ -159,7 +223,7 @@ namespace WPFCootreguaV2.UserControls
                 }
             }
             catch ( ShowableException  ex)
-    {
+            {
                 EventLogger.SaveLog(EventType.Warning, $"No se pudo notificar al servicio {ex.Message}", ex);
                 _nav.ShowModal(ex.Message, new InfoModal());
                 CancelBeforeReturn(ex.Message);
@@ -309,7 +373,7 @@ namespace WPFCootreguaV2.UserControls
             try
             {
                 EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: {denom.ToString("C0")}, Cantidad: {quantity}");
-                Api.CreateTransactionDetail(_ts.IdTransaccionApi, op, (int)denom, quantity);
+                Api.CreateTransactionDetail1(_ts.IdTransaccionApi, op, (int)denom, quantity);
 
 
             }
@@ -376,25 +440,18 @@ namespace WPFCootreguaV2.UserControls
 
                 CloseLoadModal();
 
-                //Si el usuario escoje mostrar en pantalla se devuelve true
-                bool isInboxScreen = Dispatcher.Invoke(() => _nav.ShowModalOf(new InboxOptionModal()));
-                _ts.FacturaEnPantalla = isInboxScreen;
-                if (isInboxScreen)
-                {
-                    var data = _ts.ProcedureManager.GetInboxData(_ts);
-                    Dispatcher.Invoke(() => _nav.ShowModalOf(new InboxViewModal(data)));
-                }
-
                 Dispatcher.Invoke(() => GoTo(new FinishUC()));
             }
             catch (Exception ex)
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+               // CloseLoadModal();
+                _nav.ShowModal("Se presentó un problema intentando reportar los datos del retiro. Por favor comuníquese con soporte técnico.");
                 CloseLoadModal();
-                _loadModal = _nav.ShowLoadModal("Se presentó un problema intentando reportar los datos del retiro. Por favor comuníquese con soporte técnico.");
+
+
             }
         }
-
         private async Task Notify()
         {
             var maxTries = 3;
@@ -403,27 +460,35 @@ namespace WPFCootreguaV2.UserControls
             {
                 nTries++;
                 EventLogger.SaveLog(EventType.Info, $"Intento {nTries} notificar retiro");
-                var reqData = new CFA_ReqWithdrawalNotification
+                PymentProduct pay = new PymentProduct
                 {
-                    Document = _ts.DocumentoCliente ?? string.Empty,
-                    TypeDocument = _ts.TipoDocumento ?? string.Empty,
-                    MontoTransaccion = ((int)_ts.TotalSinRedondear).ToString(),
-                    AcountTransaccion = _ts.CuentaSeleccionada,
-                    AmountDelivered = _paymentViewModel.DispensedAmount.ToString(),
+                    Identification = _ts.Documento,
+                    Description = "Renotificación-Retiro",
+                    PayDate = DateTime.Now,
+                    ValueToPay = (long)(_ts.Total - _ts.TotalDevuelta),
+                    NumberProduct = long.Parse(_ts.ProductSelect.NumberProduct),
+                    TypeProduct = _ts.ProductSelect.TipoProducto,
+                    Coduser = _ts.Codigo,
+                    codOpe = 0,
+                    TipoMovimiento = 2
                 };
 
-                bool notificationSuccess = await ApiIntegration.NotifyWithdrawalR(reqData);
+                //bool notificationSuccess = await ApiIntegration.NotifyWithdrawalR(reqData);
+                var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
 
-                if (notificationSuccess)
+                if (authen!=null)
                 {
+
                     _tranStateTemp = StateTransaction.Aprobada;
                     return;
                 }
-                
+
             }
             _tranStateTemp = StateTransaction.AprobadaSinNotificar;
 
         }
+
+
 
         private void SetTransactionDescription()
         {

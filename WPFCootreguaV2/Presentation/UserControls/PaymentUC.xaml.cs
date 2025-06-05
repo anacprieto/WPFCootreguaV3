@@ -274,7 +274,7 @@ namespace WPFCootreguaV2.UserControls
             try
             {
                 EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: ${denom:N0} COP, Cantidad: {quantity}");
-                Api.CreateTransactionDetail(op, (int)denom);
+                Api.CreateTransactionDetail(op, (int)denom,quantity);
 
             }
             catch (Exception ex)
@@ -646,7 +646,7 @@ namespace WPFCootreguaV2.UserControls
             try
             {
                 EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: {denom.ToString("C0")}");
-                Api.CreateTransactionDetail(op, (int)denom);
+                Api.CreateTransactionDetail2(op, (int)denom);
 
             }
             catch (Exception ex)

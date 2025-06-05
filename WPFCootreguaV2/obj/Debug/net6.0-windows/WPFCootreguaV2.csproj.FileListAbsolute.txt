@@ -661,3 +661,5 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\WPFCootreguaV2.pdb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\WPFCootreguaV2.genruntimeconfig.cache
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\ref\WPFCootreguaV2.dll
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\AwaitWithdrawalUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\AwaitWithdrawalUC.baml

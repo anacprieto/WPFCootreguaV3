@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,8 @@ using WPFCootreguaV2.Domain;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Peripherals;
 using WPFCootreguaV2.Domain.UIServices;
+using WPFCootreguaV2.Modals;
+using WPFCootreguaV2.Models;
 using WPFCootreguaV2.UserControls;
 
 namespace WPFCootreguaV2.Presentation.UserControls
@@ -38,6 +41,50 @@ namespace WPFCootreguaV2.Presentation.UserControls
             Unloaded += OnUnloaded;
             _ts = Transaction.Instance;
 
+        }
+        private async void SelectOption(object sender, EventArgs e)
+        {
+            string? selectedTag = ((Grid)sender).Tag.ToString();
+            if (selectedTag == null) return;
+
+            await Dispatcher.BeginInvoke(() =>
+            {
+                this.IsEnabled = false;
+                this.Opacity = 0.3;
+            });
+
+            _ts.TipoRecaudo = selectedTag;
+            switch (_ts.TipoRecaudo)
+            {
+                case "1":
+                    _ts.Type = ETransactionType.Withdrawal;
+                    _ts.TipoTransaccion = TypeTransaction.Retiro;
+                    _ts.TipoTransaccionVerb = "Retiro";
+                    //_ts.ProcedureManager = new WithdrawalManager();
+                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+                    break;
+
+                case "2":
+                    _ts.Type = ETransactionType.Payment;
+                    _ts.TipoTransaccion = TypeTransaction.Pago;
+                    _ts.TipoTransaccionVerb = "Pago";
+                    //_ts.ProcedureManager = new PaymentManager();
+                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+                    break;
+
+                case "3":
+                    _ts.Type = ETransactionType.Registros;
+                    _ts.TipoTransaccion = TypeTransaction.Registro;
+                    _ts.TipoTransaccionVerb = "Registro";
+                    //_ts.ProcedureManager = new PaymentManager();
+                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+                    break;
+
+
+            }
+
+            _ts.TipoPago = TypePayment.Efectivo;
+            //ValidateStatus();
         }
 
         private void typeTrans_TouchDown(object sender, EventArgs e)
@@ -61,7 +108,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                     _ts.Type = ETransactionType.Registros;
                 }
 
-                ValidateStatus();
+                //ValidateStatus();
             }
             catch (Exception ex)
             {
@@ -91,6 +138,37 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
             if (_ts.TipoPago == TypePayment.Efectivo)
                 Dispatcher.Invoke(() => GoTo(new PaymentUC()));
+        }
+        private void Redirect(bool state)
+        {
+            try
+            {
+                if (state)
+                {
+                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+
+                   // Utilities.navigator.Navigate(UserControlView.Menu);
+                }
+                else
+                {
+                    if (_ts.Type == ETransactionType.Registros)
+                    {
+                        Dispatcher.Invoke(() => GoTo(new MenuUC()));
+
+                        //Utilities.navigator.Navigate(UserControlView.Menu);
+                    }
+                    else
+                    {
+                        //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, null, AdminPayPlus.DataPayPlus.Message);
+                        //Utilities.ShowModal(MessageResource.NoService + " " + MessageResource.NoMoneyKiosco, EModalType.Error, false);
+                        //GoTimer();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {

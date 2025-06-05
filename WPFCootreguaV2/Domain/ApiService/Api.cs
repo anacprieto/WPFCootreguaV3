@@ -299,7 +299,7 @@ namespace WPFCootreguaV2.ApiService
                 return null;
             });
         }*/
-        public static void CreateTransactionDetail(int idTransactionApi, TypeOperation op, int value, int quantity)
+        public static void CreateTransactionDetail1(int idTransactionApi, TypeOperation op, int value, int quantity)
         {
             var detail = new TransactionDetailDto
             {
@@ -354,5 +354,110 @@ namespace WPFCootreguaV2.ApiService
             });
         }
 
+        public static void CreateTransactionDetail(TypeOperation op, int value, int quantity)
+        {
+            var detail = new TransactionDetailDto
+            {
+                CurrencyDenomination = value,
+                IdTypeOperation = (int)op,
+                Quantity = quantity
+            };
+
+
+
+            _requestsQueue.Enqueue(async () =>
+            {
+                string payload = JsonConvert.SerializeObject(detail);
+
+                var content = new StringContent(payload, Encoding.UTF8, "Application/json");
+                var url = AppConfig.Get("TransactionDetails");
+
+                var response = await _client.PostAsync(url, content);
+
+                var result = await response.Content.ReadAsStringAsync();
+                if (result == null)
+                {
+                    EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
+                    return null;
+                }
+
+                var requestresponse = JsonConvert.DeserializeObject<ApiResponse<List<TransactionDetailDto>>>(result);
+                if (requestresponse == null)
+                {
+                    EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
+                    return null;
+                }
+
+                if (requestresponse.statusCode == 200)
+                {
+                    var listTransactionsCreated = requestresponse.response;
+                    // Se guarda el detalle en la base de datos local
+                    var mapper = ObjMapper.Instance;
+                    foreach (var transactionDetailCreated in listTransactionsCreated)
+                    {
+                        if (!await DB_TransactionService.CreateDetail(mapper.Map<DB_TransactionDetail>(transactionDetailCreated)))
+                        {
+                            EventLogger.SaveLog(EventType.Error, "No se pudo actualizar la transacción de manera local", transactionDetailCreated);
+                        }
+                    }
+                    return listTransactionsCreated;
+                }
+
+                EventLogger.SaveLog(EventType.Error, "Api no respondió satisfactoriamente", requestresponse);
+                return null;
+            });
+        }
+        public static void CreateTransactionDetail2(TypeOperation op, int value)
+        {
+            var detail = new TransactionDetailDto
+            {
+                CurrencyDenomination = value,
+                IdTypeOperation = (int)op
+            };
+
+
+
+            _requestsQueue.Enqueue(async () =>
+            {
+                string payload = JsonConvert.SerializeObject(detail);
+
+                var content = new StringContent(payload, Encoding.UTF8, "Application/json");
+                var url = AppConfig.Get("TransactionDetails");
+
+                var response = await _client.PostAsync(url, content);
+
+                var result = await response.Content.ReadAsStringAsync();
+                if (result == null)
+                {
+                    EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
+                    return null;
+                }
+
+                var requestresponse = JsonConvert.DeserializeObject<ApiResponse<List<TransactionDetailDto>>>(result);
+                if (requestresponse == null)
+                {
+                    EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
+                    return null;
+                }
+
+                if (requestresponse.statusCode == 200)
+                {
+                    var listTransactionsCreated = requestresponse.response;
+                    // Se guarda el detalle en la base de datos local
+                    var mapper = ObjMapper.Instance;
+                    foreach (var transactionDetailCreated in listTransactionsCreated)
+                    {
+                        if (!await DB_TransactionService.CreateDetail(mapper.Map<DB_TransactionDetail>(transactionDetailCreated)))
+                        {
+                            EventLogger.SaveLog(EventType.Error, "No se pudo actualizar la transacción de manera local", transactionDetailCreated);
+                        }
+                    }
+                    return listTransactionsCreated;
+                }
+
+                EventLogger.SaveLog(EventType.Error, "Api no respondió satisfactoriamente", requestresponse);
+                return null;
+            });
+        }
     }
 }

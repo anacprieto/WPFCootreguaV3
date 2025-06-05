@@ -9,7 +9,7 @@
              xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              mc:Ignorable="d" 
              d:DesignHeight="1920" d:DesignWidth="1080">
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.Background>
             <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
         </Grid.Background>
@@ -22,7 +22,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Width="250"
-            Source="/Image/Other/logo2.png" Margin="0,196,0,0"/>
+            Source="/Images/Buttons/btn-acept.png" Margin="0,196,0,0"/>
 
 
         <TextBlock
@@ -31,7 +31,6 @@
             TextAlignment="Center" 
             FontSize="80"
             Foreground="{StaticResource SECONDARYCOLOR}"
-            FontFamily="{StaticResource FONTFAMILY1}"
             FontWeight="Light"
             Visibility="Visible" 
             Margin="0,560,0,0" 
@@ -65,9 +64,9 @@
 
 
         <Image 
-    Source="/Image/Other/Superintendencia.png" Margin="0,1405,906,54"/>
+    Source="/Images/Buttons/Btn9.png" Margin="0,1405,906,54"/>
         <Image 
-    Source="/Image/Other/logoecity.png" Margin="139,1773,718,50"/>
+    Source="/Images/Buttons/Btn9.png" Margin="139,1773,718,50"/>
 
 
     </Grid>

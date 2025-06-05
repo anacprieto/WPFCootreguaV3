@@ -11,9 +11,9 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         Height="550" Width="800">
-    <Window.Background>
-        <ImageBrush ImageSource="/Images/Backgrounds/generico-modal.png"/>
-    </Window.Background>
+    <!--<Window.Background>
+        <ImageBrush ImageSource="{StaticResource MODALGENERIC}" />
+    </Window.Background>-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

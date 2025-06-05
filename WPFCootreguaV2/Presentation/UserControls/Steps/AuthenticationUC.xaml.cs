@@ -233,7 +233,11 @@ namespace WPFCootreguaV2.UserControls
                             //if (Utilities.TransactionType == ETransactionType.Registros)
                             if (_ts.Type == ETransactionType.Registros)
                             {
+                               
                                 SaveTransaction();
+                                var tsCreated = Api.CreateTransaction();
+                                if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
+
                             }
                             else
                             {

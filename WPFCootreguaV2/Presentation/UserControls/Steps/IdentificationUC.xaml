@@ -60,7 +60,7 @@
 
         <Grid Grid.Row="2">
 
-            <Image x:Name="BtnCancelar" Source="{StaticResource BTN_ANTERIOR}" 
+            <Image x:Name="BtnCancelar" Source="/Images/Buttons/BtnAtrasTxt.png" 
                Height="90"
              HorizontalAlignment="Left"
              VerticalAlignment="Top"

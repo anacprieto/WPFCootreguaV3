@@ -57,9 +57,12 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         public ETransactionType Type { get; set; }
         public TypeTransaction TipoTransaccion { get; set; }
+
+        public string EstadoTransaccionVerb { get; set; } = string.Empty;
+
+        public string? TipoTransaccionVerb { get; set; } = string.Empty;
         public TypePayment TipoPago { get; set; }
         public StateTransaction EstadoTransaccion { get; set; }
-        public string EstadoTransaccionVerb { get; set; }
         public string? Referencia { get; set; }
         public string? Documento { get; set; }
         public string? Descripcion { get; set; }

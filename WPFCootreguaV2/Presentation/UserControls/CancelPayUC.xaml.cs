@@ -1,4 +1,5 @@
 ﻿using DB;
+using DPUruNet;
 using Microsoft.AspNet.SignalR.Client.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -473,7 +474,7 @@ namespace WPFCootreguaV2.UserControls
             try
             {
                 EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: {denom.ToString("C0")}");
-                Api.CreateTransactionDetail(op, (int)denom);
+                Api.CreateTransactionDetail2(op, (int)denom);
 
             }
             catch (Exception ex)

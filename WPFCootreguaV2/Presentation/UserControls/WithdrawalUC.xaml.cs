@@ -261,12 +261,12 @@ namespace WPFCootreguaV2.Presentation.UserControls
                         }
                         else
                         {
-                           // Finish(false);
+                            //Finish(false);
                         }
                     }
                     else
                     {
-                      //  Finish(false);
+                        //Finish(false);
                     }
                 });
 
@@ -274,8 +274,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
             }
             catch (Exception ex)
             {
-            //    Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            //    Finish(false);
+                //    Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                //Finish(false);
             }
         }
         private void ReturnMoney(decimal returnValue)

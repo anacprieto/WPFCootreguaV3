@@ -219,8 +219,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                 var footer = new Dictionary<string, string?>
                 {
-                    //     {"Dirección","Carrera 11 No. 18 - 132"},
-                    //    {"Línea de Atención", "(+57) 4 8582024"},
+                         {"Dirección","Carrera 11 No. 18 - 132"},
+                        {"Línea de Atención", "(+57) 4 8582024"},
 
                 };
 

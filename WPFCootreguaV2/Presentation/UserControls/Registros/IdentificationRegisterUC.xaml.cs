@@ -375,7 +375,7 @@ namespace WPFCootreguaV2.UserControls
 
                     _ts.Codigo = Convert.ToInt32(data.CodPerson);
 
-                    Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
+                    Dispatcher.Invoke(() => GoTo(new AuthenticationRegisterUC()));
                 }
                 else
                 {

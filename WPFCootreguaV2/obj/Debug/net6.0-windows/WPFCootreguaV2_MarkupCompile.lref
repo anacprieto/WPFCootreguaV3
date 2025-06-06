@@ -27,18 +27,18 @@ FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presen
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\MedioPagoUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\MenuUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\PaymentUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Registros\AuthenticationRegisterUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Registros\IdentificationRegisterUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Retiros\AuthenticationRetirosUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Retiros\IdentificationRetirosUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Retiros\ListProductsRetirosUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\ScanInputUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\SelectOptionUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Steps\AuthenticationUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Steps\IdentificationUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Steps\ListProductsUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\SuccessUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\TypeTransUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\TypeUC.xaml;;
 FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\WithdrawalUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Retiros\IdentificationRetirosUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Registros\AuthenticationRegisterUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Registros\IdentificationRegisterUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Retiros\AuthenticationRetirosUC.xaml;;
-FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Retiros\ListProductsRetirosUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Pagar\AuthenticationUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Pagar\IdentificationUC.xaml;;
+FC:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\Presentation\UserControls\Pagar\ListProductsUC.xaml;;
 

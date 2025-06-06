@@ -37,7 +37,7 @@ namespace WPFCootreguaV2.UserControls
     /// <summary>
     /// Lógica de interacción para ScanInputUC.xaml
     /// </summary>
-    public partial class AuthenticationRegistrosUC : AppUserControl
+    public partial class AuthenticationRetirosUC : AppUserControl
     {
 
         private MenuBackground bg;
@@ -45,7 +45,7 @@ namespace WPFCootreguaV2.UserControls
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
-        private AuthenticationRegistrosUCViewModel _viewModel;
+        private AuthenticationRetirosUCViewModel _viewModel;
         private ModalWindow? _currentLoadModal = null;
         private int CantIntentos;
 
@@ -65,7 +65,7 @@ namespace WPFCootreguaV2.UserControls
         #endregion
 
 
-        public AuthenticationRegistrosUC()
+        public AuthenticationRetirosUC()
         {
             InitializeComponent();
 
@@ -745,7 +745,7 @@ namespace WPFCootreguaV2.UserControls
         //}
     }
 
-    public class AuthenticationRegistrosUCViewModel : INotifyPropertyChanged
+    public class AuthenticationRetirosUCViewModel : INotifyPropertyChanged
     {
         private string _statusMsg = string.Empty;
 

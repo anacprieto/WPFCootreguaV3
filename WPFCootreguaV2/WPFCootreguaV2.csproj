@@ -346,13 +346,13 @@
     <Compile Update="Presentation\UserControls\FinishUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Presentation\UserControls\Steps\AuthenticationUC.xaml.cs">
+    <Compile Update="Presentation\UserControls\Pagar\AuthenticationUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Presentation\UserControls\Steps\IdentificationUC.xaml.cs">
+    <Compile Update="Presentation\UserControls\Pagar\IdentificationUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Presentation\UserControls\Steps\ListProductsUC.xaml.cs">
+    <Compile Update="Presentation\UserControls\Pagar\ListProductsUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

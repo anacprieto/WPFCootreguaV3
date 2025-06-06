@@ -14,7 +14,7 @@ namespace WPFCootreguaV2.Domain.ApiService.Models
         {
             get { return _Val; }
             set
-            {
+          {
                 _Val = value;
                 NotifyPropertyChanged("Val");
             }

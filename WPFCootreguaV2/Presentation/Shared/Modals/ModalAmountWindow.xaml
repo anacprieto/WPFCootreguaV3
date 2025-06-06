@@ -82,15 +82,31 @@
 
         </Grid>
         <Grid Grid.ColumnSpan="2" Margin="0,212,0,11" Grid.RowSpan="2">
-            <Image 
-                Name="btnAceptar"
-                Source="/Images/pagar.png"
-                Height="98"
-                Margin="0,192,0,0"
-                VerticalAlignment="Top" 
-                HorizontalAlignment="Center"
-                MouseDown="btnAceptar_TouchDown" Width="313"
-                />
+            <Grid x:Name="BtnPagar" Tag="1" Height="70" Width="300" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,179,0,0" MouseDown="OptionPagar" Cursor="Hand">
+                <Border Background="#96d12c" CornerRadius="25">
+                    <Grid>
+                        <!-- Sección izquierda con ícono -->
+                        <Border Width="40" Height="70" Background="#373737" CornerRadius="10,0,0,10" HorizontalAlignment="Left">
+                            <Polyline Points="8,1 20,16 8,31"
+                                  Stroke="White"
+                                  StrokeThickness="8"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"
+                                  StrokeLineJoin="Round"
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"/>
+
+                        </Border>
+                        <TextBlock x:Name="BtnPagarTexto"
+                       Text="Pagar" 
+                       FontWeight="Bold" 
+                       Foreground="White" 
+                       FontSize="36" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

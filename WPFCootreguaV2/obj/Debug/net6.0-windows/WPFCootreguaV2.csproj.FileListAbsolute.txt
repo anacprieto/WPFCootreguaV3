@@ -663,3 +663,13 @@ C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Deb
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\ref\WPFCootreguaV2.dll
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\AwaitWithdrawalUC.g.cs
 C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\AwaitWithdrawalUC.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Retiros\IdentificationRetirosUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Retiros\IdentificationRetirosUC.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Registros\AuthenticationRegisterUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Registros\IdentificationRegisterUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Retiros\AuthenticationRetirosUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Retiros\ListProductsRetirosUC.g.cs
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Registros\AuthenticationRegisterUC.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Registros\IdentificationRegisterUC.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Retiros\AuthenticationRetirosUC.baml
+C:\Users\Ana Prieto\Desktop\PROYECTOS 2025\WPFCootreguaV2\WPFCootreguaV2\obj\Debug\net6.0-windows\Presentation\UserControls\Retiros\ListProductsRetirosUC.baml

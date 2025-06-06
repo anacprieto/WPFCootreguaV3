@@ -7,7 +7,6 @@
     <BitmapImage x:Key="BACKGENERIC" UriSource="pack://application:,,,/Images/Backgrounds/BgGenerico.jpg"/>
     <BitmapImage x:Key="BACKCALIFICA" UriSource="pack://application:,,,/Images/Backgrounds/BackFinish.jpg"/>
     <BitmapImage x:Key="MODALGENERIC" UriSource="pack://application:,,,/Images/Backgrounds/generico-modal.png"/>
-    
     <!-- CUSTOM BACKGROUNDS -->
 
     <!-- MENU -->

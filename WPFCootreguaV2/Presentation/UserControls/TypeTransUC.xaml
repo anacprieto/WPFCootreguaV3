@@ -10,30 +10,81 @@
         <Grid.Background>
             <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
         </Grid.Background>
-        <!-- 
-        <Image Source="{StaticResource LOGODOBLECLICK}" Style="{StaticResource logoHeaderStyle}"/>HEADER -->
-        <Image x:Name="BtnAtras" Tag="1"  Source="{StaticResource BTN_ATRAS}" Margin="554,1356,209,358"
-            PreviewMouseDown="typeTrans_TouchDown"/>
-        <Image x:Name="BtnSalir" Tag="2"  Source="{StaticResource BTN_ATRAS}" Margin="554,1503,210,222"
-            PreviewMouseDown="typeTrans_TouchDown"/>
-        <!-- <Image x:Name="BtnSalir_Copiar" Source="{StaticResource BTN_PAGAR}" Margin="554,1400,214,374"
-            MouseDown="BtnSalir_MouseDown"/> -->
-
         <!-- BOTONES -->
-        <Grid x:Name="BtnConsignacion" Tag="1"  Height="180" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="70,850,0,0" MouseDown="SelectOption">
-            <Border Background="{StaticResource TERTIARYCOLOR}" CornerRadius="20">
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Pagar"  FontWeight="DemiBold" Foreground="{StaticResource SECONDARYCOLOR}" FontSize="33" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+        <Grid x:Name="BtnPagar" Tag="1" Height="70" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="562,1280,0,0" MouseDown="SelectOption" Cursor="Hand">
+            <Border Background="#96d12c" CornerRadius="25">
+                <Grid>
+                    <!-- Sección izquierda con ícono -->
+                    <Border Width="40" Height="70" Background="#373737" CornerRadius="10,0,0,10" HorizontalAlignment="Left">
+                        <Polyline Points="8,1 20,16 8,31"
+                      Stroke="White"
+                      StrokeThickness="8"
+                      StrokeStartLineCap="Round"
+                      StrokeEndLineCap="Round"
+                      StrokeLineJoin="Round"
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center"/>
+
+                    </Border>
+                    <TextBlock x:Name="BtnPagarTexto"
+                   Text="Pagar" 
+                   FontWeight="Bold" 
+                   Foreground="White" 
+                   FontSize="36" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center"/>
                 </Grid>
             </Border>
         </Grid>
-        <Grid x:Name="BtnPagoCredito" Tag="2" Height="180" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="70,1050,0,0" MouseDown="SelectOption" Visibility="Visible">
-            <Border Background="{StaticResource SECONDARYCOLOR}" CornerRadius="20">
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Registro"  FontWeight="DemiBold" Foreground="#fff" FontSize="33" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+        <Grid x:Name="BtnRetirar" Tag="2" Height="70" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="562,1416,0,0" MouseDown="SelectOption" Cursor="Hand">
+            <Border Background="#96d12c" CornerRadius="25">
+                <Grid>
+                    <!-- Sección izquierda con ícono -->
+                    <Border Width="40" Height="70" Background="#373737" CornerRadius="10,0,0,10" HorizontalAlignment="Left">
+                        <Polyline Points="8,1 20,16 8,31"
+                      Stroke="White"
+                      StrokeThickness="8"
+                      StrokeStartLineCap="Round"
+                      StrokeEndLineCap="Round"
+                      StrokeLineJoin="Round"
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center"/>
+
+                    </Border>
+                    <TextBlock
+                       Text="Retirar" 
+                       FontWeight="Bold" 
+                       Foreground="White" 
+                       FontSize="36" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"/>
                 </Grid>
             </Border>
         </Grid>
-        
+        <Grid x:Name="BtnRegistrar" Tag="3" Height="70" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="562,1552,0,0" MouseDown="SelectOption" Cursor="Hand">
+            <Border Background="#96d12c" CornerRadius="25">
+                <Grid>
+                    <!-- Sección izquierda con ícono -->
+                    <Border Width="40" Height="70" Background="#373737" CornerRadius="10,0,0,10" HorizontalAlignment="Left">
+                        <Polyline Points="8,1 20,16 8,31"
+                          Stroke="White"
+                          StrokeThickness="8"
+                          StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round"
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"/>
+
+                    </Border>
+                    <TextBlock
+                       Text="Registrar" 
+                       FontWeight="Bold" 
+                       Foreground="White" 
+                       FontSize="36" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </local:AppUserControl>

@@ -322,6 +322,21 @@
 
 
   <ItemGroup>
+    <Compile Update="Presentation\UserControls\Registros\AuthenticationRegisterUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Registros\IdentificationRegisterUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Retiros\AuthenticationRetirosUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Retiros\IdentificationRetirosUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\UserControls\Retiros\ListProductsRetirosUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Presentation\UserControls\TypeUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

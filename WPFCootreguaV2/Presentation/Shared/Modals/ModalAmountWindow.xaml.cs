@@ -44,11 +44,20 @@ namespace WPFCootreguaV2.Modals
                 {
                     Val = 0
                 };
-
+                //if (_ts.Type == ETransactionType.Withdrawal)
+                //{
+                //    txtMsInformacion.Text = "Ingrese el valor que desea retirar";
+                //    BtnPagarTexto.Text = "Retirar";
+                //}
+                //else
+                //{
+                //    txtMsInformacion.Text = "Ingrese el valor que desea pagar";
+                //    BtnPagarTexto.Text = "Pagar";
+                //}
                 if (_ts.Type == ETransactionType.Withdrawal)
                 {
                     txtMsInformacion.Text = "Ingrese el valor que desea retirar";
-                    btnAceptar.Source = new BitmapImage(new Uri("/Images/Buttons/retirar.png", UriKind.Relative));
+                    BtnPagarTexto.Text = "Retirar";
                 }
                 else
                 {
@@ -107,8 +116,11 @@ namespace WPFCootreguaV2.Modals
         {
             DialogResult = false;
         }
-
         private void btnAceptar_TouchDown(object sender, MouseEventArgs e)
+        {
+            Validate();
+        }
+        private void OptionPagar(object sender, MouseEventArgs e)
         {
             Validate();
         }

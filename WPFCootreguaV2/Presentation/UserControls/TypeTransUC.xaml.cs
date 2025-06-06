@@ -61,7 +61,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                     _ts.TipoTransaccion = TypeTransaction.Retiro;
                     _ts.TipoTransaccionVerb = "Retiro";
                     //_ts.ProcedureManager = new WithdrawalManager();
-                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+                    Dispatcher.Invoke(() => GoTo(new IdentificationRetirosUC()));
                     break;
 
                 case "2":
@@ -69,7 +69,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                     _ts.TipoTransaccion = TypeTransaction.Pago;
                     _ts.TipoTransaccionVerb = "Pago";
                     //_ts.ProcedureManager = new PaymentManager();
-                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+                    Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
                     break;
 
                 case "3":
@@ -77,7 +77,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                     _ts.TipoTransaccion = TypeTransaction.Registro;
                     _ts.TipoTransaccionVerb = "Registro";
                     //_ts.ProcedureManager = new PaymentManager();
-                    Dispatcher.Invoke(() => GoTo(new MenuUC()));
+                    Dispatcher.Invoke(() => GoTo(new IdentificationRegisterUC()));
                     break;
 
 

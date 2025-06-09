@@ -30,21 +30,21 @@ Width="1080" >
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <ListView x:Name="lv_Products"
-          SelectionChanged="lv_Products_SelectionChanged"
-          HorizontalAlignment="Center" 
-          VerticalAlignment="Top"
-          ItemsSource="{Binding}"
-          Margin="0,0,0,0"
-          Grid.Row="1"
-          Grid.ColumnSpan="7"
-          Background="Transparent"
-          BorderBrush="Transparent"
-          SelectedIndex="-1"
-          SelectionMode="Single"
-          AutomationProperties.AutomationId="ItemGridView"
-          AutomationProperties.Name="Grouped Items">
+              SelectionChanged="lv_Products_SelectionChanged"
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Top"
+              ItemsSource="{Binding}"
+              Margin="0,0,0,0"
+              Grid.Row="1"
+              Grid.ColumnSpan="7"
+              Background="Transparent"
+              BorderBrush="Transparent"
+              SelectedIndex="-1"
+              IsSynchronizedWithCurrentItem="False"
+              SelectionMode="Single"
+              AutomationProperties.AutomationId="ItemGridView"
+              AutomationProperties.Name="Grouped Items">
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
@@ -107,7 +107,7 @@ Width="1080" >
                                 <Run Foreground="Gray" FontWeight="Bold" Text="Valor de la cuota: " /><LineBreak/>
                                 <Run Foreground="Black" Text="{Binding Cuota,StringFormat={}{0:C0}}"/><LineBreak/>
                                 <Run Foreground="Gray" FontWeight="Bold" Text="Saldo: " /><LineBreak/>
-                                <Run Foreground="Black" Text="********" Tag="{Binding Saldo}" Name="txtSaldo" TouchDown="txtSaldo_TouchDown"/><LineBreak/>
+                                <Run Foreground="Black" Text="********" Tag="{Binding Saldo}" Name="txtSaldo" MouseDown="txtSaldo_TouchDown"/><LineBreak/>
                                 </TextBlock>
 
                                 <TextBlock Text="{Binding ValorPagar, StringFormat={}{0:C0}}"
@@ -117,16 +117,6 @@ Width="1080" >
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Grid.Column="1"/>
-
-                                <!-- Indicador visual de selección -->
-                                <!--  <Ellipse Grid.Column="2"
-                             Width="30"
-                             Height="30"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center"
-                             Fill="{Binding SelectionColor, FallbackValue=LightGray}"
-                             Stroke="Gray"
-                             StrokeThickness="2"/> -->
 
                                 <TextBlock Grid.Column="2"
                                Text="✓"
@@ -143,18 +133,21 @@ Width="1080" >
             </ListView>
         </Grid>
         <Grid Grid.Row="2">
-            <Image x:Name="btnPagar" Source="{StaticResource BTN_CONTINUAR}" Height="90"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="0,50,30,0"
-            Stretch="Uniform"
-            MouseDown="btnPagar_TouchDown"/>
+            <Image x:Name="btnPagar" Source="{StaticResource BTN_CONTINUAR}" 
+                Height="90"
+                Width="276"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="395,152,0,0"
+                Stretch="Uniform"
+                MouseDown="btnPagar_TouchDown"/>
 
             <Image x:Name="btnCancelar" Source="{StaticResource BTN_CANCELAR}" 
             Height="90"
+            Width="276"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Margin="10,50,0,0"
+            Margin="10,152,0,0"
             Stretch="Uniform"
             MouseDown="btnCancelar_TouchDown"/>
         </Grid>

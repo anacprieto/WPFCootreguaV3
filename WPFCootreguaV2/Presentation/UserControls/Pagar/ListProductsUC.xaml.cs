@@ -320,6 +320,7 @@ namespace WPFCootreguaV2.UserControls
                 }
                 else
                 {
+                    _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
                     //Switcher.Timer(false);
                     //Switcher.ModalMS(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", transaction.DataPerson.FirstName));
                     //Switcher.Timer(true);

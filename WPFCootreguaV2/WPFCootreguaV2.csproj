@@ -27,10 +27,17 @@
 
   <ItemGroup>
     <None Remove="icono.ico" />
+    <None Remove="Images\Backgrounds\autenticate2.jpg" />
+    <None Remove="Images\Backgrounds\Authenticate.jpg" />
     <None Remove="Images\Backgrounds\BackFinish.jpg" />
     <None Remove="Images\Backgrounds\BgGenerico.jpg" />
     <None Remove="Images\Backgrounds\BgInicio.jpg" />
     <None Remove="Images\Backgrounds\BgInicio.png" />
+    <None Remove="Images\Backgrounds\elige.jpg" />
+    <None Remove="Images\Backgrounds\identificate.jpg" />
+    <None Remove="Images\Backgrounds\identificate2.jpg" />
+    <None Remove="Images\Backgrounds\paga.jpg" />
+    <None Remove="Images\Backgrounds\type.jpg" />
     <None Remove="Images\Buttons\Btn0.png" />
     <None Remove="Images\Buttons\Btn1.png" />
     <None Remove="Images\Buttons\Btn2.png" />
@@ -387,6 +394,12 @@
     <Resource Include="icono.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Backgrounds\autenticate2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\Authenticate.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Backgrounds\BackFinish.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -394,6 +407,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Backgrounds\BgInicio.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\elige.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\identificate.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\identificate2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\paga.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\type.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\Btn0.png">

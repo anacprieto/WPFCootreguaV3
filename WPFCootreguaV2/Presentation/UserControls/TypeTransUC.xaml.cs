@@ -57,6 +57,14 @@ namespace WPFCootreguaV2.Presentation.UserControls
             switch (_ts.TipoRecaudo)
             {
                 case "1":
+                    _ts.Type = ETransactionType.Payment;
+                    _ts.TipoTransaccion = TypeTransaction.Pago;
+                    _ts.TipoTransaccionVerb = "Pago";
+                    //_ts.ProcedureManager = new PaymentManager();
+                    Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
+                    break;
+
+                case "2":
                     _ts.Type = ETransactionType.Withdrawal;
                     _ts.TipoTransaccion = TypeTransaction.Retiro;
                     _ts.TipoTransaccionVerb = "Retiro";
@@ -64,13 +72,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                     Dispatcher.Invoke(() => GoTo(new IdentificationRetirosUC()));
                     break;
 
-                case "2":
-                    _ts.Type = ETransactionType.Payment;
-                    _ts.TipoTransaccion = TypeTransaction.Pago;
-                    _ts.TipoTransaccionVerb = "Pago";
-                    //_ts.ProcedureManager = new PaymentManager();
-                    Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
-                    break;
+                
 
                 case "3":
                     _ts.Type = ETransactionType.Registros;

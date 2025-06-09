@@ -65,36 +65,33 @@ namespace WPFCootreguaV2.UserControls
         #endregion
         private ProductsState ProductsSelected = null;
 
+        private bool _isInitializing = true;
+
         public ListProductsUC()
         {
             InitializeComponent();
-
             try
             {
+                _isInitializing = true; // Activar bandera
+
                 _ts = Transaction.Instance;
                 _ts.Total = 0;
                 MaxAmountAhorroVista = Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVista"));
                 view = new CollectionViewSource();
                 lstPager = new ObservableCollection<ProductsState>();
                 ProductsSelected = new ProductsState();
-                bg = new MenuBackground();
-                ChangeBackground(EBackground.Productos);
+
                 InitView();
-                if (_ts.Type == ETransactionType.Withdrawal)
-                {
-                    Utilities.Speak("Selecciona el producto con el que vas a retirar.");
-                }
-                else
-                {
-                    Utilities.Speak("Selecciona el producto con el que vas a pagar.");
-                }
-               this.Unloaded += OnUnloaded;
+
+                _isInitializing = false; // Desactivar bandera después de la inicialización
+
+                Utilities.Speak("Selecciona el producto con el que vas a pagar.");
+                this.Unloaded += OnUnloaded;
                 this.Loaded += Onloaded;
-                //InitViewModel();
             }
             catch (Exception ex)
             {
-                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                _isInitializing = false;
             }
         }
 
@@ -179,52 +176,6 @@ namespace WPFCootreguaV2.UserControls
             catch (Exception ex)
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-            }
-        }
-        public void ChangeBackground(EBackground eBackground)
-        {
-
-            try
-            {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
-
-                Dispatcher.Invoke(() =>
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-            }
-            catch (Exception ex)
-            {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
         /*
@@ -1168,18 +1119,17 @@ namespace WPFCootreguaV2.UserControls
                 // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+
         private void lv_Products_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Salir si estamos inicializando
+            if (_isInitializing) return;
+
             ListView listView = sender as ListView;
             if (listView.SelectedItem != null)
             {
-                // Asume que tu clase de producto se llama Product
-                ProductsSelected = listView.SelectedItem as ProductsState; // o el tipo que corresponda
-
+                ProductsSelected = listView.SelectedItem as ProductsState;
                 calcular(ProductsSelected);
-                // Si necesitas el índice
-                // int selectedIndex = listView.SelectedIndex;
-
                 Console.WriteLine($"Producto seleccionado: {ProductsSelected?.NumberProduct}");
             }
             else
@@ -1187,6 +1137,25 @@ namespace WPFCootreguaV2.UserControls
                 ProductsSelected = null;
             }
         }
+        //private void lv_Products_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    ListView listView = sender as ListView;
+        //    if (listView.SelectedItem != null)
+        //    {
+        //        // Asume que tu clase de producto se llama Product
+        //        ProductsSelected = listView.SelectedItem as ProductsState; // o el tipo que corresponda
+
+        //        calcular(ProductsSelected);
+        //        // Si necesitas el índice
+        //        // int selectedIndex = listView.SelectedIndex;
+
+        //        Console.WriteLine($"Producto seleccionado: {ProductsSelected?.NumberProduct}");
+        //    }
+        //    else
+        //    {
+        //        ProductsSelected = null;
+        //    }
+        //}
 
         private void calcular(ProductsState ProductsSelected)
         {

@@ -7,10 +7,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-              Height="1720" 
-             Width="680" >
-    
-     <Grid Background="Transparent">
+             Height="1920" 
+Width="1080" >
+
+    <local:AppUserControl.Background>
+        <ImageBrush ImageSource="{StaticResource BACKPAGARPRODUCTS}" Stretch="Uniform"/>
+    </local:AppUserControl.Background>
+
+    <Grid Width="680" Height="1720" HorizontalAlignment="Right">
         <Grid.RowDefinitions>
             <RowDefinition Height="0" />
             <RowDefinition Height="*" />
@@ -37,6 +41,7 @@
           Grid.ColumnSpan="7"
           Background="Transparent"
           BorderBrush="Transparent"
+          SelectedIndex="-1"
           SelectionMode="Single"
           AutomationProperties.AutomationId="ItemGridView"
           AutomationProperties.Name="Grouped Items">

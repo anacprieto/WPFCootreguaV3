@@ -76,15 +76,6 @@ namespace WPFCootreguaV2.UserControls
                 CantIntentos = 0;
                 bg = new MenuBackground();
 
-
-                if (_ts.Type == ETransactionType.Registros)
-                {
-                    ChangeBackground(EBackground.Autenticate2);
-                }
-                else
-                {
-                    ChangeBackground(EBackground.Autenticate);
-                }
                 Utilities.Speak("Ubica tu dedo en el lector biometrico.");
 
                 //LoadReader();
@@ -187,7 +178,7 @@ namespace WPFCootreguaV2.UserControls
                 {
                     StopTimer();
                     _nav.ShowModal($"El huellero no se pudo habilitar, por favor intentalo de nuevo.", new InfoModal());
-                    Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
+                    Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
                 }
             }
             catch (Exception ex)
@@ -321,7 +312,8 @@ namespace WPFCootreguaV2.UserControls
 
                         //Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
                          Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                         GC.Collect();
+                        //GC.Collect();
+                        //
                     }
                     else
                     {

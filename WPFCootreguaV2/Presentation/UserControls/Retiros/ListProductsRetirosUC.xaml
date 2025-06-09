@@ -12,7 +12,7 @@
              Panel.ZIndex="1">
 
     <local:AppUserControl.Background>
-        <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+        <ImageBrush ImageSource="{StaticResource BACKWITHDRAWALPRODUCTS}" Stretch="Uniform"/>
     </local:AppUserControl.Background>
 
     <Grid Width="680" Height="1720" HorizontalAlignment="Right">

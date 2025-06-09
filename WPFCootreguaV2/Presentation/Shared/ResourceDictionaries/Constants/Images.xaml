@@ -7,6 +7,24 @@
     <BitmapImage x:Key="BACKGENERIC" UriSource="pack://application:,,,/Images/Backgrounds/BgGenerico.jpg"/>
     <BitmapImage x:Key="BACKCALIFICA" UriSource="pack://application:,,,/Images/Backgrounds/BackFinish.jpg"/>
     <BitmapImage x:Key="MODALGENERIC" UriSource="pack://application:,,,/Images/Backgrounds/generico-modal.png"/>
+
+    <BitmapImage x:Key="BACKTYPE" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/type.jpg"/>
+
+
+    <BitmapImage x:Key="BACKPAGARAUTH" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/Authenticate.jpg"/>
+    <BitmapImage x:Key="BACKPAGARPRODUCTS" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/elige.jpg"/>
+    <BitmapImage x:Key="BACKPAGARID" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/identificate.jpg"/>
+    
+    <BitmapImage x:Key="BACKWITHDRAWALAUTH" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/Authenticate.jpg"/>
+    <BitmapImage x:Key="BACKWITHDRAWALID" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/identificate.jpg"/>
+    <BitmapImage x:Key="BACKWITHDRAWALPRODUCTS" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/elige.jpg"/>
+
+
+    <BitmapImage x:Key="BACKREGISTERID" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/identificate2.jpg"/>
+    <BitmapImage x:Key="BACKREGISTERAUTH" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/autenticate2.jpg"/>
+
+
+
     <!-- CUSTOM BACKGROUNDS -->
 
     <!-- MENU -->

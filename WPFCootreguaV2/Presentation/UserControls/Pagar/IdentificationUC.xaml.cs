@@ -63,16 +63,6 @@ namespace WPFCootreguaV2.UserControls
             //this.Unloaded += OnUnloaded;
             //this.Loaded += Onloaded;
             Keyboard.KeyboardPressed += OnKeyboardPressed;
-
-            if (_ts.Type == ETransactionType.Registros)
-            {
-                ChangeBackground(EBackground.Identificate2);
-            }
-            else
-            {
-                ChangeBackground(EBackground.Identificate);
-
-            }
             //GoTimer();
             Utilities.Speak("Digita tu número de documento.");
             //IcoReferencia.Visibility = Visibility.Visible;
@@ -92,52 +82,6 @@ namespace WPFCootreguaV2.UserControls
         private static bool IsTextAllowed(string text)
         {
             return _regex.IsMatch(text);
-        }
-        public void ChangeBackground(EBackground eBackground)
-        {
-
-            try
-            {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
-
-                Dispatcher.Invoke(() =>
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-            }
-            catch (Exception ex)
-            {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
         }
         private async void OnKeyboardPressed(object? sender, string keyPressed)
         {

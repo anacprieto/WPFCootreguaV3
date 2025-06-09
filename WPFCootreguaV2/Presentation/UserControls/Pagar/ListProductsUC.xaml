@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
              Height="1920" 
-Width="1080" >
+             Width="1080">
 
     <local:AppUserControl.Background>
         <ImageBrush ImageSource="{StaticResource BACKPAGARPRODUCTS}" Stretch="Uniform"/>
@@ -22,7 +22,9 @@ Width="1080" >
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="447,62,0,0" HorizontalAlignment="Left" Height="38" Width="134"/>
+            <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" 
+                      Foreground="{StaticResource PRIMARYCOLOR}" Margin="447,62,0,0" 
+                      HorizontalAlignment="Left" Height="38" Width="134"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -30,49 +32,48 @@ Width="1080" >
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="380" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+            </Grid.ColumnDefinitions>
+
             <ListView x:Name="lv_Products"
-              SelectionChanged="lv_Products_SelectionChanged"
-              HorizontalAlignment="Center" 
-              VerticalAlignment="Top"
-              ItemsSource="{Binding}"
-              Margin="0,0,0,0"
-              Grid.Row="1"
-              Grid.ColumnSpan="7"
-              Background="Transparent"
-              BorderBrush="Transparent"
-              SelectedIndex="-1"
-              IsSynchronizedWithCurrentItem="False"
-              SelectionMode="Single"
-              AutomationProperties.AutomationId="ItemGridView"
-              AutomationProperties.Name="Grouped Items">
+                     HorizontalAlignment="Center" 
+                     VerticalAlignment="Top"
+                     ItemsSource="{Binding}"
+                     Margin="0,0,0,0"
+                     Grid.Row="1"
+                     Grid.ColumnSpan="7"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     AutomationProperties.AutomationId="ItemGridView"
+                     AutomationProperties.Name="Grouped Items">
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
-                        <EventSetter Event="TouchDown" Handler="ListViewItem_TouchDown" />
-                        <EventSetter Event="MouseDown" Handler="ListViewItem_MouseDown" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListViewItem">
-                                    <Border x:Name="ItemBorder" 
-                                Background="Transparent" 
-                                BorderBrush="#E0E0E0" 
-                                BorderThickness="1" 
-                                CornerRadius="8"
-                                Margin="5,10">
+                                    <Border Background="Transparent" 
+                                            BorderBrush="#E0E0E0" 
+                                            BorderThickness="1" 
+                                            CornerRadius="8"
+                                            Margin="5,10">
                                         <ContentPresenter Margin="10"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="ItemBorder" Property="Background" Value="#F5F5F5"/>
-                                            <Setter TargetName="ItemBorder" Property="BorderThickness" Value="3"/>
-                                        </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ItemBorder" Property="Background" Value="#F5F5F5"/>
+                                            <Setter Property="Background" Value="#F5F5F5"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListView.ItemContainerStyle>
 
@@ -84,20 +85,24 @@ Width="1080" >
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Vertical" 
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                            <Grid HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Width="640">
+                        <Grid HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Margin="0,20,0,0"
+                              Width="660"
+                              Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="400" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="80" />
+                            </Grid.ColumnDefinitions>
 
-                                <TextBlock FontSize="25"
-                               TextAlignment="Left"
-                               TextWrapping="Wrap"
-                               Margin="20,0,0,0"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Grid.Column="0">
+                            <TextBlock FontSize="25"
+                                      TextAlignment="Left"
+                                      TextWrapping="Wrap"
+                                      Margin="30,0,0,0"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Grid.Column="0">
                                 <Run Foreground="Gray" FontWeight="Bold" Text="Número del producto" /><LineBreak/>
                                 <Run Foreground="Black" Text="{Binding NumberProduct}"/>
                                 <Run Foreground="Gray" FontWeight="Bold" Text="-" />
@@ -108,48 +113,78 @@ Width="1080" >
                                 <Run Foreground="Black" Text="{Binding Cuota,StringFormat={}{0:C0}}"/><LineBreak/>
                                 <Run Foreground="Gray" FontWeight="Bold" Text="Saldo: " /><LineBreak/>
                                 <Run Foreground="Black" Text="********" Tag="{Binding Saldo}" Name="txtSaldo" MouseDown="txtSaldo_TouchDown"/><LineBreak/>
-                                </TextBlock>
+                            </TextBlock>
 
-                                <TextBlock Text="{Binding ValorPagar, StringFormat={}{0:C0}}"
-                               FontSize="35"
-                               TextAlignment="Center"
-                               Margin="0,0,0,0"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Grid.Column="1"/>
+                            <TextBlock Text="{Binding ValorPagar, StringFormat={}{0:C0}}"
+                                      FontSize="35"
+                                      TextAlignment="Center"
+                                      Margin="0,0,0,0"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
+                                      Grid.Column="1"/>
 
-                                <TextBlock Grid.Column="2"
-                               Text="✓"
-                               FontSize="20"
-                               FontWeight="Bold"
-                               Foreground="White"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            </Grid>
-                        </StackPanel>
+                            <Button x:Name="btnCheck"
+                                Grid.Column="2"
+                                Width="60"
+                                Height="60"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Gray"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="btnCheck_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="30"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                            <Setter TargetName="ButtonBorder" Property="Background" Value="Green"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                                            <Setter TargetName="ButtonBorder" Property="Background" Value="Gray"/>
+                                                        </DataTrigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
+
         <Grid Grid.Row="2">
             <Image x:Name="btnPagar" Source="{StaticResource BTN_CONTINUAR}" 
-                Height="90"
-                Width="276"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="395,152,0,0"
-                Stretch="Uniform"
-                MouseDown="btnPagar_TouchDown"/>
+                   Height="90"
+                   Width="276"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="395,152,0,0"
+                   Stretch="Uniform"
+                   MouseDown="btnPagar_TouchDown"/>
 
             <Image x:Name="btnCancelar" Source="{StaticResource BTN_CANCELAR}" 
-            Height="90"
-            Width="276"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="10,152,0,0"
-            Stretch="Uniform"
-            MouseDown="btnCancelar_TouchDown"/>
+                   Height="90"
+                   Width="276"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="10,152,0,0"
+                   Stretch="Uniform"
+                   MouseDown="btnCancelar_TouchDown"/>
         </Grid>
     </Grid>
 </local:AppUserControl>

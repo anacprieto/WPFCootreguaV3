@@ -38,6 +38,7 @@
     <None Remove="Images\Backgrounds\identificate2.jpg" />
     <None Remove="Images\Backgrounds\paga.jpg" />
     <None Remove="Images\Backgrounds\type.jpg" />
+    <None Remove="Images\Buttons\aceptar.png" />
     <None Remove="Images\Buttons\Btn0.png" />
     <None Remove="Images\Buttons\Btn1.png" />
     <None Remove="Images\Buttons\Btn2.png" />
@@ -75,6 +76,7 @@
     <None Remove="Images\Buttons\btn_recaudo_impuesto_predial.png" />
     <None Remove="Images\Buttons\btn_recaudo_industria_comercio.png" />
     <None Remove="Images\Buttons\btn_recaudo_tramites_transito.png" />
+    <None Remove="Images\Buttons\cancelar.png" />
     <None Remove="Images\Buttons\icono_califica_servicio.png" />
     <None Remove="Images\Buttons\txt_gracias.png" />
     <None Remove="Images\Gif\datafono.gif" />
@@ -424,6 +426,9 @@
     <Resource Include="Images\Backgrounds\type.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Buttons\aceptar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Buttons\Btn0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -497,6 +502,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\BtnVolver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\cancelar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Gif\datafono.gif">

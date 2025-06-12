@@ -11,9 +11,9 @@
              Width="1080"
              Panel.ZIndex="1">
 
-            <local:AppUserControl.Background>
+    <local:AppUserControl.Background>
         <ImageBrush ImageSource="{StaticResource BACKPAGARAUTH}" Stretch="Uniform"/>
-            </local:AppUserControl.Background>
+    </local:AppUserControl.Background>
 
     <Grid x:Name="MainGrid" Width="680" Height="1720" HorizontalAlignment="Right">
         <Grid.RowDefinitions>
@@ -22,12 +22,16 @@
             <RowDefinition Height="400" />
         </Grid.RowDefinitions>
         <!-- HEADER -->
-        <Grid Grid.Row="0" Margin="0,0,0,644" Grid.RowSpan="2">
+        <Grid Grid.Row="0" Margin="-10,89,10,311">
             <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
         </Grid>
 
         <Grid Grid.Row="1" >
-            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="87,226,87,188" RenderTransformOrigin="-1.019,-0.023" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="603*"/>
+                <ColumnDefinition Width="77*"/>
+            </Grid.ColumnDefinitions>
+            <local:GifViewer PathFolder="Images/Gif/GifHuella" Margin="87,226,10,188" RenderTransformOrigin="-1.019,-0.023" >
                 <local:GifViewer.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
@@ -40,7 +44,7 @@
             <TextBlock x:Name="TxtStatusMsg"
                Text="{Binding StatusMsg}"
                Style="{StaticResource StatusTextStyle}" 
-               Margin="0,58,0,0"/>
+               Margin="40,58,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left"/>
         </Grid>
 
         <Grid Grid.Row="2" >
@@ -50,8 +54,8 @@
              VerticalAlignment="Top"
              Margin="0,94,0,0"
              Stretch="Uniform"
-             PreviewMouseDown="OpcionButton_Click" RenderTransformOrigin="-2.235,1.238" Width="340"/>
-            
+             PreviewMouseDown="BtnSalir_MouseDown" RenderTransformOrigin="-2.235,1.238" Width="340"/>
+
         </Grid>
 
     </Grid>

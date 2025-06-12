@@ -32,11 +32,15 @@
     <BitmapImage x:Key="BTN_PAGA" UriSource="pack://application:,,,/Images/Backgrounds/paga.jpg"/>
     <BitmapImage x:Key="BTN_IDENTIFICATE" UriSource="pack://application:,,,/Images/Backgrounds/identificate.jpg"/>
     <BitmapImage x:Key="BTN_IDENTIFICATE2" UriSource="pack://application:,,,/Images/Backgrounds/identificate2.jpg"/>
-    <BitmapImage x:Key="BTN_AUTENTICATE" UriSource="pack://application:,,,/Images/Backgrounds/autenticate.jpg"/>
     <BitmapImage x:Key="BTN_AUTENTICATE2" UriSource="pack://application:,,,/Images/Backgrounds/autenticate2.jpg"/>
     <BitmapImage x:Key="BTN_PRODUCTOS" UriSource="pack://application:,,,/Images/Backgrounds/elige.jpg"/>
+
     
     
+    
+    <BitmapImage x:Key="BTN_ACEPTAR" UriSource="pack://application:,,,/Images/Buttons/aceptar.png"/>
+
+
 
     <!-- BUTTONS -->
     <BitmapImage x:Key="BTN_ATRAS" UriSource="pack://application:,,,/Images/Buttons/BtnAtrasTxt.png"/>

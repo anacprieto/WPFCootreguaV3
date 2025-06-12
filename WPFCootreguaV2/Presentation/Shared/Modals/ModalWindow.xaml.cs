@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.ComponentModel;
 using System.Windows;
-using MahApps.Metro.Controls;
+using System.Windows.Input;
+using WPFCootreguaV2.Domain.UIServices;
 
 namespace WPFCootreguaV2.Modals
 {
@@ -11,6 +13,7 @@ namespace WPFCootreguaV2.Modals
     public partial class ModalWindow : Window
     {
         private ModalViewModel _viewModel;
+
         public ModalWindow(ModalViewModel modal)
         {
             InitializeComponent();
@@ -20,35 +23,49 @@ namespace WPFCootreguaV2.Modals
             this.WindowVB.Width = this.Height * 9 / 16;
 
             this._viewModel = modal;
-
             this.DataContext = _viewModel;
 
-            //ConfigureModal();
+            ConfigureModal();
         }
 
-        //private void ConfigureModal()
-        //{
-        //    this.BtnOk.Visibility = _viewModel.TypeModal.BtnOkVisibility;
-        //    this.BtnYes.Visibility = _viewModel.TypeModal.BtnYesVisibility;
-        //    this.BtnNo.Visibility = _viewModel.TypeModal.BtnNoVisibility;
-        //    this.LoadGif.Visibility = _viewModel.TypeModal.LoadGifVisibility;
-        //}
-
-        private void BtnOk_MouseDown(object sender, EventArgs e)
+        private void ConfigureModal()
         {
-
-            this.DialogResult = true;
-
+            this.BtnOk.Visibility = _viewModel.TypeModal.BtnOkVisibility;
+            this.BtnYes.Visibility = _viewModel.TypeModal.BtnYesVisibility;
+            this.BtnNo.Visibility = _viewModel.TypeModal.BtnNoVisibility;
+            this.GifLoading.Visibility = _viewModel.TypeModal.LoadGifVisibility;
         }
 
-        private void BtnYes_MouseDown(object sender, EventArgs e)
+        private void BtnOk_Event()
         {
             this.DialogResult = true;
         }
 
-        private void BtnNo_MouseDown(object sender, EventArgs e)
+        private void BtnYes_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DialogResult = true;
+        }
+
+        private void BtnNo_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DialogResult = false;
+        }
+        private void BtnOk_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DialogResult = true;
+        }
+
+
+
+
+        private void ContinueButton_TouchDown(object sender, TouchEventArgs e)
+        {
+            BtnOk_Event();
+        }
+
+        private void ContinueButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            BtnOk_Event();
         }
     }
 
@@ -69,9 +86,7 @@ namespace WPFCootreguaV2.Modals
             }
         }
 
-        
-
-        private string _title;
+        private string _title = string.Empty;
 
         public string Title
         {
@@ -86,7 +101,7 @@ namespace WPFCootreguaV2.Modals
             }
         }
 
-        private ModalType _typeModal;
+        private ModalType _typeModal = new InfoModal();
 
         public ModalType TypeModal
         {
@@ -106,13 +121,11 @@ namespace WPFCootreguaV2.Modals
         private void OnPropertyRaised(string propertyname)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
-
         }
     }
 
     public class ModalType
     {
-
         public Visibility BtnOkVisibility { get; set; }
         public Visibility BtnYesVisibility { get; set; }
         public Visibility BtnNoVisibility { get; set; }
@@ -127,9 +140,7 @@ namespace WPFCootreguaV2.Modals
             BtnYesVisibility = Visibility.Collapsed;
             BtnNoVisibility = Visibility.Collapsed;
             LoadGifVisibility = Visibility.Collapsed;
-
         }
-
     }
 
     public class LoadModal : ModalType
@@ -140,7 +151,6 @@ namespace WPFCootreguaV2.Modals
             BtnYesVisibility = Visibility.Collapsed;
             BtnNoVisibility = Visibility.Collapsed;
             LoadGifVisibility = Visibility.Visible;
-
         }
     }
 
@@ -152,7 +162,6 @@ namespace WPFCootreguaV2.Modals
             BtnYesVisibility = Visibility.Visible;
             BtnNoVisibility = Visibility.Visible;
             LoadGifVisibility = Visibility.Collapsed;
-
         }
     }
 }

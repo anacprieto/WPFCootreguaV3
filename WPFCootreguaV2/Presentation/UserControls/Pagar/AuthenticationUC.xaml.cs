@@ -77,7 +77,6 @@ namespace WPFCootreguaV2.UserControls
 
                 Utilities.Speak("Ubica tu dedo en el lector biometrico.");
 
-                //LoadReader();
 
 #if NO_PERIPHERALS
                 Button dynamicButton = new Button();
@@ -121,6 +120,8 @@ namespace WPFCootreguaV2.UserControls
                 //AudioManager.PlayLoop(audioName);
 
                 // Utilities.Speak("Ubica tu dedo en el lector biometrico.");
+                //LoadReader();
+                //GoTimer();
                 this.Unloaded += OnUnloaded;
                 this.Loaded += Onloaded;
             
@@ -130,7 +131,16 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, "Error al inicializar componente");
             }
         }
+        private void BtnCancelar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            EcityReader.callbackTemplate = null;
+            EcityReader.callbackError = null;
+            EcityReader.CancelCaptureAndCloseReader(EcityReader.OnCaptured);
+            StopTimer();
+            _nav.CloseModal();
+            Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
 
+        }
         private void Onloaded(object sender, RoutedEventArgs e)
         {
             _nav.CloseModal();
@@ -184,7 +194,8 @@ namespace WPFCootreguaV2.UserControls
                 {
                     StopTimer();
                     _nav.ShowModal($"El huellero no se pudo habilitar, por favor intentalo de nuevo.", new InfoModal());
-                    Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
+                    EventLogger.SaveLog(EventType.Info, "El huellero no se pudo habilitar, por favor intentalo de nuevo.");
+                    Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
                 }
             }
             catch (Exception ex)
@@ -212,9 +223,11 @@ namespace WPFCootreguaV2.UserControls
                         TypeReader = 1,
                         Template = template
                     };
+                    EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
 
                     var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
                     var desencrypted = EncryptorEcity.Decrypt(authen);
+                    EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
 
 
 

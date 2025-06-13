@@ -256,6 +256,7 @@
     <None Remove="Images\Others\BannerEfigas.png" />
     <None Remove="Images\Others\check.png" />
     <None Remove="Images\Others\ChecOk.png" />
+    <None Remove="Images\Others\circle.png" />
     <None Remove="Images\Others\IcoDocumento.png" />
     <None Remove="Images\Others\icono_referencia_pagar.png" />
     <None Remove="Images\Others\icono_referencia_pagar_industria_comercio.png" />
@@ -272,6 +273,7 @@
     <None Remove="Images\Others\leynda_linea_atencion.png" />
     <None Remove="Images\Others\LineaAtencion.png" />
     <None Remove="Images\Others\LogoDobleclick.png" />
+    <None Remove="Images\Others\ok.png" />
     <None Remove="Images\Others\scannerVideo.wmv" />
     <None Remove="Images\Others\star.png" />
     <None Remove="Images\Others\StarS.png" />
@@ -525,6 +527,9 @@
     <Resource Include="Images\Others\ChecOk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Others\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Others\IcoDocumento.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -536,6 +541,9 @@
     </Resource>
     <Resource Include="Images\Others\LogoDobleclick.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\ok.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Others\star.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

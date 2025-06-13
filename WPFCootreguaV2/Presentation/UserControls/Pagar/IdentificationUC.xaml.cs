@@ -1,5 +1,6 @@
 ﻿using ControlzEx.Standard;
 using DB;
+using Ecity.DigitalPersona.ReaderUareU;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -12,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Markup;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
@@ -57,20 +59,16 @@ namespace WPFCootreguaV2.UserControls
         {
             InitializeComponent();
             _ts = Transaction.Instance;
-            bg = new MenuBackground();
             _viewModel = new IdentificationViewModel();
             this.DataContext = _viewModel;
-            //this.Unloaded += OnUnloaded;
-            //this.Loaded += Onloaded;
+           
             Keyboard.KeyboardPressed += OnKeyboardPressed;
-            //GoTimer();
             Utilities.Speak("Digita tu número de documento.");
-            //IcoReferencia.Visibility = Visibility.Visible;
 
+            this.Unloaded += OnUnloaded;
+            this.Loaded += Onloaded;
         }
 
-        // Fix for CS0121: The issue arises because there are two identical method signatures for OnKeyboardPressed in the same class.
-        // To resolve this, one of the duplicate methods must be removed.
 
         private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
@@ -109,23 +107,11 @@ namespace WPFCootreguaV2.UserControls
             await Task.Delay(100);
         }
 
-        private void Btn_Cancelar_Touch(object sender, EventArgs e)
-        {
-        }
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            //CloseLoadModal();
-            StopTimer();
-            ScannerController.Stop();
-            //ScannerController.ScannerDataReceived -= OnScannerDataReceived;
-        }
+       
         private void Onloaded(object sender, RoutedEventArgs e)
         {
-            //ScannerController.ScannerDataReceived += OnScannerDataReceived;
-            //ScannerController.Start();
-            //       _viewModel.HelpMessage = "Ingresa número de cuenta o referente";
+            GoTimer(); 
         }
-
         #region UI EVENTS
 
         private void TxtIdentification_TextChanged(object sender, TextChangedEventArgs e)
@@ -160,14 +146,6 @@ namespace WPFCootreguaV2.UserControls
 
             }
         }
-        private void BtnSalir_MouseDown(object sender, EventArgs e)
-        {
-            StopTimer();
-            _nav.CloseModal();
-            Dispatcher.Invoke(() => GoTo(new ConfigUC()));
-
-        }
-        //BtnContinuar_TouchDown
 
         private void TxtInvoice_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -178,9 +156,19 @@ namespace WPFCootreguaV2.UserControls
                 return;
             }
         }
+        private void BtnCancelar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            StopTimer();
+            _nav.CloseModal();
+            Dispatcher.Invoke(() => GoTo(new ConfigUC()));
+
+        }
+        //BtnContinuar_TouchDown
 
         
-        private async void BtnConsultar_Touch(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        
+        private void BtnConsultar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _ts.Documento = TxtIdentification.Text;
 
@@ -199,6 +187,8 @@ namespace WPFCootreguaV2.UserControls
                 if (TxtIdentification.Text.Length < 5)
                 {
                     Dispatcher.Invoke(() => { _viewModel.StatusMsg = "Debe ingresar un número de cédula valido."; });
+                    EventLogger.SaveLog(EventType.Error, $"Debe ingresar un número de cédula valido.");
+
 
                     return;
                 }
@@ -256,6 +246,7 @@ namespace WPFCootreguaV2.UserControls
                         else
                         {
                             _nav.CloseModal();
+                            EventLogger.SaveLog(EventType.Info, $"Número de documento válido.");
                             _nav.ShowModal("Por favor ingrese un número de documento válido.");
                             GoTimer();
 
@@ -264,6 +255,7 @@ namespace WPFCootreguaV2.UserControls
                     else
                     {
                         _nav.CloseModal();
+                        EventLogger.SaveLog(EventType.Info, $"No hay comunicación con el servicio");
                         _nav.ShowModal("No hay comunicación con el servicio, por favor intenta de nuevo.");
                         GoTimer();
 
@@ -272,6 +264,7 @@ namespace WPFCootreguaV2.UserControls
 
 
                 StopTimer();
+
                 _nav.ShowModal("Consultando...", new LoadModal());
             }
             catch (Exception ex)
@@ -288,6 +281,8 @@ namespace WPFCootreguaV2.UserControls
                 if (string.IsNullOrEmpty(_ts.Documento))
                 {
                     _nav.ShowModal("No se encontró un número de documento válido.");
+                    EventLogger.SaveLog(EventType.Error, $"No se encontró un número de documento válido.");
+
                     StopTimer();
                     return;
                 }
@@ -297,21 +292,31 @@ namespace WPFCootreguaV2.UserControls
                     CodPerson = _ts.Codigo,
                     Identification = _ts.Documento,
                 };
+                EventLogger.SaveLog(EventType.Error, "Codigo: "+ _ts.Codigo +"Documento:  "+ _ts.Documento);
 
                 var persEncrypt = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetPerson", person);
+                
+
                 var pers = EncryptorEcity.Decrypt(persEncrypt);
+                EventLogger.SaveLog(EventType.Error, persEncrypt);
+
 
                 // Move CloseLoadModal() after checking if persEncrypt is empty
                 if (string.IsNullOrEmpty(persEncrypt))
                 {
-                    CloseLoadModal();
+                    _nav.CloseModal();
+                    EventLogger.SaveLog(EventType.Error, "No se encontraron registros con este número de documento, por favor intenta de nuevo.");
+
                     _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
                     StopTimer();
                     return;
                 }
 
                 var data = JsonConvert.DeserializeObject<Person>(pers);
-                CloseLoadModal();
+
+                EventLogger.SaveLog(EventType.Error, "Data:  " + pers);
+
+                _nav.CloseModal(); // Close the modal after processing the response
 
                 if (data != null)
                 {
@@ -342,79 +347,17 @@ namespace WPFCootreguaV2.UserControls
                 {
 
                     _nav.ShowModal("Ocurrió un error procesando la información de la persona.");
+                    EventLogger.SaveLog(EventType.Error, "Ocurrió un error procesando la información de la persona.");
                     StopTimer();
                 }
             }
             catch (Exception ex)
             {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-                CloseLoadModal(); // Make sure to close modal if exception occurs
                 _nav.ShowModal("Ocurrió un error: " + ex.Message);
+                EventLogger.SaveLog(EventType.Error, "Ocurrió un error procesando la información de la persona.");
                 StopTimer();
             }
         }
-        //private async Task GetPerson()
-        //{
-
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(_ts.Documento))
-        //        {
-        //            _nav.ShowModal("No se encontró un número de documento válido.");
-        //            StopTimer();
-        //            return;
-        //        }
-        //        Person person = new Person
-        //        {
-        //            CodPerson = _ts.Codigo,
-        //            Identification = _ts.Documento,
-        //        };
-
-        //        var persEncrypt = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetPerson", person);
-        //        var pers = EncryptorEcity.Decrypt(persEncrypt);
-        //        var data = JsonConvert.DeserializeObject<Person>(pers);
-
-        //        CloseLoadModal();
-
-        //        if (!string.IsNullOrEmpty(persEncrypt))
-        //        {
-        //            if (data != null)
-        //            {
-        //                // Initialize if needed
-        //                if (_ts.Persona == null)
-        //                {
-        //                    _ts.Persona = new Domain.ApiService.Models.Person();  // Replace with actual type
-        //                }
-
-        //                _ts.Persona.CodPerson = data.CodPerson;
-        //                _ts.Persona.Identification = data.Identification;
-        //                _ts.Persona.FirstName = data.FirstName;
-        //                _ts.Persona.SecondName = data.SecondName;
-        //                _ts.Persona.FirstLastName = data.FirstLastName;
-        //                _ts.Persona.SecondLastName = data.SecondLastName;
-
-        //                _ts.Persona.Adress = data.Adress;
-        //                _ts.Persona.Phone = data.Phone;
-        //                _ts.Persona.Email = data.Email;
-        //                _ts.Persona.CellPhone = data.CellPhone;
-        //                _ts.Persona.CodOficine = data.CodOficine;
-
-
-        //                _ts.Codigo = Convert.ToInt32(data.CodPerson);
-        //                Dispatcher.Invoke(() => GoTo(new AuthenticationUC()));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
-        //            StopTimer();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //       // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
         public class Person
         {
             public long CodPerson { get; set; }
@@ -431,51 +374,7 @@ namespace WPFCootreguaV2.UserControls
         }
 
 
-        private void CloseLoadModal()
-        {
-            if (_currentLoadModal != null)
-            {
-                _currentLoadModal.Close();
-                _currentLoadModal = null;
-            }
-        }
-
         #endregion
-
-        //#region ScannerEvents
-        //private async void OnScannerDataReceived(string data)
-        //{
-        //    DisableView();
-        //    try
-        //    {
-
-        //        string scannerRead = data.Replace("\u001d", "").Replace("\r", "");
-
-        //        EventLogger.SaveLog(EventType.Info, "Data readed from scanner", scannerRead);
-
-        //        _NoConvenio = scannerRead.Substring(3, 13);
-        //        _referencia = scannerRead.Substring(20, 24);
-        //        _valorPagar = scannerRead.Substring(48, 12);
-        //        _fechaPago = scannerRead.Substring(62, 8);
-
-        //        RequestConsultData request = new RequestConsultData();
-
-        //        request.idComercio = AppConfig.Get("idComercioAlcaldia");
-        //        request.password = AppConfig.Get("passwordAlcaldia");
-        //        request.idCliente = _referencia;
-        //        request.claveConsulta = "01";
-
-        //        await _ts.ProcedureManager.GetDataPay();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _nav.ShowModal($"Hubo un error inesperado al realizar la consulta intenta nuevamente", new Modals.InfoModal());
-        //        await Application.Current.Dispatcher.InvokeAsync(() => GoTo(new MainUC()));
-        //    }
-        //    EnableView();
-
-        //}
-        //#endregion
 
         #region Timer
         public void GoTimer()
@@ -489,7 +388,7 @@ namespace WPFCootreguaV2.UserControls
                 _timer.CallBackTimeOut = () =>
                 {
 
-                    //         Dispatcher.Invoke(() => GoTo(new SelectInputUC()));
+                       Dispatcher.Invoke(() => GoTo(new ConfigUC()));
 
 
                 };
@@ -531,16 +430,10 @@ namespace WPFCootreguaV2.UserControls
         #endregion
 
 
-        private void BtnLimpiar_Touch(object sender, EventArgs e)
+        private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            Image key = (Image)sender;
-            string tag = key.Tag.ToString() ?? "";
-
-            if (tag == "Clear")
-            {
-                TxtIdentification.Text = "";
-                return;
-            }
+            StopTimer();
+            _nav.CloseModal();
 
         }
     }

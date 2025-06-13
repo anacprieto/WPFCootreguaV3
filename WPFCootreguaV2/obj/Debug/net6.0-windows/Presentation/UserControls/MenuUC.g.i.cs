@@ -69,7 +69,7 @@ namespace WPFCootreguaV2.Presentation.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WPFCootreguaV2;component/presentation/usercontrols/menuuc.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WPFCootreguaV2;V1.0.0.0;component/presentation/usercontrols/menuuc.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Presentation\UserControls\MenuUC.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -44,7 +44,6 @@ namespace WPFCootreguaV2.Presentation.UserControls
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
-        private MenuBackground bg;
         private DocumentFormat _document = new();
 
         //private ManualInputViewModel _viewModel;
@@ -55,16 +54,14 @@ namespace WPFCootreguaV2.Presentation.UserControls
             InitializeComponent();
             //this.Unloaded += OnUnloaded;
             _ts = Transaction.Instance;
-            bg = new MenuBackground();
-            ChangeBackground(EBackground.Generico);
             Utilities.Speak("Gracias por utilizar nuestros servicios, esperamos verte nuevamente pronto. No olvides retirar tu recibo.");
-
             FinishTransaction();
             ///GoTimer();
 
         }
         private async void FinishTransaction1()
         {
+
             if (string.IsNullOrEmpty(_ts.Calificacion))
             {
                 _ts.Calificacion = "Sin calificación";
@@ -314,52 +311,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
-        public void ChangeBackground(EBackground eBackground)
-        {
-
-            try
-            {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
-
-                Dispatcher.Invoke(() =>
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-            }
-            catch (Exception ex)
-            {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
+      
         public class DocumentFormat
         {
             public Dictionary<string, string> header;

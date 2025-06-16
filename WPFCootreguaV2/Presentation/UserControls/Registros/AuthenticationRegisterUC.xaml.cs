@@ -74,17 +74,6 @@ namespace WPFCootreguaV2.UserControls
 
                 _ts = Transaction.Instance;
                 CantIntentos = 0;
-                bg = new MenuBackground();
-
-
-                if (_ts.Type == ETransactionType.Registros)
-                {
-                    ChangeBackground(EBackground.Autenticate2);
-                }
-                else
-                {
-                    ChangeBackground(EBackground.Autenticate);
-                }
                 Utilities.Speak("Ubica tu dedo en el lector biometrico.");
 
                 //LoadReader();
@@ -215,10 +204,12 @@ namespace WPFCootreguaV2.UserControls
                         TypeReader = 1,
                         Template = template
                     };
+                    EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
 
                     var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
                     var desencrypted = EncryptorEcity.Decrypt(authen);
-
+                 
+                    EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
 
 
                     if (!string.IsNullOrEmpty(desencrypted))
@@ -229,20 +220,10 @@ namespace WPFCootreguaV2.UserControls
 
                         if (data.Validate == 1)
                         {
-                            _ts.TipoTransaccion=_ts.TipoTransaccion == TypeTransaction.Registro ? TypeTransaction.Registro : _ts.TipoTransaccion;
-                            //if (Utilities.TransactionType == ETransactionType.Registros)
-                            if (_ts.Type == ETransactionType.Registros)
-                            {
-                               
-                                SaveTransaction();
-                                var tsCreated = Api.CreateTransaction();
-                                if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
-
-                            }
-                            else
-                            {
-                                var result = GetProducts();
-                            }
+                            _ts.TipoTransaccion=TypeTransaction.Registro;
+                             SaveTransaction();
+                             var tsCreated = Api.CreateTransaction();
+                             if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
                         }
                         else
                         {
@@ -319,7 +300,6 @@ namespace WPFCootreguaV2.UserControls
 
                         _ts.DataProducts = data;
 
-                        //Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
                          Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
                          GC.Collect();
                     }
@@ -362,9 +342,11 @@ namespace WPFCootreguaV2.UserControls
                         ADDRESS = _ts.DataPerson.Adress,
                     };
 
+                    await SaveTransactionPayer();
+
 
                     _nav.ShowModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName, new InfoModal()));
-
+                    _nav.CloseModal();
 
                     if (this._ts.IdTransaccionApi == 0)
                     {
@@ -397,9 +379,9 @@ namespace WPFCootreguaV2.UserControls
                             ms = "Bienvenido " + NameUser;
                         }
 
-                        //Utilities.Speak(ms);
-                        //Utilities.ShowModal(ms + " Has sido registrad@ en el sistema.", EModalType.Error, true);
-                        //Switcher.CLose();
+                        Utilities.Speak(ms);
+                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.", new InfoModal());
+                        _nav.CloseModal();
                     }
                 });
 
@@ -412,93 +394,147 @@ namespace WPFCootreguaV2.UserControls
                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
-        public void ChangeBackground(EBackground eBackground)
-        {
 
+        public static async Task<int> SavePayer(Payer payer)
+        {
             try
             {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
+                payer.STATE = true;
 
-                Dispatcher.Invoke(() =>
+                var resultPayer = await ApiIntegration.CallApiCootregua("SavePayer", payer);
+
+
+                //var resultPayer = await api.CallApi("SavePayer", payer);
+
+                if (resultPayer != null)
                 {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
+                    return JsonConvert.DeserializeObject<int>(resultPayer.ToString());
+                }
             }
             catch (Exception ex)
             {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "InitPaypad", ex, ex.ToString());
+            }
+            return 0;
+        }
+        public async Task SaveTransactionPayer()
+        {
+            try
+            {
+                if (_ts != null)
+                {
+                    _ts.DevueltaCorrecta = true;
+
+                    if (_ts.payer == null)
+                    {
+                        _ts.payer = new Payer
+                        {
+                            IDENTIFICATION = AppConfig.Get("paypadId").ToString(),
+                            NAME = AppConfig.Get("NAME_PAYPAD"),
+                            LAST_NAME = AppConfig.Get("LAST_NAME_PAYPAD")
+                        };
+                    }
+
+                    _ts.payer.PAYER_ID = await SavePayer(_ts.payer);
+
+                    if (_ts.payer.PAYER_ID > 0)
+                    {
+                        var data = new TRANSACTION
+                        {
+                            TYPE_TRANSACTION_ID = _ts.Type,
+                            PAYER_ID = _ts.payer.PAYER_ID,
+                            STATE_TRANSACTION_ID = Convert.ToInt32(_ts.EstadoTransaccion),
+                            TOTAL_AMOUNT = _ts.Total,
+                            DATE_END = DateTime.Now,
+                            TRANSACTION_ID = 0,
+                            RETURN_AMOUNT = 0,
+                            INCOME_AMOUNT = 0,
+                            PAYPAD_ID = 0,
+                            DATE_BEGIN = DateTime.Now,
+                            STATE_NOTIFICATION = 0,
+                            STATE = 0,
+                            DESCRIPTION = "Transaccion iniciada",
+                            TRANSACTION_REFERENCE = ""
+                        };
+
+                        if (_ts.Type != ETransactionType.Registros)
+                        {
+                            data.TRANSACTION_DESCRIPTION.Add(new TRANSACTION_DESCRIPTION
+                            {
+                                AMOUNT = _ts.Total,
+                                TRANSACTION_ID = data.ID,
+                                TRANSACTION_PRODUCT_ID =_ts.ProductSelect.Identititfy,
+                                DESCRIPTION = string.Concat(_ts.ProductSelect.NameLine, "-", _ts.ProductSelect.ValorPagar),
+                                EXTRA_DATA = "",
+                                TRANSACTION_DESCRIPTION_ID = 0,
+                                STATE = true
+                            });
+                        }
+
+                        if (data != null)
+                        {
+                            var responseTransaction = await api.CallApi("SaveTransaction", data);
+                            if (responseTransaction != null)
+                            {
+                                transaction.IdTransactionAPi = JsonConvert.DeserializeObject<int>(responseTransaction.ToString());
+
+                                if (transaction.IdTransactionAPi > 0)
+                                {
+                                    data.TRANSACTION_ID = transaction.IdTransactionAPi;
+                                    transaction.TransactionId = SqliteDataAccess.SaveTransaction(data);
+                                }
+                            }
+                            else
+                            {
+                                SaveLog(new RequestLog
+                                {
+                                    Reference = transaction.reference,
+                                    Description = string.Concat(MessageResource.NoInsertTransaction, " en su primer intente "),
+                                    State = 1,
+                                    Date = DateTime.Now
+                                }, ELogType.General);
+
+                                responseTransaction = await api.CallApi("SaveTransaction", data);
+                                if (responseTransaction != null)
+                                {
+                                    transaction.IdTransactionAPi = JsonConvert.DeserializeObject<int>(responseTransaction.ToString());
+
+                                    if (transaction.IdTransactionAPi > 0)
+                                    {
+                                        data.TRANSACTION_ID = transaction.IdTransactionAPi;
+                                        transaction.TransactionId = SqliteDataAccess.SaveTransaction(data);
+                                    }
+                                }
+                                else
+                                {
+                                    SaveLog(new RequestLog
+                                    {
+                                        Reference = transaction.reference,
+                                        Description = string.Concat(MessageResource.NoInsertTransaction, " en su segundo intente "),
+                                        State = 1,
+                                        Date = DateTime.Now
+                                    }, ELogType.General);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SaveLog(new RequestLog
+                        {
+                            Reference = transaction.reference,
+                            Description = MessageResource.NoInsertPayment + transaction.payer.IDENTIFICATION,
+                            State = 1,
+                            Date = DateTime.Now
+                        }, ELogType.General);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "InitPaypad", ex, ex.ToString());
             }
         }
-        /*
-        public void ChangeBackground(EBackground eBackground)
-        {
-            try
-            {
-                Dispatcher.BeginInvoke((Action)delegate
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            bg.Background = "/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-                GC.Collect();
-            }
-            catch (Exception ex)
-            {
-             //   Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }*/
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             CloseLoadModal();

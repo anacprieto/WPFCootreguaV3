@@ -1,7 +1,12 @@
-﻿using System;
+﻿using HantleDispenserAPI;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,20 +17,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WPFCootreguaV2.Domain.UIServices;
+using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.Domain;
-using WPFCootreguaV2.UserControls;
-using WPFCootreguaV2.Modals;
-using ManualInputViewModel = WPFCootreguaV2.UserControls.ManualInputViewModel;
-using WPFCootreguaV2.Domain.UIServices.Integrations;
-using WPFCootreguaV2.Domain.Peripherals;
-using System.Reflection;
-using WPFCootreguaV2.Domain.ApiService.Models;
-using System.Diagnostics;
-using WPFCootreguaV2.Domain.Enumerables;
-using Newtonsoft.Json;
-using System.Threading;
 using WPFCootreguaV2.Domain.ApiService;
+using WPFCootreguaV2.Domain.ApiService.Models;
+using WPFCootreguaV2.Domain.Enumerables;
+using WPFCootreguaV2.Domain.Exceptions;
+using WPFCootreguaV2.Domain.Peripherals;
+using WPFCootreguaV2.Domain.UIServices;
+using WPFCootreguaV2.Domain.UIServices.Integrations;
+using WPFCootreguaV2.Modals;
+using WPFCootreguaV2.UserControls;
+using ManualInputViewModel = WPFCootreguaV2.UserControls.ManualInputViewModel;
 
 namespace WPFCootreguaV2.Presentation.UserControls
 {
@@ -37,22 +40,18 @@ namespace WPFCootreguaV2.Presentation.UserControls
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
-        private MenuBackground bg;
-        //private ManualInputViewModel _viewModel;
-        //private ModalWindow? _currentLoadModal = null;
-        private Transaction transaction;
         private PaymentViewModel _paymentViewModel;
+
+        private StateTransaction _tranStateTemp = StateTransaction.Iniciada;
+
         public WithdrawalUC()
         {
             InitializeComponent();
-            bg = new MenuBackground();
             _ts = Transaction.Instance;
-            // Cambiar el fondo
-            ChangeBackground(EBackground.Paga);
-            // Inicializar el ViewModel AQUÍ
-            OrganizeValues();
 
-            
+            _ts.DevueltaCorrecta = false;
+
+
 
 #if NO_PERIPHERALS
             Button dynamicButton = new Button();
@@ -92,7 +91,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
             void ExecuteScanner(object sender, EventArgs e)
             {
 
-                //OnCashIn(20000);
+                SaveWithdrawal();
                 //NotifyPay();
             }
 
@@ -103,11 +102,9 @@ namespace WPFCootreguaV2.Presentation.UserControls
             //MainGrid.Children.Add(dynamicButton);
 
 #else
-    _peripherals = ArduinoController.Instance;
-    _peripherals.CashIn += OnCashIn;
-    _peripherals.CashDispensed += OnCashDispensed;
-    _peripherals.DispenserReject += OnDispenserReject;
-    _peripherals.PeripheralError += OnPeripheralError;
+      _peripherals = PeripheralController.Instance;
+      _peripherals.CashDispensed += OnCashDispensed;
+      _peripherals.DispenserReject += OnDispenserReject;
 #endif
 
             // Agregar eventos
@@ -131,153 +128,30 @@ namespace WPFCootreguaV2.Presentation.UserControls
             _paymentViewModel = new PaymentViewModel
             {
                 PayAmount = _ts.Total,
-                RemainingAmount = _ts.Total,
-                ReturnAmount = 0,
+                RemainingAmount =0,
+                ReturnAmount = _ts.Total,
                 EnteredAmount = 0,
                 Denominations = new List<Denomination>(),
                 DispensedAmount = 0
             };
-            this.DataContext = _paymentViewModel;
+
+            ReturnMoney(_paymentViewModel.ReturnAmount);
 
         }
+
+
 
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
 #if NO_PERIPHERALS
 #else
-            _peripherals.CashIn -= OnCashIn;
             _peripherals.CashDispensed -= OnCashDispensed;
             _peripherals.DispenserReject -= OnDispenserReject;
-            _peripherals.PeripheralError -= OnPeripheralError;
 #endif
         }
 
-        public void ChangeBackground(EBackground eBackground)
-        {
-
-            try
-            {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
-
-                Dispatcher.Invoke(() =>
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-            }
-            catch (Exception ex)
-            {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
-        private void OrganizeValues()
-        {
-            try
-            {
-                _paymentViewModel = new PaymentViewModel
-                {
-                    PayAmount = _ts.Total,
-                    RemainingAmount = _ts.Total,
-                    ReturnAmount = 0,
-                    EnteredAmount = 0,
-                    Denominations = new List<Denomination>(),
-                    DispensedAmount = 0
-                };
-                this.DataContext = _paymentViewModel;
-
-                this.DataContext = _ts;
-
-                SaveWithdrawal();
-            }
-            catch (Exception ex)
-            {
-                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
-
-        private async void SaveWithdrawal()
-        {
-            try
-            {
-                Task.Run(async () =>
-                {
-                    PymentProduct pay = new PymentProduct
-                    {
-                        Identification = _ts.Documento,
-                        Description = "Retiro",
-                        PayDate = DateTime.Now,
-                        ValueToPay = (long)_ts.Total,
-                        NumberProduct = long.Parse(transaction.ProductSelect.NumberProduct),
-                        TypeProduct = _ts.ProductSelect.TipoProducto,
-                        Coduser = _ts.Codigo,
-                        codOpe = 0,
-                        TipoMovimiento = 1
-                    };
-
-                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
-
-                    Thread.Sleep(500);
-
-                    if (!string.IsNullOrEmpty(authen) && authen != "[]")
-                    {
-                        var data = JsonConvert.DeserializeObject<PymentProduct>(authen);
-
-                        if (data.codOpe >= 1)
-                        {
-                            _ts.PayCode = data.codOpe;
-                            _ts.statePaySuccess = true;
-                            _ts.EstadoTransaccion = StateTransaction.Aprobada;
-
-                            ReturnMoney(_ts.Total);
-                        }
-                        else
-                        {
-                            //Finish(false);
-                        }
-                    }
-                    else
-                    {
-                        //Finish(false);
-                    }
-                });
-
-               // Switcher.ModalLoad(true);
-            }
-            catch (Exception ex)
-            {
-                //    Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-                //Finish(false);
-            }
-        }
+     
         private void ReturnMoney(decimal returnValue)
         {
             _ts.DevueltaCorrecta = false;
@@ -288,257 +162,61 @@ namespace WPFCootreguaV2.Presentation.UserControls
 #endif
 
         }
+
         private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
         {
 
-            //_paymentViewModel.DispensedAmount = totalDispensed;
+            _paymentViewModel.DispensedAmount = totalDispensed;
 
-            //_paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
-            //string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
+            _paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
+            string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
 
-            //SendDispenseDetails(details);
+            SendDispenseDetails(details);
 
-            //CloseLoadModal();
+             _nav.CloseModal();
 
-            //if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
-            //{
-            //    _ts.DevueltaCorrecta = true;
-            //    await SavePay();
-            //}
-            //else
-            //{
-            //    _currentLoadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
-            //    await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
-            //    _ts.DevueltaCorrecta = false;
-            //    await SavePay();
-            //}
+            if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
+            {
+                _ts.DevueltaCorrecta = true;
+                await SaveWithdrawal();
+
+            }
+            else
+            {
+                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+                await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
+                _ts.DevueltaCorrecta = false;
+                await SaveWithdrawal();
+
+            }
 
         }
 
-        //private void ReturnMoney()
-        //{
-        //    try
-        //    {
-        //        //TODO:pruebas
-        //        //transaction.Payment.ValorDispensado = 100;
-        //        //transaction.StateReturnMoney = false;
-        //        //Finish(true);
+        private void SendDispenseDetails(Dictionary<int, int> details)
+        {
 
-        //        Task.Run(() =>
-        //        {
-        //            AdminPayPlus.ControlPeripherals.callbackTotalOut = totalOut =>
-        //            {
-        //                transaction.StateReturnMoney = true;
+            foreach (var denom in details.Keys)
+            {
+                var quantity = details[denom];
+                if (quantity <= 0) continue;
+                SendTransactionDetail(TypeOperation.DP, Convert.ToDecimal(denom), quantity);
 
-        //                transaction.Payment.ValorDispensado = totalOut;
+            }
+        }
 
-        //                Finish(true);
-        //            };
+        private void SendTransactionDetail(TypeOperation op, decimal denom, int quantity)
+        {
+            try
+            {
+                EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: {denom.ToString("C0")}, Cantidad: {quantity}");
+                Api.CreateTransactionDetail(op, (int)denom, quantity);
 
-        //            AdminPayPlus.ControlPeripherals.callbackError = error =>
-        //            {
-        //                AdminPayPlus.SaveLog(new RequestLogDevice
-        //                {
-        //                    Code = error.Item1,
-        //                    Date = DateTime.Now,
-        //                    Description = error.Item2,
-        //                    Level = ELevelError.Medium,
-        //                    TransactionId = transaction.IdTransactionAPi
-        //                }, ELogType.Device);
-        //            };
-
-        //            AdminPayPlus.ControlPeripherals.callbackOut = valueOut =>
-        //            {
-        //                AdminPayPlus.ControlPeripherals.callbackOut = null;
-
-        //                transaction.Payment.ValorDispensado = valueOut;
-
-        //                transaction.StateReturnMoney = false;
-
-        //                if (transaction.Payment.ValorDispensado != transaction.Amount)
-        //                {
-        //                    transaction.Observation += MessageResource.IncompleteMony + " Devolvio: " + valueOut.ToString();
-        //                }
-        //                else
-        //                {
-        //                    transaction.StateReturnMoney = true;
-        //                }
-
-        //                Finish(true);
-        //            };
-
-        //            AdminPayPlus.ControlPeripherals.callbackLog = log =>
-        //            {
-        //                AdminPayPlus.SaveDetailsTransaction(transaction.IdTransactionAPi, 0, 0, 0, string.Empty, log);
-        //            };
-
-        //            AdminPayPlus.ControlPeripherals.StartDispenser(transaction.Amount);
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
-
-        //private async void SaveWithdrawal()
-        //{
-        //    try
-        //    {
-        //        Task.Run(async () =>
-        //        {
-        //            PymentProduct pay = new PymentProduct
-        //            {
-        //                Identification = transaction.Document,
-        //                Description = "Retiro",
-        //                PayDate = DateTime.Now,
-        //                ValueToPay = (long)transaction.Amount,
-        //                NumberProduct = long.Parse(transaction.ProductSelect.NumberProduct),
-        //                TypeProduct = transaction.ProductSelect.TipoProducto,
-        //                Coduser = transaction.Codigo,
-        //                codOpe = 0,
-        //                TipoMovimiento = 1
-        //            };
-
-        //            var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
-
-        //            Thread.Sleep(500);
-
-        //            if (!string.IsNullOrEmpty(authen) && authen != "[]")
-        //            {
-        //                var data = JsonConvert.DeserializeObject<PymentProduct>(authen);
-
-        //                if (data.codOpe >= 1)
-        //                {
-        //                    this.transaction.PayCode = data.codOpe;
-        //                    this.transaction.statePaySuccess = true;
-        //                    transaction.State = ETransactionState.Success;
-
-        //                    ReturnMoney();
-        //                }
-        //                else
-        //                {
-        //                    Finish(false);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                Finish(false);
-        //            }
-        //        });
-
-        //        Switcher.ModalLoad(true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //        Finish(false);
-        //    }
-        //}
-
-        //private void Finish(bool state)
-        //{
-        //    try
-        //    {
-        //        if (!this.paymentViewModel.StatePay)
-        //        {
-        //            this.paymentViewModel.StatePay = true;
-
-        //            Switcher.ModalLoad(false);
-
-        //            if (state)
-        //            {
-        //                AdminPayPlus.ControlPeripherals.ClearValues();
-
-        //                if (!transaction.StateReturnMoney)
-        //                {
-        //                    Switcher.ModalMS(string.Format("Estimado {0}, no se pudo entregar la totalidad del dinero. {1} Falto por devolver {2} {3} Se abonara lo faltante a la cuenta.", transaction.DataPerson.FirstName, Environment.NewLine, String.Format("{0:C0}", (transaction.Amount - transaction.Payment.ValorDispensado)), Environment.NewLine));
-        //                    RenotifyTransaction();
-        //                }
-        //                else
-        //                {
-        //                    Switcher.Navigate(UserControlView.PaySuccess, transaction);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                Switcher.ModalMS(string.Format("Estimado {0}, no se pudo notificar el retiro. Por favor vuelve a intentarlo.", transaction.DataPerson.FirstName));
-
-        //                transaction.State = ETransactionState.Cancel;
-
-        //                AdminPayPlus.UpdateTransaction(transaction);
-
-        //                Switcher.CLose();
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
-
-        //private void RenotifyTransaction()
-        //{
-        //    try
-        //    {
-        //        Task.Run(async () =>
-        //        {
-        //            PymentProduct pay = new PymentProduct
-        //            {
-        //                Identification = transaction.Document,
-        //                Description = "Renotificación-Retiro",
-        //                PayDate = DateTime.Now,
-        //                ValueToPay = (long)(transaction.Amount - transaction.Payment.ValorDispensado),
-        //                NumberProduct = long.Parse(transaction.ProductSelect.NumberProduct),
-        //                TypeProduct = transaction.ProductSelect.TipoProducto,
-        //                Coduser = transaction.Codigo,
-        //                codOpe = 0,
-        //                TipoMovimiento = 2
-        //            };
-
-        //            var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
-
-        //            Thread.Sleep(500);
-
-        //            Switcher.ModalLoad(false);
-
-        //            if (!string.IsNullOrEmpty(authen) && authen != "[]")
-        //            {
-        //                var data = JsonConvert.DeserializeObject<PymentProduct>(authen);
-
-        //                if (data.codOpe >= 1)
-        //                {
-        //                    this.transaction.PayCode = data.codOpe;
-        //                    this.transaction.statePaySuccess = true;
-        //                    transaction.State = ETransactionState.Success;
-
-        //                    Switcher.Navigate(UserControlView.PaySuccess, transaction);
-        //                }
-        //                else
-        //                {
-        //                    AdminPayPlus.SaveWithdrawalExpin(pay);
-        //                    Switcher.Navigate(UserControlView.PaySuccess, transaction);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                AdminPayPlus.SaveWithdrawalExpin(pay);
-        //                Switcher.Navigate(UserControlView.PaySuccess, transaction);
-        //            }
-        //        });
-
-        //        Switcher.ModalLoad(true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
-        //#endregion
-
-
-
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+            }
+        }
         #region "Eventos"
         private void txtValueReturn_TouchDown(object sender, TouchEventArgs e)
         {
@@ -561,5 +239,116 @@ namespace WPFCootreguaV2.Presentation.UserControls
             }
         }
         #endregion
+
+        private async Task Notify()
+        {
+            var maxTries = 3;
+            var nTries = 0;
+            while (nTries < maxTries)
+            {
+                nTries++;
+                EventLogger.SaveLog(EventType.Info, $"Intento {nTries} notificar retiro");
+                PymentProduct pay = new PymentProduct
+                {
+                    Identification = _ts.Documento,
+                    Description = "Retiro",
+                    PayDate = DateTime.Now,
+                    ValueToPay = (long)_ts.Total,
+                    NumberProduct = long.Parse(_ts.ProductSelect.NumberProduct),
+                    TypeProduct = _ts.ProductSelect.TipoProducto,
+                    Coduser = _ts.Codigo,
+                    codOpe = 0,
+                    TipoMovimiento = 1
+                };
+
+                var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaRetirePayments", pay);
+                Thread.Sleep(500);
+
+                if (!string.IsNullOrEmpty(authen) && authen != "[]")
+                {
+                    var data = JsonConvert.DeserializeObject<PymentProduct>(authen);
+                    _tranStateTemp = StateTransaction.Aprobada;
+
+                    if (data.codOpe >= 1)
+                    {
+                        _ts.PayCode = data.codOpe;
+                        _ts.statePaySuccess = true;
+                        _ts.EstadoTransaccion =StateTransaction.Aprobada;
+                        // ReturnMoney();
+                    }
+                }
+
+
+            }
+            _tranStateTemp = StateTransaction.AprobadaSinNotificar;
+
+        }
+
+        private async Task SaveWithdrawal()
+        {
+            try
+            {
+#if NO_PERIPHERALS
+                
+#else
+                await Notify();
+#endif
+
+
+                _paymentViewModel.IsPayCompleted = true;
+                _ts.DatosPago = _paymentViewModel;
+                _ts.TotalIngresado = _paymentViewModel.EnteredAmount;
+                _ts.TotalDevuelta = _paymentViewModel.DispensedAmount;
+
+                SetTransactionDescription();
+
+
+                if ((_tranStateTemp == StateTransaction.Aprobada || _tranStateTemp == StateTransaction.Cancelada)
+                    && !_ts.DevueltaCorrecta)
+                {
+                    // Si el estado de transacción es aprobada o cancelada y además hay error de devuelta se cambia a su respectivo estado
+                    // CanceladoErrorDevuelta o AprobadaErrorDevuelta
+                    _ts.EstadoTransaccion = (StateTransaction)((int)_tranStateTemp + 2);
+                }
+                else
+                {
+                    _ts.EstadoTransaccion = _tranStateTemp;
+                }
+
+
+
+                Api.UpdateTransaction();
+
+                Dispatcher.Invoke(() => GoTo(new SuccessUC()));
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+                _nav.CloseModal();
+                _nav.ShowModal("Se presentó un problema intentando reportar los datos del retiro. Por favor comuníquese con soporte técnico.",new InfoModal());
+            }
+        }
+        private void SetTransactionDescription()
+        {
+            switch (_tranStateTemp)
+            {
+                case StateTransaction.Aprobada:
+                    _ts.EstadoTransaccionVerb = "Exitoso";
+                    _ts.Descripcion += "Transacción finalizada correctamente. ";
+                    break;
+                case StateTransaction.AprobadaSinNotificar:
+                    _ts.EstadoTransaccionVerb = "Exitoso";
+                    _ts.Descripcion += "Transacción aprobada, pero no se ha podido notificar el retiro.";
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (!_ts.DevueltaCorrecta)
+                _ts.Descripcion += $"Ocurrió un error durante la devolución del dinero. Cantidad faltante {_paymentViewModel.RemainingAmount.ToString("C0")}";
+        }
+
+
     }
 }

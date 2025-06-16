@@ -38,7 +38,7 @@ namespace WPFCootreguaV2.UserControls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            PrintVoucher();
+            //PrintVoucher();
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

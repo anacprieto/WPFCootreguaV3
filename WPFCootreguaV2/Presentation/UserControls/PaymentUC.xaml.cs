@@ -436,21 +436,21 @@ namespace WPFCootreguaV2.UserControls
                 _isPayCanceled = true;
                 _tranStateTemp = StateTransaction.Cancelada;
 
-                if (_paymentViewModel.EnteredAmount > 0)
-                {
-                        _paymentViewModel.ImgContinue = Visibility.Visible;
-                        _paymentViewModel.ReturnAmount = _paymentViewModel.EnteredAmount;
-                        _nav.ShowModal("Transacción cancelada. Devolución en curso...", new LoadModal());
-                        await Task.Delay(3000);
-                        ReturnMoney(_paymentViewModel.EnteredAmount);
-                }
-                else
-                {
-                        _paymentViewModel.ImgCancel = Visibility.Visible;
-                        _nav.ShowModal("Transacción cancelada", new InfoModal());
-                        _ts.DevueltaCorrecta = true;
-                        await SavePay();
-                 }
+                //if (_paymentViewModel.EnteredAmount > 0)
+                //{
+                //        _paymentViewModel.ImgContinue = Visibility.Visible;
+                //        _paymentViewModel.ReturnAmount = _paymentViewModel.EnteredAmount;
+                //        _nav.ShowModal("Transacción cancelada. Devolución en curso...", new LoadModal());
+                //        await Task.Delay(3000);
+                //        ReturnMoney(_paymentViewModel.EnteredAmount);
+                //}
+                //else
+                //{
+                //        _paymentViewModel.ImgCancel = Visibility.Visible;
+                //        _nav.ShowModal("Transacción cancelada", new InfoModal());
+                //        _ts.DevueltaCorrecta = true;
+                //        await SavePay();
+                // }
 
                 Dispatcher.Invoke(() => GoTo(new CancelPayUC()));
             }

@@ -40,8 +40,6 @@ namespace WPFCootreguaV2.UserControls
     public partial class AuthenticationRetirosUC : AppUserControl
     {
 
-        private MenuBackground bg;
-
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
@@ -68,26 +66,15 @@ namespace WPFCootreguaV2.UserControls
         public AuthenticationRetirosUC()
         {
             InitializeComponent();
-
+            _nav = Navigator.Instance;
             try
             {
 
                 _ts = Transaction.Instance;
                 CantIntentos = 0;
-                bg = new MenuBackground();
 
-
-                if (_ts.Type == ETransactionType.Registros)
-                {
-                    ChangeBackground(EBackground.Autenticate2);
-                }
-                else
-                {
-                    ChangeBackground(EBackground.Autenticate);
-                }
                 Utilities.Speak("Ubica tu dedo en el lector biometrico.");
 
-                //LoadReader();
 
 #if NO_PERIPHERALS
                 Button dynamicButton = new Button();
@@ -131,12 +118,30 @@ namespace WPFCootreguaV2.UserControls
                 //AudioManager.PlayLoop(audioName);
 
                 // Utilities.Speak("Ubica tu dedo en el lector biometrico.");
+                //LoadReader();
+                //GoTimer();
+                this.Unloaded += OnUnloaded;
+                this.Loaded += Onloaded;
 
             }
             catch (Exception ex)
             {
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                EventLogger.SaveLog(EventType.Error, "Error al inicializar componente");
             }
+        }
+        private void BtnCancelar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            EcityReader.callbackTemplate = null;
+            EcityReader.callbackError = null;
+            EcityReader.CancelCaptureAndCloseReader(EcityReader.OnCaptured);
+            StopTimer();
+            _nav.CloseModal();
+            Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
+
+        }
+        private void Onloaded(object sender, RoutedEventArgs e)
+        {
+            _nav.CloseModal();
         }
 
         private void LoadReader()
@@ -187,6 +192,7 @@ namespace WPFCootreguaV2.UserControls
                 {
                     StopTimer();
                     _nav.ShowModal($"El huellero no se pudo habilitar, por favor intentalo de nuevo.", new InfoModal());
+                    EventLogger.SaveLog(EventType.Info, "El huellero no se pudo habilitar, por favor intentalo de nuevo.");
                     Dispatcher.Invoke(() => GoTo(new IdentificationUC()));
                 }
             }
@@ -215,9 +221,11 @@ namespace WPFCootreguaV2.UserControls
                         TypeReader = 1,
                         Template = template
                     };
+                    EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
 
                     var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
                     var desencrypted = EncryptorEcity.Decrypt(authen);
+                    EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
 
 
 
@@ -225,29 +233,19 @@ namespace WPFCootreguaV2.UserControls
                     {
 
                         var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
-                        var tipo = _ts.Type;
 
                         if (data.Validate == 1)
                         {
-                            _ts.TipoTransaccion=_ts.TipoTransaccion == TypeTransaction.Registro ? TypeTransaction.Registro : _ts.TipoTransaccion;
-                            //if (Utilities.TransactionType == ETransactionType.Registros)
-                            if (_ts.Type == ETransactionType.Registros)
-                            {
-                               
-                                SaveTransaction();
-                                var tsCreated = Api.CreateTransaction();
-                                if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
-
-                            }
-                            else
-                            {
-                                var result = GetProducts();
-                            }
+                            var result = GetProducts();
                         }
                         else
                         {
-                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.CloseModal();
                             StopTimer();
+                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
+                            EventLogger.SaveLog(EventType.Error, "Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName);
+
+                            GoTimer();
                             CantIntentos++;
                             LoadReader();
                         }
@@ -260,6 +258,8 @@ namespace WPFCootreguaV2.UserControls
                         if (CantIntentos == 2)
                         {
                             _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName, new InfoModal()));
+                            EventLogger.SaveLog(EventType.Error, "Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName);
+
                             StopTimer();
 
                             //Switcher.ModalMS(string.Format("Estimado {0}, Ha superado el número de intentos permitidos.", transaction.DataPerson.FirstName));
@@ -268,20 +268,25 @@ namespace WPFCootreguaV2.UserControls
                         else
                         {
                             _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
-                           // GoTimer();
+                            EventLogger.SaveLog(EventType.Error, "Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName);
+
+                            // GoTimer();
                             CantIntentos++;
+                            GoTimer();
                             LoadReader();
                         }
                     }
                 });
                 StopTimer();
-                CloseLoadModal();
+                _nav.ShowModal(string.Format("Consultando.....", _ts.DataPerson.FirstName), new LoadModal());
+                EventLogger.SaveLog(EventType.Error, "Consultando, saliendo del metodo , validar huella" + _ts.DataPerson.FirstName);
+
                 //Switcher.Timer(false);
                 //Switcher.ModalLoad(true);
             }
             catch (Exception ex)
             {
-                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                EventLogger.SaveLog(EventType.Error, MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex.ToString());
             }
         }
         private async Task GetProducts()
@@ -294,13 +299,14 @@ namespace WPFCootreguaV2.UserControls
                     Identititfy = _ts.Documento,
                 };
 
-                 var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
+                var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
+                _nav.ShowModal("Consultando productos para {0}...", new LoadModal());
                 //var desencrypted = EncryptorEcity.Decrypt(prodct);
                 //var respuesta1120557056 = "UlmKdX4+uzXax9XsKwFwqkgxt6FMJoVaVcQpR4ambziDsTfenMMfOjwUzrGFBNEtauGKXdJKOMTd/bFOMHjxkw==";
                 ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
                 //var desencrypted1120 = EncryptorEcity.Decrypt(respuesta1120557056);
                 //_nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", new InfoModal()));
-                 var desncrypted = EncryptorEcity.Decrypt(prodct);   
+                var desncrypted = EncryptorEcity.Decrypt(prodct);
                 //Switcher.ModalLoad(false);
 
                 if (!string.IsNullOrEmpty(desncrypted))
@@ -312,7 +318,7 @@ namespace WPFCootreguaV2.UserControls
                     };
 
                     var data = JsonConvert.DeserializeObject<List<ProductsState>>(desncrypted, settings);
-                   // var data = JsonConvert.DeserializeObject<List<ProductsState>>(desncrypted);
+                    // var data = JsonConvert.DeserializeObject<List<ProductsState>>(desncrypted);
 
                     if (data.Count >= 1)
                     {
@@ -320,21 +326,21 @@ namespace WPFCootreguaV2.UserControls
                         _ts.DataProducts = data;
 
                         //Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                         Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                         GC.Collect();
+                        Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
+                        //GC.Collect();
+                        //
                     }
                     else
                     {
                         _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
 
-                        CloseLoadModal();
+                        _nav.CloseModal();
                     }
                 }
                 else
                 {
                     _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
-
-                    CloseLoadModal();
+                    _nav.CloseModal();
                 }
             }
             catch (Exception ex)
@@ -343,339 +349,22 @@ namespace WPFCootreguaV2.UserControls
 
             }
         }
-        private void SaveTransaction()
-        {
-            try
-            {
-                Task.Run(async () =>
-                {
-                    _ts.Type = TransactionType;
-                    _ts.EstadoTransaccion = StateTransaction.Iniciada;
-                    _ts.Total = 0;
-                    _ts.payer = new Payer
-                    {
-                        IDENTIFICATION = _ts.DataPerson.CodPerson.ToString(),
-                        NAME = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
-                        EMAIL = _ts.DataPerson.Email,
-                        LAST_NAME = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
-                        PHONE = _ts.DataPerson.Phone,
-                        ADDRESS = _ts.DataPerson.Adress,
-                    };
-
-
-                    _nav.ShowModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName, new InfoModal()));
-
-
-                    if (this._ts.IdTransaccionApi == 0)
-                    {
-                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo." +_ts.DataPerson.FirstName));
-                        _nav.CloseModal();
-
-                    }
-                    else
-                    {
-                        string NameUser = _ts.DataPerson.FirstName;
-                        int Time = DateTime.Now.Hour;
-                        string ms = string.Empty;
-
-                        if (Time >= 6 && Time < 12)
-                        {
-                            ms = "Buenos días " + NameUser;
-                        }
-                        else
-                        if (Time >= 12 && Time < 16)
-                        {
-                            ms = "Buenas tardes " + NameUser;
-                        }
-                        else
-                        if (Time >= 16 && Time <= 24)
-                        {
-                            ms = "Buenas noches " + NameUser;
-                        }
-                        else
-                        {
-                            ms = "Bienvenido " + NameUser;
-                        }
-
-                        //Utilities.Speak(ms);
-                        //Utilities.ShowModal(ms + " Has sido registrad@ en el sistema.", EModalType.Error, true);
-                        //Switcher.CLose();
-                    }
-                });
-
-                //Switcher.Timer(false);
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
-
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
-        public void ChangeBackground(EBackground eBackground)
-        {
-
-            try
-            {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
-
-                Dispatcher.Invoke(() =>
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-            }
-            catch (Exception ex)
-            {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
-        /*
-        public void ChangeBackground(EBackground eBackground)
-        {
-            try
-            {
-                Dispatcher.BeginInvoke((Action)delegate
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            bg.Background = "/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-                GC.Collect();
-            }
-            catch (Exception ex)
-            {
-             //   Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }*/
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            CloseLoadModal();
+            _nav.CloseModal();
             StopTimer();
-            ScannerController.Stop();
-            ScannerController.ScannerDataReceived -= OnScannerDataReceived;
-        }
-        private void Onloaded(object sender, RoutedEventArgs e)
-        {
-            ScannerController.ScannerDataReceived += OnScannerDataReceived;
-            ScannerController.Start();
-            // _viewModel.HelpMessage = "Ingresa número de cuenta o referente";
-        }
-
-
-        private async void OpcionButton_Click(object sender, EventArgs e)
-        {
-
-            var control = sender as FrameworkElement;
-
-            // Validar que el control tenga un Tag definido
-            if (control == null || control.Tag == null)
-            {
-                return;
-            }
-
-            string tag = control.Tag.ToString();
-
-            //if (tag == "Gimnasio")
-            //{
-            //    _ts.EspacioReservar = tag;
-            //    Requestconsultarinscripciongimnasio request = new Requestconsultarinscripciongimnasio();
-            //    request.id_formulario = _ts.IdRegistroFormularioInder.ToString();
-            //    await _ts.ProcedureManagerInder.Getconsultarinscripciongimnasio(request);
-            //}
-            //else if (tag.Contains("Piscina"))
-            //{
-            //    _ts.EspacioReservar = tag;
-            //    Dispatcher.Invoke(() => GoTo(new SelectTipoRegistroPiscinaUC()));
-            //}
-            //else if (tag.Contains("Turcos"))
-            //{
-            //    _ts.EspacioReservar = tag;
-            //    // Ir primero a ManualInput para verificar si el usuario existe
-            //    Dispatcher.Invoke(() => GoTo(new ManualInputUC("Turcos")));
-            //}
-            //else
-            //{
-            //    // Verificar si es día de mantenimiento (lunes normal)
-            //    bool isDayOfMaintenance = AppConfig.Get("DiaMantenimiento") == diaActual;
-
-            //    // Si es lunes, verificar si es festivo
-            //    bool isMondayHoliday = false;
-            //    if (diaActual == "lunes")
-            //    {
-            //        // Verificar si el lunes actual es festivo
-            //        isMondayHoliday = ColombianHolidayHelper.IsColombianHoliday(DateTime.Today);
-            //        EventLogger.SaveLog(EventType.Info, $"Verificando si hoy ({DateTime.Today:yyyy-MM-dd}) es festivo: {isMondayHoliday}", null);
-            //    }
-
-            //    // Mostrar mensaje de mantenimiento solo si es día de mantenimiento y no es un lunes festivo
-            //    if (isDayOfMaintenance && !isMondayHoliday)
-            //    {
-            //        _nav.ShowModal($"Los días {diaActual} se realiza proceso de mantenimiento a este espacio.", new InfoModal());
-            //    }
-            //    else
-            //    {
-            //        _ts.EspacioReservar = tag;
-            //        Dispatcher.Invoke(() => GoTo(new ManualInputUC(tag)));
-            //    }
-            //}
         }
 
         #region UI EVENTS
 
-        private void BtnCancelar_TouchDown(object sender, EventArgs e)
-        {
-            Dispatcher.Invoke(() => GoTo(new SelectOptionUC()));
-
-        }
-
         private void BtnSalir_MouseDown(object sender, EventArgs e)
         {
-            Dispatcher.Invoke(() => GoTo(new MainUC()));
+            Dispatcher.Invoke(() => GoTo(new ConfigUC()));
 
         }
 
         #endregion
 
-        #region ScannerEvents
-        private async void OnScannerDataReceived(string data)
-        {
-            DisableView();
-            try
-            {
-
-                string scannerRead = data.Replace("\u001d", "").Replace("\r", "");
-
-                EventLogger.SaveLog(EventType.Info, "Data readed from scanner", scannerRead);
-
-                _NoConvenio = scannerRead.Substring(3, 13);
-                _referencia = scannerRead.Substring(20, 24);
-                _valorPagar = scannerRead.Substring(48, 12);
-                _fechaPago = scannerRead.Substring(62, 8);
-
-                RequestConsultData request = new RequestConsultData();
-
-                request.idComercio = AppConfig.Get("idComercioAlcaldia");
-                request.password = AppConfig.Get("passwordAlcaldia");
-                request.idCliente = _referencia;
-                request.claveConsulta = "01";
-
-                await _ts.ProcedureManager.GetDataPay();
-            }
-            catch (Exception ex)
-            {
-                _nav.ShowModal($"Hubo un error inesperado al realizar la consulta intenta nuevamente", new InfoModal());
-                await Application.Current.Dispatcher.InvokeAsync(() => GoTo(new MainUC()));
-            }
-            EnableView();
-
-        }
-        #endregion
-
-
-        private async Task RequestDocData(string document)
-        {
-            try
-            {
-                if (document.Length < 6)
-                {
-                    _nav.ShowModal("Por favor ingrese un número de referencia valido.", new InfoModal());
-                    return;
-                }
-
-                if (_ts.TipoConsulta == "Documento")
-                {
-                    _ts.Documento = document;
-                }
-
-                _ts.Referencia = document;
-
-
-                RequestConsultData request = new RequestConsultData();
-
-                request.idComercio = AppConfig.Get("idComercioAlcaldia");
-                request.password = AppConfig.Get("passwordAlcaldia");
-                request.idCliente = _ts.Referencia;
-                request.claveConsulta = "01";
-
-                await _ts.ProcedureManager.GetDataPay();
-
-
-
-            }
-            catch (ProcedureException ex)
-            {
-
-                Dispatcher.Invoke(() => { _viewModel.StatusMsg = ex.Message; });
-            }
-            catch (Exception ex)
-            {
-                Dispatcher.Invoke(() => { _viewModel.StatusMsg = "Ocurrió un error durante la consulta de los datos. Por favor intenta de nuevo."; });
-
-            }
-
-            CloseLoadModal();
-        }
-
-        private void CloseLoadModal()
-        {
-            if (_currentLoadModal != null)
-            {
-                _currentLoadModal.Close();
-                _currentLoadModal = null;
-            }
-        }
 
         #region Timer
         public void GoTimer()
@@ -689,7 +378,7 @@ namespace WPFCootreguaV2.UserControls
                 _timer.CallBackTimeOut = () =>
                 {
 
-                    //         Dispatcher.Invoke(() => GoTo(new SelectInputUC()));
+                    Dispatcher.Invoke(() => GoTo(new ConfigUC()));
 
 
                 };
@@ -729,21 +418,8 @@ namespace WPFCootreguaV2.UserControls
 
 
         #endregion
-
-
-        //private void BtnLimpiar_Touch(object sender, EventArgs e)
-        //{
-        //    Image key = (Image)sender;
-        //    string tag = key.Tag.ToString() ?? "";
-
-        //    if (tag == "Clear")
-        //    {
-        //    //    InputInvoice.Text = "";
-        //        return;
-        //    }
-
-        //}
     }
+
 
     public class AuthenticationRetirosUCViewModel : INotifyPropertyChanged
     {

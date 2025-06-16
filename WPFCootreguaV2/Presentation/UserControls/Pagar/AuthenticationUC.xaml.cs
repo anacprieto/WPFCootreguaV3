@@ -108,8 +108,6 @@ namespace WPFCootreguaV2.UserControls
                      //await _ts.integrationHelpers._consultReferencesManager.ConsultAfterPalmInput();
                  }*/
                 MainGrid.Children.Add(dynamicButton);
-
-                //MainGrid.Children.Add(dynamicButton);
                 //MainGrid.Children.Add(dynamicButton2);
 #else
             LoadReader();
@@ -235,31 +233,10 @@ namespace WPFCootreguaV2.UserControls
                     {
 
                         var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
-                        var tipo = _ts.Type;
 
                         if (data.Validate == 1)
                         {
-                            _ts.TipoTransaccion=_ts.TipoTransaccion == TypeTransaction.Registro ? TypeTransaction.Registro : _ts.TipoTransaccion;
-                            //if (Utilities.TransactionType == ETransactionType.Registros)
-                            if (_ts.Type == ETransactionType.Registros)
-                            {
-                               
-                                SaveTransaction();
-                                var tsCreated = Api.CreateTransaction();
-                                if (tsCreated == null)
-                                {
-                                    EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
-                                    throw new Exception("No se pudo enviar la transacción");
-                                    
-                                }
-                                
-
-
-                            }
-                            else
-                            {
-                                var result = GetProducts();
-                            }
+                            var result = GetProducts();
                         }
                         else
                         {

@@ -14,13 +14,14 @@
     <local:AppUserControl.Background>
         <ImageBrush ImageSource="{StaticResource BACKREGISTERID}" Stretch="Uniform"/>
     </local:AppUserControl.Background>
-
+    
     <Grid Width="680" Height="1720" HorizontalAlignment="Right">
         <Grid.RowDefinitions>
             <RowDefinition Height="500" />
             <RowDefinition Height="*" />
             <RowDefinition Height="400" />
         </Grid.RowDefinitions>
+
         <Grid Grid.Row="0">
             <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,22,0,0"/>
             <TextBox x:Name="TxtCelular"
@@ -69,14 +70,14 @@
              VerticalAlignment="Top"
              Margin="42,183,0,0"
              Stretch="Uniform"
-             TouchDown="Btn_Cancelar_Touch" RenderTransformOrigin="0.502,-0.244"/>
+             PreviewMouseDown="BtnCancelar_MouseDown" RenderTransformOrigin="0.502,-0.244"/>
 
             <Image x:Name="BtnContinuar" Source="{StaticResource BTN_CONTINUAR}" Height="90"
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
               Margin="0,183,52,0"
               Stretch="Uniform"
-              MouseDown="BtnConsultar_Touch"/>
+              PreviewMouseDown="BtnConsultar_MouseDown"/>
 
         </Grid>
 

@@ -37,6 +37,9 @@ namespace WPFCootreguaV2.UserControls
 {
     public partial class CancelPayUC : AppUserControl
     {
+
+        private const string STR_TIMER = "02:30";
+
         private Transaction _ts;
         private ArduinoController _peripherals;
         private CancelPayViewModel _paymentViewModel;
@@ -54,117 +57,159 @@ namespace WPFCootreguaV2.UserControls
         public CancelPayUC()
         {
             InitializeComponent();
-            bg = new MenuBackground();
             _ts = Transaction.Instance;
 
             //this.transaction.statePaySuccess = false;
             ValueReturn = 0;
-
-            ChangeBackground(EBackground.Paga);
-
-            _ts = Transaction.Instance;
             _ts.DevueltaCorrecta = false;
+            
+            ReturnMoney();
             this.Loaded += OnLoaded;
             this.Unloaded += OnUnloaded;
-            ReturnMoney();
 
+        }
+        private async Task CancelPay()
+        {
+            try
+            {
+                if (_paymentViewModel.IsPayCompleted) return;
+#if NO_PERIPHERALS
+#else
+                await _peripherals.StopAceptance();
+#endif
+                _isPayCanceled = true;
+                _tranStateTemp = StateTransaction.Cancelada;
+
+                if (_paymentViewModel.EnteredAmount > 0)
+                {
+                    _paymentViewModel.ReturnAmount = _paymentViewModel.EnteredAmount;
+                    _nav.ShowModal("Transacción cancelada. Devolución en curso...", new LoadModal());
+                    ReturnMoney();
+                }
+                else
+                {
+                    _nav.ShowModal("Transacción cancelada");
+                    _ts.DevueltaCorrecta = true;
+                    await SavePay();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+            }
+        }
+        private void ReturnMoney()
+        {
+            try
+            {
+                EventLogger.SaveLog(EventType.Error, "Entrado a ReturnMoney");
+
+                ValueReturn = _ts.DatosPago.EnteredAmount - _ts.DatosPago.DispensedAmount;
+                txtValueReturn.Text = string.Format("{0:C0}", ValueReturn);
+                _paymentViewModel = new CancelPayViewModel
+                {
+                    PayAmount = _ts.DatosPago.PayAmount,
+                    EnteredAmount = _ts.DatosPago.EnteredAmount,
+                    ReturnAmount = ValueReturn,
+                    DispensedAmount = _ts.DatosPago.DispensedAmount,
+                    Denominations = new List<Denomination>()
+                };
+                EventLogger.SaveLog(EventType.Error, "Valor Return:" + ValueReturn );
+                _ts.DevueltaCorrecta = false;
+#if NO_PERIPHERALS
+                OnCashDispensed(ValueReturn, new Dictionary<int, int>());
+#else
+            _peripherals.StartDispenser(returnValue);
+#endif
+
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, "No entro al return, se fue por el cath" + ValueReturn);
+
+                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+            }
         }
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             DisableView();
             PrintService.CleanPrintQueue();
             PrintVoucher();
-            var currentModal = _nav.ShowModal("Imprimiendo factura...");
+            _nav.ShowModal("Imprimiendo factura...", new LoadModal());
 
             await Task.Delay(TimeSpan.FromSeconds(PrintService.numberOfSecondsToPrint));
             _timer.ControlTimer(pauseOrder: true);
             while (!(PrintService.recentImpressionSuccess ?? false))
             {
-                currentModal.Close();
-                if (!HandlePrintingError()) break;
-                currentModal = _nav.ShowModal("Imprimiendo factura...");
+                _nav.CloseModal();
+                //if (!HandlePrintingError()) break;
+                _nav.ShowModal("Imprimiendo factura...", new LoadModal());
                 await Task.Delay(TimeSpan.FromSeconds(PrintService.numberOfSecondsToPrint));
             }
-            currentModal.Close();
+            _nav.CloseModal();
             _timer.ControlTimer(pauseOrder: false);
             EnableView();
         }
-
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            PrintService.recentImpressionSuccess = false;
-        }
-
-        //private void FinishCancelPay()
-        //{
-        //    try
-        //    {
-        //        AdminPayPlus.ControlPeripherals.ClearValues();
-
-        //        if (!string.IsNullOrEmpty(transaction.Observation))
-        //        {
-        //            AdminPayPlus.SaveErrorControl(transaction.Observation, "", EError.Device, ELevelError.Medium);
-        //        }
-
-        //        _ts.EstadoTransaccion = StateTransaction.Cancelada;
-
-        //        _ts.StatePay = "Cancelada";
-
-        //        Api.UpdateTransaction();
-
-
-        //        //AdminPayPlus.UpdateTransaction(transaction);
-
-        //        //Utilities.PrintVoucher(transaction);
-        //        PrintService.CleanPrintQueue();
-        //        PrintVoucher();
-        //        Thread.Sleep(5000);
-
-        //        Switcher.CLose();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-        //    }
-        //}
-        private void FinishBtn(object sender, MouseButtonEventArgs e)
+        #region Timer
+        public void GoTimer()
         {
             try
             {
-                FinishTransaction();
+                _timer = new TimerGeneric(STR_TIMER);
+
+                TxtTimer.Text = STR_TIMER;
+
+                _timer.CallBackTimeOut = () =>
+                {
+
+                    Dispatcher.Invoke(() => GoTo(new ConfigUC()));
+
+
+                };
+
+                _timer.CallBackTick = stringTimer =>
+                {
+                    Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        TxtTimer.Text = stringTimer;
+
+                    });
+                };
 
             }
             catch (Exception ex)
             {
-                EventLogger.SaveLog(EventType.Error, $"Error al detener VideoRecorder: {ex.Message}", ex);
-                MessageBox.Show($"Error al detener VideoRecorder: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
             }
         }
-        private async void FinishTransaction()
-        {
-            if (string.IsNullOrEmpty(_ts.Calificacion))
-            {
-                _ts.Calificacion = "Sin calificación";
-            }
-            //TODO: Endpoint para calificación de transacción
 
-            if (!_ts.DatosPago._isReturnSuccess)
+        public void StopTimer()
+        {
+            try
             {
-                var loadModal = _nav.ShowModal(
-                    "No se pudo entregar la totalidad del dinero hay un faltante de:" +
-                    $" {_ts.DatosPago.RemainingAmount.ToString("C0")} " +
-                    ". Por favor comuníquese con un administrador.");
-                await Task.Delay(TimeSpan.FromSeconds(20));
-                if (loadModal != null)
+                if (_timer != null)
                 {
-                    loadModal.Close();
-                    loadModal = null;
+                    _timer.CallBackTimeOut = null;
+                    _timer.CallBackTick = null;
+                    _timer.CallBackStop?.Invoke();
                 }
             }
-
-            Dispatcher.Invoke(() => GoTo(new ConfigUC()));
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+            }
         }
-        private void PrintVoucher()
+
+
+        #endregion
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            StopTimer();
+            PrintService.recentImpressionSuccess = false;
+        }
+
+        private async void PrintVoucher()
         {
             //StopVideoRecording();
             try
@@ -220,11 +265,13 @@ namespace WPFCootreguaV2.UserControls
                     };
 
 
-                _document.header = header;
+                _document.header= header;
                 _document.body = body;
                 _document.footer = footer;
                 PrintService.BuildPrint(header, body, footer);
-                PrintService.Start();
+                await PrintService.Start();
+
+
                 }
             }
             catch (Exception ex)
@@ -232,107 +279,35 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
             }
         }
-        private bool HandlePrintingError()
-        {
-            bool result = false;
+        //private bool HandlePrintingError()
+        //{
+        //    bool result = false;
 
-            BillReportViewModel model = new BillReportViewModel
-            {
-                Title = "Estimado Cliente: "
-            };
+        //    BillReportViewModel model = new BillReportViewModel
+        //    {
+        //        Title = "Estimado Cliente: "
+        //    };
 
 
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                var _currentModal = new BillReportWindow(model,_document.header, _document.body, _document.footer);
-                _currentModal.ShowDialog();
-                if (_currentModal.DialogResult.HasValue)
-                {
-                    result = _currentModal.DialogResult.Value;
-                    if (result) PrintVoucher();
-                }
-            });
-            return result;
-        }
+        //    Application.Current.Dispatcher.Invoke(delegate
+        //    {
+        //        var _currentModal = new BillReportWindow(model,_document.header, _document.body, _document.footer);
+        //        _currentModal.ShowDialog();
+        //        if (_currentModal.DialogResult.HasValue)
+        //        {
+        //            result = _currentModal.DialogResult.Value;
+        //            if (result) PrintVoucher();
+        //        }
+        //    });
+        //    return result;
+        //}
 
-        private void ReturnMoney()
-        {
-            try
-            {
-                ValueReturn = _ts.DatosPago.EnteredAmount - _ts.DatosPago.DispensedAmount;
-                txtValueReturn.Text = string.Format("{0:C0}", ValueReturn);
-                _paymentViewModel = new CancelPayViewModel
-                {
-                    PayAmount = _ts.DatosPago.PayAmount,
-                    EnteredAmount = _ts.DatosPago.EnteredAmount,
-                    ReturnAmount = ValueReturn,
-                    DispensedAmount = _ts.DatosPago.DispensedAmount,
-                    Denominations = new List<Denomination>()
-                };
-                _ts.DevueltaCorrecta = false;
-#if NO_PERIPHERALS
-                OnCashDispensed(ValueReturn, new Dictionary<int, int>());
-#else
-            _peripherals.StartDispenser(returnValue);
-#endif
-
-            }
-            catch (Exception ex)
-            {
-                //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
-        public void ChangeBackground(EBackground eBackground)
-        {
-
-            try
-            {
-                //if (bg == null)
-                //{
-                //    bg = new MenuBackground(); // Tipo correcto
-                //}
-
-                Dispatcher.Invoke(() =>
-                {
-                    switch (eBackground)
-                    {
-                        case EBackground.Identificate:
-                            // Usar el recurso estático
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate.jpg";
-                            break;
-                        case EBackground.Identificate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/identificate2.jpg";
-                            break;
-                        case EBackground.Autenticate:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate.jpg";
-                            break;
-                        case EBackground.Autenticate2:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/autenticate2.jpg";
-                            break;
-                        case EBackground.Productos:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/elige.jpg";
-                            break;
-                        case EBackground.Paga:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/paga.jpg";
-                            break;
-                        case EBackground.Generico:
-                            bg.Background = "C:/Users/Ana Prieto/Desktop/PROYECTOS 2025/WPFCootreguaV2/WPFCootreguaV2/bin/Debug/net6.0-windows/Images/Backgrounds/generic.jpg";
-                            break;
-                    }
-
-                    this.DataContext = bg;
-                });
-            }
-            catch (Exception ex)
-            {
-                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
-            }
-        }
       
 
         #region Responses to Peripheral Events
         private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
         {
+            if (_paymentViewModel == null) return; // Add null check
 
             _paymentViewModel.DispensedAmount = totalDispensed;
 
@@ -341,8 +316,7 @@ namespace WPFCootreguaV2.UserControls
 
             SendDispenseDetails(details);
 
-            CloseLoadModal();
-
+            _nav.CloseModal();
             if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
             {
                 _ts.DevueltaCorrecta = true;
@@ -386,58 +360,29 @@ namespace WPFCootreguaV2.UserControls
 
                 Api.UpdateTransaction();
 
-                CloseLoadModal();
-                Dispatcher.Invoke(() => GoTo(new SuccessUC()));
+                _nav.CloseModal();
+                Dispatcher.Invoke(() => GoTo(new FinishUC()));
 
             }
             catch (Exception ex)
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-                if (!_isPayCanceled)
-                {
-                    EventLogger.SaveLog(EventType.Info, "Pago cancelado por error guardando el pago");
-                    await CancelPay();
-                }
+                //if (!_isPayCanceled)
+                //{
+                //    EventLogger.SaveLog(EventType.Info, "Pago cancelado por error guardando el pago");
+                //    await CancelPay();
+                //}
 
-                CloseLoadModal();
+                _nav.CloseModal();
+
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
-                _currentLoadModal = _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+                _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
             }
         }
-
-        private async Task CancelPay()
-        {
-            try
-            {
-                _isPayCanceled = true;
-                _ts.EstadoTransaccion = StateTransaction.Cancelada;
-                _ts.DatosPago.RemainingAmount = _paymentViewModel.RemainingAmount;
-                Api.UpdateTransaction();
-                CloseLoadModal();
-                Dispatcher.Invoke(() => GoTo(new SuccessUC()));
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-            }
-        }
-
 
         #endregion
 
         #region UI control methods
-
-        private void CloseLoadModal()
-        {
-            if (_currentLoadModal != null)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    _currentLoadModal.Close();
-                    _currentLoadModal = null;
-                });
-            }
-        }
 
 
         #endregion

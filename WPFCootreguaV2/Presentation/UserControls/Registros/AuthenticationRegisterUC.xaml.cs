@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Security;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -98,7 +99,10 @@ namespace WPFCootreguaV2.UserControls
                 dynamicButton.Click += ExecuteHuella;
                 void ExecuteHuella(object sender, RoutedEventArgs e)
                 {
-                    _ = GetProducts(); // Si no necesitas await aquí
+                   
+                    SaveTransaction();
+
+                   // _ = GetProducts(); // Si no necesitas await aquí
                 }
 
 
@@ -206,10 +210,13 @@ namespace WPFCootreguaV2.UserControls
                     };
                     EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
 
-                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
-                    var desencrypted = EncryptorEcity.Decrypt(authen);
-                 
+                    //var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
+                    var encrypt = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBZ4j3JVhPqj5DPQF/2pDb7pVPx4BV0gxVmMc2G9320aEGHrKU2iPyqxtHWItgM7v1Ve/MkWnUgHRJvllTH9y7ObowgNIJzuwHeJ7JKe3Ggtj1LL5T7unObqxIVW8NJVb5+AAES4nAtP0LigbP3rwiFwCt3DeAeStJkWkSbBYx1HBN4rkn9ypmsIuSKHSfu+jViw/StytLCwQdDvaFnJNh7LDDwI+2un+hrC8QjB5IueJTza3w5sTDiTI0xuTa0hFn8ILMgcqIfLcl3EiQX44BbWkmI/c1XCTCHUGdp/BNYR9GLYsSuADUEhhvVxc4TunwzoIfnN6aCwGolzu+HtfBFVLzE3o+VUAbr01tuHOpM/d1a9zmt4EM/HqWi6Zu82nW1aFDUiaqltyw4ObMayPlZWFuFqtW+otRd0N2Mvkd+ZFdNKsf8XA7CcEfSWAM+bMzkpqlPCaeCLDHBJqSJZ7aa2lUQkwRhm3jjFGN3m98i5FV2qm09L9yaOlB7ZwGF1zK+2/P84PzLsQ1oThn7r71jmnJythbkv5zZaw+VTEOjUGpvsshOaku1A6z3vJstf6EVgU2lA4We5uhdQQyOjHu5HU0NfarRCm60W96iqTBZUgl+QO2Y3Fxlo8Wnhg6H76ac4EDkcAWqBMP+8K98hnO+hJNBpQ31X+rnAvAcYtK8lDXecUTI1zvOMekoWRGarFmn9sXgvLB5kYnX8XAz7xUgLE/Dgac7HC4+KIM08InSSCtQbwIQFDHE1BhY2hNRjRBPVUPIxS/KqFoBl3OY9TdyixNC1eJkYHvLki49tzsrMSfTqe9Y2DwWqhV/fr/kURJgZsYBwi7xy2bVmbvaJWa4ryxVh95tahOgKNcOO9mnoq3VmoPhlFkc+xa3Ai4B+Ip9BIbwUfKzSv9bbE5FxUGPuZcQT2J9mZrCATo+qWzMtDRqM7DPxcMuAtDBaez+r1apUzDmo1zHdzK6zy578f8JSIPeY7pzhTh0o7oDBiv8aK/5yKmo2ipvaPgC6PIWDCuYObzHtATjtt07R9pGcjciBcpN1XuW4Yx1L6u1wfwsYpxCF/NNsUKuwysH0rVLlPksWe9bcpWlexefVMpgIseNE9qEAEwUXCcyUpqLj3vDgSW48K1AphvEqzXWrZkQDe/nEm7dhw++LzO1lUfWmPUU7VlFgMl2eS93rUR9XfkbmGKXTW1poMLs/pdvzJkXb/xOhGP02JZwL3wmid//xl8BwdfgSLg7xdKShNwN/n5EGUHf+N8ppF162daAm4TiaqQZHo4lQbqM4J7bxyY9Sht4IJbvWVrN8jFEn3AIm+eYXMArqHwHWKzzaHeJuyeKScTyCZ3sXSW8pg+RlPlP1F0x8Ag01eBLbNzr2ZCl5Fr2pv2gHc2KE87JDLjCi0jiLo75a/G/DB6F1kz7Z0G0LAGEsyAExD8pJLlaeRkTFQ9i44jrbJHEhZRDxjeTIgExFKvLuhnq0ZsMenqekr/+2hU8fsHHu6RBnJw43jM2/Vs29BPKVqI5OrexEXLeUyWh7Vzf7GwQlzbi0tr/dO1OAZeDqava7vh6Vfo4dgu0ERZkstZI6dOX0wQ8F5wTSmlCzb2RSBLhZwNN+wRWc+UPNJ0HKbAsp04JbOmY4M7aRKpJ0EADBjuj2/j6W0MJnJEqGiu+D8SogwHkfie28CQbQ3RUckSXXt3/vIhoaajAC0cuPngrTzWJwR5Jdd9VJxJI30a9jA8EMerrY0FM0j/vFKM0vKbILHNO+MiyjMLsj0iwIhaFsNEiLHBnFKl9Ug7JAQRayjvN/t7rtqaQU4ZysZaok=";
+
+                    var desencrypted = EncryptorEcity.Decrypt(encrypt);
+
                     EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
+
 
 
                     if (!string.IsNullOrEmpty(desencrypted))
@@ -217,13 +224,15 @@ namespace WPFCootreguaV2.UserControls
 
                         var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
                         var tipo = _ts.Type;
+                       // data.Validate = 1;
 
                         if (data.Validate == 1)
                         {
                             _ts.TipoTransaccion=TypeTransaction.Registro;
-                             SaveTransaction();
-                             var tsCreated = Api.CreateTransaction();
-                             if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
+                            var tsCreated = Api.CreateTransaction();
+                            if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
+                            SaveTransaction();
+                             
                         }
                         else
                         {
@@ -265,141 +274,240 @@ namespace WPFCootreguaV2.UserControls
                 //Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
-        private async Task GetProducts()
+        //private void SaveTransaction()
+        //{
+        //    try
+        //    {  //BORRAR LUEGO PARA HABILITAR HUELLERO
+        //        //_ts.ProductSelect.NameProduct= "Registro de Usuario";
+        //        //_ts.ProductSelect.NumberProduct = "100";
+        //        //_ts.ProductSelect.TipoProducto = 0;
+        //        //_ts.ProductSelect.Saldo =0;
+
+        //        var tsCreated = Api.CreateTransaction();
+        //        if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
+        //        ///TERMINA PARA PRUEBAS DE HUELLERO
+        //        Task.Run(async () =>
+        //        {
+        //            _ts.Type = TransactionType;
+        //            _ts.EstadoTransaccion = StateTransaction.Iniciada;
+        //            _ts.Total = 0;
+        //            _ts.payer = new Payer
+        //            {
+        //                DOCUMENT = _ts.Documento,
+        //                DOCUMENTTYPE="CC",
+        //                NAME = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
+        //                LASTNAME = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+        //                EMAIL = _ts.DataPerson.Email,
+        //                PHONE = _ts.DataPerson.Phone,
+        //                ADRESS = _ts.DataPerson.Adress,
+        //                IDTRANSACTION=_ts.IdTransaccionApi,
+        //                IDPAYPAD = _ts.IdPaypad,
+        //                IDCLIENT=27
+        //            };
+
+        //            var payerCreated = Api.CreatePayer();
+        //            if (payerCreated == null) throw new Exception("No se pudo enviar el pagador");
+
+
+        //            _nav.ShowModal(string.Format("Guardando registro " + _ts.DataPerson.FirstName, new InfoModal()));
+        //            _nav.CloseModal();
+
+        //            if (this._ts.IdTransaccionApi == 0)
+        //            {
+        //                _nav.ShowModal(string.Format("Estimado {0}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo." +_ts.DataPerson.FirstName));
+        //                _nav.CloseModal();
+
+        //            }
+        //            else
+        //            {
+        //                string NameUser = _ts.DataPerson.FirstName;
+        //                int Time = DateTime.Now.Hour;
+        //                string ms = string.Empty;
+
+        //                if (Time >= 6 && Time < 12)
+        //                {
+        //                    ms = "Buenos días " + NameUser;
+        //                }
+        //                else
+        //                if (Time >= 12 && Time < 16)
+        //                {
+        //                    ms = "Buenas tardes " + NameUser;
+        //                }
+        //                else
+        //                if (Time >= 16 && Time <= 24)
+        //                {
+        //                    ms = "Buenas noches " + NameUser;
+        //                }
+        //                else
+        //                {
+        //                    ms = "Bienvenido " + NameUser;
+        //                }
+
+        //                Utilities.Speak(ms);
+        //                _nav.ShowModal(ms + " Has sido registrad@ en el sistema.", new InfoModal());
+        //                _nav.CloseModal();
+        //            }
+        //        });
+
+        //        //Switcher.Timer(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
+
+        //       // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+        //    }
+        //}
+
+        private async Task SaveTransaction()
         {
             try
             {
-                ProductsState products = new ProductsState
+                // Crear la transacción y esperar su resultado
+                if(_ts.IdTransaccionApi == 0)
                 {
-                    CodSession = _ts.Codigo,
-                    Identititfy = _ts.Documento,
+                    var tsCreated = await Api.CreateTransaction();
+                    if (tsCreated == null)
+                        throw new Exception("No se pudo enviar la transacción");
+                }
+
+                // Configurar los datos de la transacción después de que se haya creado exitosamente
+                _ts.Type = TransactionType;
+                _ts.EstadoTransaccion = StateTransaction.Iniciada;
+                _ts.Total = 0;
+
+                // Crear el pagador SOLO después de que la transacción esté lista
+                _ts.payer = new Payer
+                {
+                    Document = _ts.Documento,
+                    DocumentType = "CC",
+                    Name = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
+                    LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+                    Email = _ts.DataPerson.Email,
+                    Phone = _ts.DataPerson.Phone,
+                    Adress = _ts.DataPerson.Adress,
+                    IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
+                    IdPayPad = _ts.IdPaypad,
+                    IdClient = 27
                 };
 
-                 var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
-                //var desencrypted = EncryptorEcity.Decrypt(prodct);
-                //var respuesta1120557056 = "UlmKdX4+uzXax9XsKwFwqkgxt6FMJoVaVcQpR4ambziDsTfenMMfOjwUzrGFBNEtauGKXdJKOMTd/bFOMHjxkw==";
-                ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
-                //var desencrypted1120 = EncryptorEcity.Decrypt(respuesta1120557056);
-                //_nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", new InfoModal()));
-                 var desncrypted = EncryptorEcity.Decrypt(prodct);   
-                //Switcher.ModalLoad(false);
+                // Crear el pagador y esperar su resultado
+                var payerCreated = await Api.CreatePayer();
+                if (payerCreated == null)
+                    throw new Exception("No se pudo enviar el pagador");
 
-                if (!string.IsNullOrEmpty(desncrypted))
+               // _nav.CloseModal();
+
+                // Validar si el proceso fue exitoso
+                if (_ts.IdTransaccionApi == 0)
                 {
-                    var settings = new JsonSerializerSettings
-                    {
-                        DateFormatString = "dd/MM/yyyy",
-                        DateParseHandling = DateParseHandling.DateTime
-                    };
-
-                    var data = JsonConvert.DeserializeObject<List<ProductsState>>(desncrypted, settings);
-                   // var data = JsonConvert.DeserializeObject<List<ProductsState>>(desncrypted);
-
-                    if (data.Count >= 1)
-                    {
-
-                        _ts.DataProducts = data;
-
-                         Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                         GC.Collect();
-                    }
-                    else
-                    {
-                        _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
-
-                        CloseLoadModal();
-                    }
+                    _nav.ShowModal($"Estimado {_ts.DataPerson.FirstName}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo.");
+                    _nav.CloseModal();
                 }
                 else
                 {
-                    _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+                    // Proceso exitoso - mostrar mensaje de bienvenida
+                    string greeting = GetGreetingMessage(_ts.DataPerson.FirstName);
 
-                    CloseLoadModal();
-                }
-            }
-            catch (Exception ex)
-            {
-                EventLogger.SaveLog(EventType.Info, MethodBase.GetCurrentMethod().Name);
-
-            }
-        }
-        private void SaveTransaction()
-        {
-            try
-            {
-                Task.Run(async () =>
-                {
-                    _ts.Type = TransactionType;
-                    _ts.EstadoTransaccion = StateTransaction.Iniciada;
-                    _ts.Total = 0;
-                    _ts.payer = new Payer
-                    {
-                        IDENTIFICATION = _ts.DataPerson.CodPerson.ToString(),
-                        NAME = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
-                        EMAIL = _ts.DataPerson.Email,
-                        LAST_NAME = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
-                        PHONE = _ts.DataPerson.Phone,
-                        ADDRESS = _ts.DataPerson.Adress,
-                    };
-
-                    await SaveTransactionPayer();
-
-
-                    _nav.ShowModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName, new InfoModal()));
+                    Utilities.Speak(greeting);
+                    _nav.ShowModal($"{greeting} Has sido registrad@ en el sistema.", new InfoModal());
                     _nav.CloseModal();
+                }
 
-                    if (this._ts.IdTransaccionApi == 0)
-                    {
-                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo." +_ts.DataPerson.FirstName));
-                        _nav.CloseModal();
-
-                    }
-                    else
-                    {
-                        string NameUser = _ts.DataPerson.FirstName;
-                        int Time = DateTime.Now.Hour;
-                        string ms = string.Empty;
-
-                        if (Time >= 6 && Time < 12)
-                        {
-                            ms = "Buenos días " + NameUser;
-                        }
-                        else
-                        if (Time >= 12 && Time < 16)
-                        {
-                            ms = "Buenas tardes " + NameUser;
-                        }
-                        else
-                        if (Time >= 16 && Time <= 24)
-                        {
-                            ms = "Buenas noches " + NameUser;
-                        }
-                        else
-                        {
-                            ms = "Bienvenido " + NameUser;
-                        }
-
-                        Utilities.Speak(ms);
-                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.", new InfoModal());
-                        _nav.CloseModal();
-                    }
-                });
-
-                //Switcher.Timer(false);
             }
             catch (Exception ex)
             {
-                EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
+                _nav.CloseModal(); // Asegurar que se cierre el modal en caso de error
+                EventLogger.SaveLog(EventType.Error, $"Error al guardar transacción: {ex.Message}");
 
-               // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
+                // Mostrar mensaje de error al usuario
+                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.");
+                _nav.CloseModal();
             }
         }
 
+        // Método auxiliar para generar el mensaje de saludo
+        private string GetGreetingMessage(string userName)
+        {
+            int currentHour = DateTime.Now.Hour;
+
+            return currentHour switch
+            {
+                >= 6 and < 12 => $"Buenos días {userName}",
+                >= 12 and < 16 => $"Buenas tardes {userName}",
+                >= 16 and <= 23 => $"Buenas noches {userName}",
+                _ => $"Bienvenido {userName}"
+            };
+        }
+
+        // Si no puedes hacer las llamadas API asíncronas, usa esta versión alternativa:
+        //private void SaveTransactionSync()
+        //{
+        //    try
+        //    {
+        //        // Crear la transacción primero
+        //        var tsCreated = Api.CreateTransaction();
+        //        if (tsCreated == null)
+        //            throw new Exception("No se pudo enviar la transacción");
+
+        //        // Esperar un momento para que la transacción se procese completamente
+        //        // (Esto es un workaround temporal - lo ideal sería tener APIs asíncronas)
+        //        Thread.Sleep(1000);
+
+        //        // Configurar datos después de confirmar que la transacción fue creada
+        //        _ts.Type = TransactionType;
+        //        _ts.EstadoTransaccion = StateTransaction.Iniciada;
+        //        _ts.Total = 0;
+
+        //        // Verificar que tenemos el ID de transacción antes de crear el pagador
+        //        if (_ts.IdTransaccionApi == 0)
+        //        {
+        //            throw new Exception("La transacción no generó un ID válido");
+        //        }
+
+        //        _ts.payer = new Payer
+        //        {
+        //            DOCUMENT = _ts.Documento,
+        //            DOCUMENTTYPE = "CC",
+        //            NAME = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
+        //            LASTNAME = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+        //            EMAIL = _ts.DataPerson.Email,
+        //            PHONE = _ts.DataPerson.Phone,
+        //            ADRESS = _ts.DataPerson.Adress,
+        //            IDTRANSACTION = _ts.IdTransaccionApi,
+        //            IDPAYPAD = _ts.IdPaypad,
+        //            IDCLIENT = 27
+        //        };
+
+        //        // Mostrar progreso al usuario
+        //        _nav.ShowModal($"Guardando registro {_ts.DataPerson.FirstName}", new InfoModal());
+
+        //        // Crear el pagador
+        //        var payerCreated = Api.CreatePayer();
+        //        if (payerCreated == null)
+        //            throw new Exception("No se pudo enviar el pagador");
+
+        //        _nav.CloseModal();
+
+        //        // Mostrar resultado final
+        //        string greeting = GetGreetingMessage(_ts.DataPerson.FirstName);
+        //        Utilities.Speak(greeting);
+        //        _nav.ShowModal($"{greeting} Has sido registrad@ en el sistema.", new InfoModal());
+        //        _nav.CloseModal();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _nav.CloseModal();
+        //        EventLogger.SaveLog(EventType.Error, $"Error al guardar transacción: {ex.Message}");
+        //        _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.");
+        //        _nav.CloseModal();
+        //    }
+        //}
         public static async Task<int> SavePayer(Payer payer)
         {
             try
             {
-                payer.STATE = true;
+                //payer.STATE = true;
 
                 var resultPayer = await ApiIntegration.CallApiCootregua("SavePayer", payer);
 
@@ -417,124 +525,7 @@ namespace WPFCootreguaV2.UserControls
             }
             return 0;
         }
-        public async Task SaveTransactionPayer()
-        {
-            try
-            {
-                if (_ts != null)
-                {
-                    _ts.DevueltaCorrecta = true;
 
-                    if (_ts.payer == null)
-                    {
-                        _ts.payer = new Payer
-                        {
-                            IDENTIFICATION = AppConfig.Get("paypadId").ToString(),
-                            NAME = AppConfig.Get("NAME_PAYPAD"),
-                            LAST_NAME = AppConfig.Get("LAST_NAME_PAYPAD")
-                        };
-                    }
-
-                    _ts.payer.PAYER_ID = await SavePayer(_ts.payer);
-
-                    if (_ts.payer.PAYER_ID > 0)
-                    {
-                        var data = new TRANSACTION
-                        {
-                            TYPE_TRANSACTION_ID = _ts.Type,
-                            PAYER_ID = _ts.payer.PAYER_ID,
-                            STATE_TRANSACTION_ID = Convert.ToInt32(_ts.EstadoTransaccion),
-                            TOTAL_AMOUNT = _ts.Total,
-                            DATE_END = DateTime.Now,
-                            TRANSACTION_ID = 0,
-                            RETURN_AMOUNT = 0,
-                            INCOME_AMOUNT = 0,
-                            PAYPAD_ID = 0,
-                            DATE_BEGIN = DateTime.Now,
-                            STATE_NOTIFICATION = 0,
-                            STATE = 0,
-                            DESCRIPTION = "Transaccion iniciada",
-                            TRANSACTION_REFERENCE = ""
-                        };
-
-                        if (_ts.Type != ETransactionType.Registros)
-                        {
-                            data.TRANSACTION_DESCRIPTION.Add(new TRANSACTION_DESCRIPTION
-                            {
-                                AMOUNT = _ts.Total,
-                                TRANSACTION_ID = data.ID,
-                                TRANSACTION_PRODUCT_ID =_ts.ProductSelect.Identititfy,
-                                DESCRIPTION = string.Concat(_ts.ProductSelect.NameLine, "-", _ts.ProductSelect.ValorPagar),
-                                EXTRA_DATA = "",
-                                TRANSACTION_DESCRIPTION_ID = 0,
-                                STATE = true
-                            });
-                        }
-
-                        if (data != null)
-                        {
-                            var responseTransaction = await api.CallApi("SaveTransaction", data);
-                            if (responseTransaction != null)
-                            {
-                                transaction.IdTransactionAPi = JsonConvert.DeserializeObject<int>(responseTransaction.ToString());
-
-                                if (transaction.IdTransactionAPi > 0)
-                                {
-                                    data.TRANSACTION_ID = transaction.IdTransactionAPi;
-                                    transaction.TransactionId = SqliteDataAccess.SaveTransaction(data);
-                                }
-                            }
-                            else
-                            {
-                                SaveLog(new RequestLog
-                                {
-                                    Reference = transaction.reference,
-                                    Description = string.Concat(MessageResource.NoInsertTransaction, " en su primer intente "),
-                                    State = 1,
-                                    Date = DateTime.Now
-                                }, ELogType.General);
-
-                                responseTransaction = await api.CallApi("SaveTransaction", data);
-                                if (responseTransaction != null)
-                                {
-                                    transaction.IdTransactionAPi = JsonConvert.DeserializeObject<int>(responseTransaction.ToString());
-
-                                    if (transaction.IdTransactionAPi > 0)
-                                    {
-                                        data.TRANSACTION_ID = transaction.IdTransactionAPi;
-                                        transaction.TransactionId = SqliteDataAccess.SaveTransaction(data);
-                                    }
-                                }
-                                else
-                                {
-                                    SaveLog(new RequestLog
-                                    {
-                                        Reference = transaction.reference,
-                                        Description = string.Concat(MessageResource.NoInsertTransaction, " en su segundo intente "),
-                                        State = 1,
-                                        Date = DateTime.Now
-                                    }, ELogType.General);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        SaveLog(new RequestLog
-                        {
-                            Reference = transaction.reference,
-                            Description = MessageResource.NoInsertPayment + transaction.payer.IDENTIFICATION,
-                            State = 1,
-                            Date = DateTime.Now
-                        }, ELogType.General);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "InitPaypad", ex, ex.ToString());
-            }
-        }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             CloseLoadModal();

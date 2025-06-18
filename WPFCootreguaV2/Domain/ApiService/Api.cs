@@ -1,4 +1,5 @@
-﻿using DB;
+﻿using ControlzEx.Standard;
+using DB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -7,12 +8,15 @@ using System.Drawing;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using WPFCootreguaV2.ApiService.Models;
 using WPFCootreguaV2.ApiService.QueueModels;
 using WPFCootreguaV2.Domain;
+using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.UIServices;
 
@@ -110,27 +114,187 @@ namespace WPFCootreguaV2.ApiService
             return false;
             
         }
+        public static async Task<Payer?> CreatePayer()
+        {
+            var ts = Transaction.Instance;
 
+            var payerToCreate = new Payer
+            {
+                Document = ts.Documento,
+                DocumentType = ts.payer.DocumentType,
+                Name = ts.payer.Name,
+                LastName = ts.payer.LastName,
+                Phone = ts.payer.Phone,
+                Email = ts.payer.Email,
+                IdTransaction = ts.payer.IdTransaction,
+                IdClient = ts.payer.IdClient,
+                IdPayPad = ts.payer.IdPayPad
+            };
+
+            int tries = 2;
+            while (tries > 0)
+            {
+                tries--;
+                try
+                {
+
+                    string payload = JsonConvert.SerializeObject(payerToCreate);
+
+                    var content = new StringContent(payload, Encoding.UTF8, "Application/json");
+                    var url = AppConfig.Get("Payer");
+
+                    EventLogger.SaveLog(EventType.Info, "Petición: Creación de pagador Dashboard", payerToCreate);
+
+                    var response = await _client.PostAsync(url, content);
+
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (result == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
+                        continue;
+                    }
+
+                    var requestresponse = JsonConvert.DeserializeObject<ApiResponse<Payer>>(result);
+                    if (requestresponse == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
+                        continue;
+                    }
+
+                    if (requestresponse.statusCode == 200)
+                    {
+                        EventLogger.SaveLog(EventType.Info, "Respuesta: Creación de Payer Dashboard", requestresponse);
+                        return requestresponse.response;
+                    }
+
+                    EventLogger.SaveLog(EventType.Error, "Api no respondió satisfactoriamente", requestresponse);
+                }
+                catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+                {
+                    EventLogger.SaveLog(EventType.Error, $"Timeout al crear payer (intento {3 - tries}): {ex.Message}");
+                    if (tries == 0)
+                    {
+                        // Último intento fallido
+                        throw new Exception("La operación excedió el tiempo límite después de varios intentos");
+                    }
+                    // Esperar un poco antes del siguiente intento
+                    await Task.Delay(2000);
+                }
+                catch (Exception ex)
+                {
+                    EventLogger.SaveLog(EventType.Error, $"Error al crear pager: {ex.Message}");
+                    throw;
+                }
+            }
+            return null;
+        }
+        //public static async Task<Payer?> CreatePayer()
+        //{
+        //    var ts = Transaction.Instance;
+
+        //    var payerToCreate = new Payer
+        //        {
+        //            DOCUMENT = ts.payer.DOCUMENT, // This will be set by the API
+        //            DOCUMENTTYPE = ts.payer.DOCUMENTTYPE,
+        //            NAME = ts.payer.NAME,
+        //            LASTNAME = ts.payer.LASTNAME,
+        //            NACIONALITY= ts.payer.NACIONALITY,
+        //            PHONE = ts.payer.PHONE,
+        //            EMAIL = ts.payer.EMAIL,
+        //            DEPARTAMENT = ts.payer.DEPARTAMENT,
+        //            MUNICIPALITY = ts.payer.MUNICIPALITY,
+        //            IDTRANSACTION = ts.payer.IDTRANSACTION,
+        //            IDCLIENT = ts.payer.IDCLIENT,
+        //            IDPAYPAD = ts.payer.IDPAYPAD
+        //    };
+        //    int tries = 2;
+        //    while (tries > 0)
+        //    {
+        //        tries--;
+
+        //        string payload = JsonConvert.SerializeObject(payerToCreate);
+
+        //        var content = new StringContent(payload, Encoding.UTF8, "Application/json");
+        //        var url = AppConfig.Get("Payer");
+
+        //        EventLogger.SaveLog(EventType.Info, "Petición: Creación de payer Dashboard", payerToCreate);
+        //        var response = await _client.PostAsync(url, content);
+
+        //        var result = await response.Content.ReadAsStringAsync();
+        //        if (result == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
+        //            continue;
+        //        }
+
+        //        var requestresponse = JsonConvert.DeserializeObject<ApiResponse<Payer>>(result);
+        //        if (requestresponse == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
+        //            continue;
+        //        }
+
+        //        if (requestresponse.statusCode == 200)
+        //        {
+        //            var transactionCreated = requestresponse.response;
+
+        //            // Se guarda la transaccion en la base de datos local
+        //            var mapper = ObjMapper.Instance;
+
+        //            EventLogger.SaveLog(EventType.Info, "Respuesta: Creación de Payer Dashboard", requestresponse);
+        //            return requestresponse.response;
+        //        }
+
+        //        EventLogger.SaveLog(EventType.Error, "Api no respondió satisfactoriamente", requestresponse);
+        //    }
+
+        //    return null;
+        //}
         public static async Task<TransactionDto?> CreateTransaction()
         {
             var ts = Transaction.Instance;
 
+
             ts.EstadoTransaccion = StateTransaction.Iniciada;
-            var transactionToCreate = new TransactionDto
+
+            var transactionToCreate = new TransactionDto();
+
+
+            if (ts.Type== ETransactionType.Registros)
             {
-                Document = ts.Documento,
-                Reference = ts.ProductSelect.NumberProduct,//
-                Product = ts.ProductSelect.NameLine.ToString(),
-                TotalAmount = Convert.ToDouble(ts.Total),
-                RealAmount = Convert.ToDouble(ts.TotalSinRedondear),
-                IncomeAmount = 0,
-                ReturnAmount = 0,
-                Description = ts.Descripcion ?? string.Empty,
-                IdStateTransaction = (int)ts.EstadoTransaccion,
-                StateTransaction = ts.EstadoTransaccion.ToString(),
-                IdTypeTransaction = (int) ts.TipoTransaccion,
-                IdTypePayment = (int)ts.TipoPago,//
-            };
+                 transactionToCreate = new TransactionDto
+                {
+                    Document = ts.Documento,
+                    Reference = "100",//
+                    Product = "Registro",
+                    TotalAmount =0,
+                    RealAmount = 0,
+                    IncomeAmount = 0,
+                    ReturnAmount = 0,
+                    Description = ts.Descripcion ?? string.Empty,
+                    IdStateTransaction = (int)ts.EstadoTransaccion,
+                    StateTransaction = ts.EstadoTransaccion.ToString(),
+                    IdTypeTransaction = (int)ts.TipoTransaccion,
+                    IdTypePayment = (int)ts.TipoPago,//
+                };
+            }else
+            {
+                transactionToCreate = new TransactionDto
+                {
+                    Document = ts.Documento,
+                    Reference = ts.ProductSelect.NumberProduct,//
+                    Product = ts.ProductSelect.NameLine.ToString(),
+                    TotalAmount = Convert.ToDouble(ts.Total),
+                    RealAmount = Convert.ToDouble(ts.TotalSinRedondear),
+                    IncomeAmount = 0,
+                    ReturnAmount = 0,
+                    Description = ts.Descripcion ?? string.Empty,
+                    IdStateTransaction = (int)ts.EstadoTransaccion,
+                    StateTransaction = ts.EstadoTransaccion.ToString(),
+                    IdTypeTransaction = (int)ts.TipoTransaccion,
+                    IdTypePayment = (int)ts.TipoPago,//
+                };
+            }
 
             
 

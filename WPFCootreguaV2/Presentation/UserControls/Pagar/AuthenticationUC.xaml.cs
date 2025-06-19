@@ -278,7 +278,7 @@ namespace WPFCootreguaV2.UserControls
                     }
                 });
                 StopTimer();
-               _nav.ShowModal(string.Format("Consultando.....", _ts.DataPerson.FirstName), new LoadModal());
+               _nav.ShowModal(string.Format("Consultando.....", _ts.DataPerson.FirstName));
                 EventLogger.SaveLog(EventType.Error, "Consultando, saliendo del metodo , validar huella" + _ts.DataPerson.FirstName);
 
                 //Switcher.Timer(false);
@@ -300,7 +300,7 @@ namespace WPFCootreguaV2.UserControls
                 };
 
                  var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
-                _nav.ShowModal("Consultando productos para {0}...", new LoadModal());
+                _nav.ShowModal("Consultando productos para {0}...");
                 //var desencrypted = EncryptorEcity.Decrypt(prodct);
                 //var respuesta1120557056 = "UlmKdX4+uzXax9XsKwFwqkgxt6FMJoVaVcQpR4ambziDsTfenMMfOjwUzrGFBNEtauGKXdJKOMTd/bFOMHjxkw==";
                 ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
@@ -360,12 +360,12 @@ namespace WPFCootreguaV2.UserControls
                     _ts.Total = 0;
                     _ts.payer = new Payer
                     {
-                        IDENTIFICATION = _ts.DataPerson.CodPerson.ToString(),
-                        NAME = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
-                        EMAIL = _ts.DataPerson.Email,
-                        LAST_NAME = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
-                        PHONE = _ts.DataPerson.Phone,
-                        ADDRESS = _ts.DataPerson.Adress,
+                        Document = _ts.DataPerson.CodPerson.ToString(),
+                        Name = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
+                        Email = _ts.DataPerson.Email,
+                        LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+                        Phone = _ts.DataPerson.Phone,
+                        Adress= _ts.DataPerson.Adress,
                     };
 
                     EventLogger.SaveLog(EventType.Info, "Creando objeto inicial de la transacción");
@@ -408,7 +408,7 @@ namespace WPFCootreguaV2.UserControls
 
 
                         Utilities.Speak(ms);
-                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.",new LoadModal());
+                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.");
                         _nav.CloseModal();
                     }
                 });

@@ -357,12 +357,103 @@ namespace WPFCootreguaV2.UserControls
 
 
         #endregion
-        private void SaveTransaction()
+        //private void SaveTransaction()
+        //{
+        //    _nav.CloseModal();
+        //    try
+        //    {
+        //        // Add null check for _ts and its properties
+        //        if (_ts == null)
+        //        {
+        //            _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
+        //            EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
+
+        //            return;
+        //        }
+        //        if (_ts.DataPerson == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
+        //            _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
+        //            return;
+        //        }
+
+        //        if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
+        //        {
+        //            string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
+        //            _nav.ShowModal(ms, new InfoModal());
+        //        }
+
+        //        _ts.TipoTransaccion = TypeTransaction.Retiro;
+
+        //        Task.Run(async () =>
+        //        {
+        //            try
+        //            {
+        //                _ts.TipoPago = TypePayment.Efectivo;
+        //                _ts.TipoTransaccion = TypeTransaction.Retiro;
+        //                _ts.EstadoTransaccion = StateTransaction.Iniciada;
+        //                _ts.payer = new Payer
+        //                {
+        //                    Document = _ts.Documento,
+        //                    Name = _ts.DataPerson?.FirstName ?? string.Empty,
+        //                    Email = _ts.DataPerson?.Email ?? string.Empty
+        //                };
+
+        //                var tsCreated = await Api.CreateTransaction();
+        //                if (tsCreated == null)
+        //                {
+        //                    //throw new Exception("No se pudo enviar la transacción");
+        //                    EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+
+        //                }
+        //                ;
+        //                _nav.CloseModal();
+
+        //                if (_ts.IdTransaccionApi == 0)
+        //                {
+        //                    Dispatcher.Invoke(() =>
+        //                    {
+        //                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
+        //                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
+
+        //                        GoTimer();
+        //                    });
+        //                }
+        //                else
+        //                {
+
+        //                    Dispatcher.Invoke(() => GoTo(new WithdrawalUC()));
+        //                    EventLogger.SaveLog(EventType.Error, "Yendo a ventana de retiros");
+
+
+        //                }
+        //            }
+        //            catch (Exception taskEx)
+        //            {
+        //                Dispatcher.Invoke(() =>
+        //                {
+        //                    _nav.CloseModal();
+        //                    EventLogger.SaveLog(EventType.Error, $"Error in SaveTransaction task: {taskEx.Message}", taskEx);
+        //                    _nav.ShowModal("Error procesando la transacción. Por favor intenta de nuevo.", new InfoModal());
+        //                });
+        //            }
+        //        });
+
+        //        StopTimer();
+        //        _nav.ShowModal("Procesando transacción...");
+        //        // CloseModal();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución:SaveTransaction de listProducts {ex.Message}", ex);
+        //    }
+        //}
+
+        private async Task SaveTransaction()
         {
-            _nav.CloseModal();
             try
             {
-                // Add null check for _ts and its properties
+                // Crear la transacción y esperar su resultado
                 if (_ts == null)
                 {
                     _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
@@ -384,71 +475,65 @@ namespace WPFCootreguaV2.UserControls
                 }
 
                 _ts.TipoTransaccion = TypeTransaction.Retiro;
-
-                Task.Run(async () =>
+                // Configurar los datos de la transacción después de que se haya creado exitosamente
+                _ts.EstadoTransaccion = StateTransaction.Iniciada;
+                _ts.Total = 0;
+                _ts.TipoPago = TypePayment.Efectivo;
+                _ts.Type = ETransactionType.Withdrawal;
+                _ts.payer = new Payer
                 {
-                    try
+                    Document = _ts.Documento,
+                    DocumentType = "CC",
+                    Name = _ts.DataPerson?.FirstName ?? string.Empty,
+                    LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+                    Email = _ts.DataPerson?.Email ?? string.Empty,
+                    Phone = _ts.DataPerson?.Phone ?? string.Empty,
+                    Adress = _ts.DataPerson?.Adress ?? string.Empty,
+                    IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
+                    IdPayPad = _ts.IdPaypad,
+                    IdClient = 27
+                };
+
+                // Crear el pagador y esperar su resultado
+                var payerCreated = await Api.CreatePayer();
+                if (payerCreated == null)
+                    throw new Exception("No se pudo enviar el pagador");
+
+                // _nav.CloseModal();
+
+                // Validar si el proceso fue exitoso
+                _nav.CloseModal();
+
+                if (_ts.IdTransaccionApi == 0)
+                {
+                    Dispatcher.Invoke(() =>
                     {
-                        _ts.TipoPago = TypePayment.Efectivo;
-                        _ts.TipoTransaccion = TypeTransaction.Retiro;
-                        _ts.EstadoTransaccion = StateTransaction.Iniciada;
-                        _ts.payer = new Payer
-                        {
-                            IDENTIFICATION = _ts.Documento,
-                            NAME = _ts.DataPerson?.FirstName ?? string.Empty,
-                            EMAIL = _ts.DataPerson?.Email ?? string.Empty
-                        };
+                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
+                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
 
-                        var tsCreated = await Api.CreateTransaction();
-                        if (tsCreated == null)
-                        {
-                            //throw new Exception("No se pudo enviar la transacción");
-                            EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+                        GoTimer();
+                    });
+                }
+                else
+                {
 
-                        }
-                        ;
-                        _nav.CloseModal();
-
-                        if (_ts.IdTransaccionApi == 0)
-                        {
-                            Dispatcher.Invoke(() =>
-                            {
-                                _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
-                                EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
-
-                                GoTimer();
-                            });
-                        }
-                        else
-                        {
-
-                            Dispatcher.Invoke(() => GoTo(new WithdrawalUC()));
-                            EventLogger.SaveLog(EventType.Error, "Yendo a ventana de retiros");
+                    Dispatcher.Invoke(() => GoTo(new WithdrawalUC()));
+                    EventLogger.SaveLog(EventType.Error, "Yendo a ventana de retiros");
 
 
-                        }
-                    }
-                    catch (Exception taskEx)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            _nav.CloseModal();
-                            EventLogger.SaveLog(EventType.Error, $"Error in SaveTransaction task: {taskEx.Message}", taskEx);
-                            _nav.ShowModal("Error procesando la transacción. Por favor intenta de nuevo.", new InfoModal());
-                        });
-                    }
-                });
+                }
 
-                StopTimer();
-                _nav.ShowModal("Procesando transacción...");
-                // CloseModal();
             }
             catch (Exception ex)
             {
+                _nav.CloseModal(); // Asegurar que se cierre el modal en caso de error
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución:SaveTransaction de listProducts {ex.Message}", ex);
+
+                // Mostrar mensaje de error al usuario
+                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.");
+                _nav.CloseModal();
             }
         }
-
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             _nav.CloseModal();

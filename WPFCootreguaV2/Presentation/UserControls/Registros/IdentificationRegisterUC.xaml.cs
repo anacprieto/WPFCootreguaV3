@@ -263,7 +263,8 @@ namespace WPFCootreguaV2.UserControls
 
                 StopTimer();
 
-                _nav.ShowModal("Consultando...", new LoadModal());
+                //_nav.ShowModal("Consultando...");
+                //_nav.CloseModal();
             }
             catch (Exception ex)
             {
@@ -339,7 +340,7 @@ namespace WPFCootreguaV2.UserControls
 
                     _ts.Codigo = Convert.ToInt32(data.CodPerson);
 
-                    Dispatcher.Invoke(() => GoTo(new AuthenticationRetirosUC()));
+                    Dispatcher.Invoke(() => GoTo(new AuthenticationRegisterUC()));
                 }
                 else
                 {

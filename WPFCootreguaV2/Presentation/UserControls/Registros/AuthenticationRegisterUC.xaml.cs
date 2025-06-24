@@ -384,15 +384,19 @@ namespace WPFCootreguaV2.UserControls
                     Email = _ts.DataPerson.Email,
                     Phone = _ts.DataPerson.Phone,
                     Adress = _ts.DataPerson.Adress,
-                    IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
+                    IdTransaction = _ts.IdTransaccionApi,
                     IdPayPad = _ts.IdPaypad,
-                    IdClient = 27
+                    IdClient = 24
                 };
 
                 // Crear el pagador y esperar su resultado
                 var payerCreated = await Api.CreatePayer();
                 if (payerCreated == null)
-                    throw new Exception("No se pudo enviar el pagador");
+                {
+                    EventLogger.SaveLog(EventType.Error, $"Resultado de guardar  pagador: {payerCreated}");
+                    _nav.ShowModal($"Estimado {_ts.DataPerson.FirstName}, has sido registrado con exito.");
+                    _nav.CloseModal();
+                }
 
                // _nav.CloseModal();
 

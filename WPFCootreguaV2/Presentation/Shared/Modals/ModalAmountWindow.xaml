@@ -66,10 +66,16 @@
                 HorizontalAlignment="Center"
                 FontSize="37"
                 FontFamily="Arial" 
+                IsHitTestVisible="True"
                 CaretBrush="#FFB2B0B8"
                 TouchDown="TxtVal_TouchDown"
                 TextChanged="TxtVal_TextChanged"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                d:Text="3238101149" 
+                Style="{StaticResource KeyboardTextBoxStyle}" 
+                Foreground="{StaticResource SECONDARYCOLOR}"
             />
+
 
             <TextBlock 
                 x:Name="TxtError"

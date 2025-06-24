@@ -266,7 +266,7 @@ namespace WPFCootreguaV2.ApiService
                 {
                     Document = ts.Documento,
                     Reference = "100",//
-                    Product = "Registro",
+                    Product = "Certificado de Registro mercantil,Registro mercantíl del establecimiento",
                     TotalAmount =0,
                     RealAmount = 0,
                     IncomeAmount = 0,

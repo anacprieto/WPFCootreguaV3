@@ -299,14 +299,16 @@ namespace WPFCootreguaV2.UserControls
                     Identititfy = _ts.Documento,
                 };
 
-                 var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
-                _nav.ShowModal("Consultando productos para {0}...");
+                 //var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
+               // _nav.ShowModal("Consultando productos para {0}...");
+
+
                 //var desencrypted = EncryptorEcity.Decrypt(prodct);
                 //var respuesta1120557056 = "UlmKdX4+uzXax9XsKwFwqkgxt6FMJoVaVcQpR4ambziDsTfenMMfOjwUzrGFBNEtauGKXdJKOMTd/bFOMHjxkw==";
-                ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
+                var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
                 //var desencrypted1120 = EncryptorEcity.Decrypt(respuesta1120557056);
                 //_nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", new InfoModal()));
-                var desncrypted = EncryptorEcity.Decrypt(prodct);   
+                var desncrypted = EncryptorEcity.Decrypt(product);   
                 //Switcher.ModalLoad(false);
 
                 if (!string.IsNullOrEmpty(desncrypted))

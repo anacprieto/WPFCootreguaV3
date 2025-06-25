@@ -183,7 +183,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
             }
             else
             {
-                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.",new InfoModal());
                 await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
                 _ts.DevueltaCorrecta = false;
                 await SaveWithdrawal();

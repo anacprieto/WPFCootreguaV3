@@ -245,7 +245,7 @@ namespace WPFCootreguaV2.UserControls
                         {
                             _nav.CloseModal();
                             EventLogger.SaveLog(EventType.Info, $"Número de documento válido.");
-                            _nav.ShowModal("Por favor ingrese un número de documento válido.");
+                            _nav.ShowModal("Por favor ingrese un número de documento válido.", new InfoModal());
                             GoTimer();
 
                         }
@@ -254,7 +254,7 @@ namespace WPFCootreguaV2.UserControls
                     {
                         _nav.CloseModal();
                         EventLogger.SaveLog(EventType.Info, $"No hay comunicación con el servicio");
-                        _nav.ShowModal("No hay comunicación con el servicio, por favor intenta de nuevo.");
+                        _nav.ShowModal("No hay comunicación con el servicio, por favor intenta de nuevo.", new InfoModal());
                         GoTimer();
 
                     }
@@ -279,7 +279,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 if (string.IsNullOrEmpty(_ts.Documento))
                 {
-                    _nav.ShowModal("No se encontró un número de documento válido.");
+                    _nav.ShowModal("No se encontró un número de documento válido.", new InfoModal());
                     EventLogger.SaveLog(EventType.Error, $"No se encontró un número de documento válido.");
 
                     StopTimer();
@@ -306,7 +306,7 @@ namespace WPFCootreguaV2.UserControls
                     _nav.CloseModal();
                     EventLogger.SaveLog(EventType.Error, "No se encontraron registros con este número de documento, por favor intenta de nuevo.");
 
-                    _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.");
+                    _nav.ShowModal("No se encontraron registros con este número de documento, por favor intenta de nuevo.", new InfoModal());
                     StopTimer();
                     return;
                 }
@@ -345,14 +345,14 @@ namespace WPFCootreguaV2.UserControls
                 else
                 {
 
-                    _nav.ShowModal("Ocurrió un error procesando la información de la persona.");
+                    _nav.ShowModal("Ocurrió un error procesando la información de la persona.", new InfoModal());
                     EventLogger.SaveLog(EventType.Error, "Ocurrió un error procesando la información de la persona.");
                     StopTimer();
                 }
             }
             catch (Exception ex)
             {
-                _nav.ShowModal("Ocurrió un error: " + ex.Message);
+                _nav.ShowModal("Ocurrió un error: " + ex.Message, new InfoModal());
                 EventLogger.SaveLog(EventType.Error, "Ocurrió un error procesando la información de la persona.");
                 StopTimer();
             }

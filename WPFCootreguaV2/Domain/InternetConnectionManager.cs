@@ -46,10 +46,10 @@ namespace WPFCootreguaV2.Domain
                 if (!await IsConnected())
                 {
                     if (modal != null) continue;
-                    modal = navigator.ShowModal(Messages.NO_SERVICE+" Se ha perdido la conexión a internet");
+                   // modal = _nav.ShowLoadModal(Messages.NO_SERVICE + " Se ha perdido la conexión a internet");
                     continue;
                 }
-                
+
                 if (modal == null) continue;
                 modal.Close();
                 modal = null;

@@ -85,18 +85,14 @@ namespace WPFCootreguaV2.UserControls
             // Set border brush and thickness
             dynamicButton2.BorderBrush = new SolidColorBrush(Colors.White); // Change to the desired color
             dynamicButton2.BorderThickness = new Thickness(2); // Change thickness as needed
-            dynamicButton2.Click += ExecuteScanner2;
+            dynamicButton2.Click += ExecuteScanner;
 
             void ExecuteScanner(object sender, EventArgs e)
             {
 
-                OnCashIn(20000);
+                OnCashIn(80000);
             }
 
-            void ExecuteScanner2(object sender, EventArgs e)
-            {
-                OnCashIn(50000);
-            }
             MainGrid.Children.Add(dynamicButton);
 
 #else
@@ -160,36 +156,118 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Info, MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex.ToString());
             }
         }
-
         private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
         {
-
-            _paymentViewModel.DispensedAmount = totalDispensed;
-
-            _paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
-            string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
-
-            SendDispenseDetails(details);
-
-            _nav.CloseModal();
-
-            if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
+            try
             {
-                _ts.DevueltaCorrecta = true;
-                EventLogger.SaveLog(EventType.Info, "Devuelta exitosa, Guardando pago..");
-                await SavePay();
+                // Actualizar datos del pago
+                _paymentViewModel.DispensedAmount = totalDispensed;
+                _paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
+
+                string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
+
+                // Enviar detalles de la dispensación
+                SendDispenseDetails(details);
+
+                // Cerrar cualquier modal activo
+                _nav.CloseLoadModal();
+                _nav.CloseModal();
+
+                // Verificar si la devolución fue completa
+                if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
+                {
+                    // Devolución exitosa
+                    _ts.DevueltaCorrecta = true;
+                    EventLogger.SaveLog(EventType.Info, "Devolución exitosa, guardando pago...");
+
+                    // Mostrar mensaje de éxito brevemente
+                    _nav.ShowLoadModal("Devolución completada exitosamente. Procesando...");
+                    await Task.Delay(2000);
+                    _nav.CloseLoadModal();
+
+                    await SavePay();
+                }
+                else
+                {
+                    // Devolución incompleta
+                    _ts.DevueltaCorrecta = false;
+
+                    string mensaje = $"No se pudo entregar la totalidad del dinero, hay un faltante de {strValueToReturn}. " +
+                                   "Por favor comuníquese con un administrador.";
+
+                    EventLogger.SaveLog(EventType.Warning, mensaje);
+
+                    // Mostrar modal informativo (no de carga) por tiempo prolongado
+                    _nav.ShowModal(mensaje, new InfoModal());
+
+                    // Esperar que el usuario lea el mensaje
+                    await Task.Delay(8000);
+
+                    // Cerrar modal y proceder a guardar
+                    _nav.CloseModal();
+
+                    await SavePay();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
-                await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
+                EventLogger.SaveLog(EventType.Error, $"Error en OnCashDispensed: {ex.Message}", ex);
+
+                // Limpiar modales
+                _nav.CloseLoadModal();
+                _nav.CloseModal();
+
+                // Marcar como devolución incorrecta
                 _ts.DevueltaCorrecta = false;
-                EventLogger.SaveLog(EventType.Info, "No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
 
-                await SavePay();
+                // Mostrar error y proceder
+                _nav.ShowModal("Error durante la devolución de dinero. Contacte al administrador.", new InfoModal());
+                await Task.Delay(5000);
+                _nav.CloseModal();
+
+                try
+                {
+                    await SavePay();
+                }
+                catch
+                {
+                    // Si también falla SavePay, cancelar transacción
+                    if (!_isPayCanceled)
+                    {
+                        CancelTransaction();
+                    }
+                }
             }
-
         }
+        //private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
+        //{
+
+        //    _paymentViewModel.DispensedAmount = totalDispensed;
+
+        //    _paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
+        //    string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
+
+        //    SendDispenseDetails(details);
+
+        //    _nav.CloseModal();
+
+        //    if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
+        //    {
+        //        _ts.DevueltaCorrecta = true;
+        //        EventLogger.SaveLog(EventType.Info, "Devuelta exitosa, Guardando pago..");
+        //        await SavePay();
+        //    }
+        //    else
+        //    {
+        //        _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+        //        await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
+        //        _ts.DevueltaCorrecta = false;
+        //        EventLogger.SaveLog(EventType.Info, "No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+
+        //        await SavePay();
+        //    }
+
+        //}
 
         #region
         private void SendDispenseDetails(Dictionary<int, int> details)
@@ -212,6 +290,7 @@ namespace WPFCootreguaV2.UserControls
         #region Responses to Peripheral Events
 
 
+   
         private async void OnCashIn(decimal value)
         {
             EventLogger.SaveLog(EventType.Info, "Init view" + _paymentViewModel);
@@ -234,19 +313,85 @@ namespace WPFCootreguaV2.UserControls
             await _peripherals.StopAceptance();
 #endif
 
-            _nav.ShowModal("Estamos procesando el pago...", new LoadModal());
-            await Task.Delay(3000);
+            // _nav.ShowModal("Estamos procesando el pago...", new LoadModal());
+            //await Task.Delay(3000);
+            //_nav.CloseModal();
             EventLogger.SaveLog(EventType.Info, "Iniciando Proceso de pago...");
 
-            // await PaymentProcess(_paymentViewModel);
-
-            await PaymentProcess();
-
+            await PaymentProcess(
+            _paymentViewModel);
         }
+        private async Task PaymentProcess(PaymentViewModel? paymentViewModel)
+        {
+            bool isPaySuccess;
 
-        private async Task PaymentProcess()
-        { 
-            NotifyPay();
+            try
+            {
+                await NotifyPay();
+                EventLogger.SaveLog(EventType.Info, "Pago Completado en integración");
+                _tranStateTemp = StateTransaction.Aprobada;
+                isPaySuccess = true;
+            }
+            catch (ProcedureException ex)
+            {
+                if (ex.Message == "El pago está en proceso de verificación. Por favor espere la confirmación.")
+                {
+                    EventLogger.SaveLog(EventType.Error, $"El pago está en proceso de verificación. Por favor espere la confirmación.");
+                    _nav.CloseModal();
+                    isPaySuccess = true;
+                    _tranStateTemp = StateTransaction.AprobadaSinNotificar;
+                    _nav.ShowModal(ex.Message, new InfoModal());
+                }
+                else
+                {
+                    _nav.CloseModal();
+                    isPaySuccess = false;
+                    _nav.ShowModal(ex.Message, new InfoModal());
+                    await CancelPay();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _nav.CloseModal();
+            
+                isPaySuccess = false;
+                _tranStateTemp = StateTransaction.ErrorServicioTercero;
+                EventLogger.SaveLog(EventType.Error, $"Error durante procedimiento de notificación {ex.Message}", ex);
+                _nav.ShowModal("Se presentó un problema durante el proceso de notificación del pago.", new InfoModal());
+                await CancelPay();
+                return;
+            }
+            if (isPaySuccess)
+            {
+                if (paymentViewModel != null)
+                {
+                    await FinishSuccessfulPay();
+                }
+                else
+                {
+                    // Si paymentViewModel es nulo, se guarda el estado de la transacción como "AprobadaSinNotificar"
+                    _ts.DevueltaCorrecta = true;
+
+                   // _ts.paymentProcess.DevueltaCorrecta = true;
+                    await SavePay();
+                }
+                return;
+            }
+
+            if (paymentViewModel != null)
+            {
+                paymentViewModel.ReturnAmount = paymentViewModel.EnteredAmount;
+                ReturnMoney(paymentViewModel.ReturnAmount);
+            }
+            else
+            {
+                EventLogger.SaveLog(EventType.Error, "El objeto PaymentViewModel es nulo.");
+                // Manejar el caso cuando paymentViewModel es nulo, por ejemplo:
+                // - Mostrar un mensaje de error al usuario
+                // - Realizar alguna acción de recuperación o cancelación del pago
+                // - Registrar el error en el registro de eventos
+            }
         }
 
         private void SendTransactionDetail(TypeOperation op, decimal denom, int quantity)
@@ -324,10 +469,10 @@ namespace WPFCootreguaV2.UserControls
 
         #endregion
 
-     
 
 
 
+        /*
         private async Task FinishSuccessfulPay()
         {
             if (_paymentViewModel.EnteredAmount > 0 && _paymentViewModel.ReturnAmount > 0)
@@ -350,6 +495,7 @@ namespace WPFCootreguaV2.UserControls
         {
             try
             {
+                _ts.EstadoTransaccion = StateTransaction.Aprobada;
                 _ts.EstadoTransaccionVerb = "Aprobada";
                 _paymentViewModel.IsPayCompleted = true;
                 _ts.DatosPago = _paymentViewModel;
@@ -395,6 +541,118 @@ namespace WPFCootreguaV2.UserControls
                 _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
             }
         }
+        */
+
+        private async Task FinishSuccessfulPay()
+        {
+            try
+            {
+                if (_paymentViewModel.EnteredAmount > 0 && _paymentViewModel.ReturnAmount > 0)
+                {
+                    _nav.CloseModal();
+                    _nav.ShowLoadModal("Pago completado con éxito, devolución en curso...");
+
+                    await Task.Delay(3000);
+
+                    EventLogger.SaveLog(EventType.Info, $"Iniciando devuelta de {_paymentViewModel.ReturnAmount}");
+
+                    // Ejecutar devolución de dinero
+                    await Task.Run(() => ReturnMoney(_paymentViewModel.ReturnAmount));
+
+                    _nav.CloseLoadModal();
+                }
+                else
+                {
+                    _ts.DevueltaCorrecta = true;
+                }
+
+                // Siempre guardar el pago al final
+                await SavePay();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error en FinishSuccessfulPay: {ex.Message}", ex);
+                _nav.CloseLoadModal();
+                _nav.CloseModal();
+
+                // En caso de error, intentar guardar el pago de todas formas
+                try
+                {
+                    await SavePay();
+                }
+                catch
+                {
+                    // Si falla completamente, cancelar transacción
+                    if (!_isPayCanceled)
+                    {
+                        CancelTransaction();
+                    }
+                }
+            }
+        }
+
+        private async Task SavePay()
+        {
+            try
+            {
+                // Mostrar modal de procesamiento
+                _nav.ShowLoadModal("Procesando pago...");
+
+                // Configurar datos de la transacción
+                _ts.EstadoTransaccion = StateTransaction.Aprobada;
+                _ts.EstadoTransaccionVerb = "Aprobada";
+                _paymentViewModel.IsPayCompleted = true;
+                _ts.DatosPago = _paymentViewModel;
+                _ts.TotalIngresado = _paymentViewModel.EnteredAmount;
+                _ts.TotalDevuelta = _paymentViewModel.DispensedAmount;
+
+                SetTransactionDescription();
+
+                // Determinar el estado final de la transacción
+                if ((_tranStateTemp == StateTransaction.Aprobada || _tranStateTemp == StateTransaction.Cancelada)
+                    && !_ts.DevueltaCorrecta)
+                {
+                    // Si hay error de devuelta, cambiar al estado correspondiente
+                    _ts.EstadoTransaccion = (StateTransaction)((int)_tranStateTemp + 2);
+                    EventLogger.SaveLog(EventType.Warning, $"Transacción con error de devuelta: {_ts.EstadoTransaccion}");
+                }
+                else
+                {
+                    _ts.EstadoTransaccion = _tranStateTemp;
+                    EventLogger.SaveLog(EventType.Info, $"Transacción completada: {_ts.EstadoTransaccion}");
+                }
+
+                // Actualizar transacción en la API
+                await Task.Run(() => Api.UpdateTransaction());
+
+                // Cerrar modal de carga
+                _nav.CloseLoadModal();
+
+                // Navegar a la pantalla de éxito
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    GoTo(new SuccessUC());
+                });
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error al guardar pago: {ex.Message}", ex);
+
+                _nav.CloseLoadModal();
+                _nav.CloseModal();
+
+                // Mostrar mensaje de error
+                _nav.ShowModal("Ocurrió un error al procesar el pago. Por favor comuníquese con soporte técnico.",
+                              new InfoModal());
+
+                // Cancelar transacción si no se ha cancelado ya
+                if (!_isPayCanceled)
+                {
+                    EventLogger.SaveLog(EventType.Info, "Cancelando transacción por error al guardar el pago");
+                    CancelTransaction();
+                }
+            }
+        }
 
         private void ReturnMoney(decimal returnValue)
         {
@@ -412,6 +670,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 var ms=string.Format("Estimado {0}, no se pudo notificar el pago. Se le hará la devolución del dinero ingresado.", _ts.DataPerson.FirstName);
                 _nav.ShowModal(ms,new InfoModal());
+                _nav.CloseModal();
                 Dispatcher.Invoke(() => GoTo(new CancelPayUC()));
             }
             catch (Exception ex)

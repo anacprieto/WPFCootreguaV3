@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFCootreguaV2.Modals"
+        xmlns:local2="clr-namespace:WPFCootreguaV2.Presentation.UserControls.ClassDiffrenceTextBox"
         mc:Ignorable="d"
         Title="ModalAmountWindow" 
         ResizeMode="NoResize"
@@ -55,6 +56,26 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
             />
+            <local2:NumericBox 
+                x:Name="TxtVal"
+                Text="{Binding Val, StringFormat={}{0:C0}, UpdateSourceTrigger=PropertyChanged}"
+                Width="400"
+                Height="60"
+                TextAlignment="Center"
+                Margin="0,58,0,0" 
+                VerticalAlignment="Top"
+                FontSize="37"
+                FontFamily="Arial" 
+                IsHitTestVisible="True"
+                CaretBrush="#FFB2B0B8"
+                TouchDown="TxtVal_TouchDown"
+                TextChanged="TxtVal_TextChanged"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                Style="{StaticResource KeyboardTextBoxStyle}" 
+                Foreground="{StaticResource SECONDARYCOLOR}"
+            />
+            <!-- 
+
             <TextBox 
                 x:Name="TxtVal"
                 Text="{Binding Val, StringFormat={}{0:C0}, UpdateSourceTrigger=PropertyChanged}"
@@ -75,7 +96,7 @@
                 Style="{StaticResource KeyboardTextBoxStyle}" 
                 Foreground="{StaticResource SECONDARYCOLOR}"
             />
-
+Sección izquierda con ícono -->
 
             <TextBlock 
                 x:Name="TxtError"

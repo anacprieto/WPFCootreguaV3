@@ -83,12 +83,12 @@ namespace WPFCootreguaV2.UserControls
                 if (_paymentViewModel.EnteredAmount > 0)
                 {
                     _paymentViewModel.ReturnAmount = _paymentViewModel.EnteredAmount;
-                    _nav.ShowModal("Transacción cancelada. Devolución en curso...", new LoadModal());
+                    _nav.ShowLoadModal("Transacción cancelada. Devolución en curso...");
                     ReturnMoney();
                 }
                 else
                 {
-                    _nav.ShowModal("Transacción cancelada");
+                    _nav.ShowModal("Transacción cancelada",new InfoModal());
                     _ts.DevueltaCorrecta = true;
                     await SavePay();
                 }
@@ -133,6 +133,7 @@ namespace WPFCootreguaV2.UserControls
         }
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+            _nav.CloseModal();
             DisableView();
             PrintService.CleanPrintQueue();
             PrintVoucher();
@@ -324,7 +325,7 @@ namespace WPFCootreguaV2.UserControls
             }
             else
             {
-                _currentLoadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.");
+                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.", new InfoModal());
                 await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
                 _ts.DevueltaCorrecta = false;
                 await SavePay();
@@ -342,6 +343,7 @@ namespace WPFCootreguaV2.UserControls
                 _ts = Transaction.Instance ?? throw new InvalidOperationException("Transaction instance is null");
                 _ts.DatosPago.EnteredAmount = _paymentViewModel.EnteredAmount;
                 _ts.TotalDevuelta = _paymentViewModel.DispensedAmount;
+               // _ts.EstadoTransaccion = StateTransaction.Cancelada;
 
                 SetTransactionDescription();
 
@@ -376,7 +378,7 @@ namespace WPFCootreguaV2.UserControls
                 _nav.CloseModal();
 
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
-                _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+                _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.", new InfoModal());
             }
         }
 

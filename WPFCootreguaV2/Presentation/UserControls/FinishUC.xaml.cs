@@ -165,22 +165,39 @@ namespace WPFCootreguaV2.UserControls
             {
                 _ts.Calificacion = "Sin calificación";
             }
-            //TODO: Endpoint para calificación de transacción
-
             if (!_ts.DevueltaCorrecta)
             {
-                var loadModal = _nav.ShowModal(
-                    "No se pudo entregar la totalidad del dinero hay un faltante de:" +
-                    $" {_ts.DatosPago.RemainingAmount.ToString("C0")} " +
-                    ". Por favor comunícate con un administrador.");
-                await Task.Delay(TimeSpan.FromMinutes(1));
-                if (loadModal != null)
-                {
-                    loadModal.Close();
-                    loadModal = null;
-                }
-            }
+                string mensaje;
 
+                // Verificar que DatosPago y RemainingAmount existan
+                if (_ts?.DatosPago?.RemainingAmount != null)
+                {
+                    mensaje = "No se pudo entregar la totalidad del dinero hay un faltante de:" +
+                             $" {_ts.DatosPago.RemainingAmount.ToString("C0")} " +
+                             ". Por favor comuníquese con un administrador.";
+                }
+                else
+                {
+                    // Mensaje alternativo cuando no hay datos específicos del faltante
+                    mensaje = "No se pudo entregar la totalidad del dinero correctamente. " +
+                             "Por favor comuníquese con un administrador.";
+                }
+
+                // Mostrar modal en el hilo de la UI
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    _nav.ShowLoadModal(mensaje);
+                });
+
+                // Esperar 20 segundos
+                await Task.Delay(TimeSpan.FromSeconds(20));
+
+                // Cerrar modal en el hilo de la UI
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    _nav.CloseLoadModal();
+                });
+            }
             Dispatcher.Invoke(() => GoTo(new ConfigUC()));
         }
         #endregion

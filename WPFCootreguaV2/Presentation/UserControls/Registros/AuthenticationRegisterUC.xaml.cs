@@ -234,7 +234,7 @@ namespace WPFCootreguaV2.UserControls
                         }
                         else
                         {
-                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName), new InfoModal());
                             StopTimer();
                             CantIntentos++;
                             LoadReader();
@@ -247,7 +247,7 @@ namespace WPFCootreguaV2.UserControls
 
                         if (CantIntentos == 2)
                         {
-                            _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName), new InfoModal());
                             StopTimer();
 
                             //Switcher.ModalMS(string.Format("Estimado {0}, Ha superado el número de intentos permitidos.", transaction.DataPerson.FirstName));
@@ -255,7 +255,7 @@ namespace WPFCootreguaV2.UserControls
                         }
                         else
                         {
-                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName), new InfoModal());
                            // GoTimer();
                             CantIntentos++;
                             LoadReader();
@@ -394,7 +394,7 @@ namespace WPFCootreguaV2.UserControls
                 if (payerCreated == null)
                 {
                     EventLogger.SaveLog(EventType.Error, $"Resultado de guardar  pagador: {payerCreated}");
-                    _nav.ShowModal($"Estimado {_ts.DataPerson.FirstName}, has sido registrado con exito.");
+                    _nav.ShowModal($"Estimado {_ts.DataPerson.FirstName}, has sido registrado con exito.", new InfoModal());
                     _nav.CloseModal();
                 }
 
@@ -403,7 +403,7 @@ namespace WPFCootreguaV2.UserControls
                 // Validar si el proceso fue exitoso
                 if (_ts.IdTransaccionApi == 0)
                 {
-                    _nav.ShowModal($"Estimado {_ts.DataPerson.FirstName}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo.");
+                    _nav.ShowModal($"Estimado {_ts.DataPerson.FirstName}, no se pudo registrar su huella en el sistema. Por favor intenta de nuevo.", new InfoModal());
                     _nav.CloseModal();
                 }
                 else
@@ -423,7 +423,7 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Error al guardar transacción: {ex.Message}");
 
                 // Mostrar mensaje de error al usuario
-                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.");
+                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.", new InfoModal());
                 _nav.CloseModal();
             }
         }

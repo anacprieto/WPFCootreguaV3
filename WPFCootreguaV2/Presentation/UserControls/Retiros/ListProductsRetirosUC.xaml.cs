@@ -530,7 +530,7 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución:SaveTransaction de listProducts {ex.Message}", ex);
 
                 // Mostrar mensaje de error al usuario
-                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.");
+                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.", new InfoModal());
                 _nav.CloseModal();
             }
         }

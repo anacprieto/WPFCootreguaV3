@@ -34,6 +34,9 @@ namespace WPFCootreguaV2.Domain.UIServices
 
         public string StatePay { get; set; }
         private Transaction() { }
+
+        public PaymentProcess paymentProcess { get; set; } = new();
+
         public bool statePaySuccess { get; set; }
 
         public TransactionDto ApiDto { get; set; }
@@ -95,7 +98,22 @@ namespace WPFCootreguaV2.Domain.UIServices
 
 
     }
+    public class PaymentProcess
+    {
+        public string? Referencia { get; set; }
+        public string? Documento { get; set; }
+        public string? UserName { get; set; }
+        public string? Descripcion { get; set; }
+        public string? FechaVencimiento { get; set; }
+        public decimal TotalSinRedondear { get; set; }
+        public decimal Total { get; set; }
+        public decimal TotalDevuelta { get; set; }
+        public decimal TotalIngresado { get; set; }
+        public decimal ValorFaltante { get; set; }
+        public bool DevueltaCorrecta { get; set; }
+        public string Calificacion { get; set; }
 
+    }
     public class RequestDatafonoInfo
     {
 

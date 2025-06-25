@@ -383,7 +383,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                         StopTimer();
                         CloseLoadModal();
-                        _currentLoadModal = _nav.ShowModal("Transacción en verificación, un momento por favor mientras se realizan las validaciones pertinentes.");
+                        _nav.ShowLoadModal("Transacción en verificación, un momento por favor mientras se realizan las validaciones pertinentes.");
                         GoTimer();
                         _intentos++;
                         _IntentosTimer++;
@@ -410,7 +410,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
                         {
                             isPaySuccess = false;
                             _tranStateTemp = StateTransaction.Cancelada;
-                            CloseLoadModal();
+                            _nav.CloseLoadModal();
                             await SavePay();
                         }
                         else
@@ -437,7 +437,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                     case "05":
                         StopTimer();
-                        CloseLoadModal();
+                        _nav.CloseLoadModal();
+
                         _nav.ShowModal("Transacción con errores de apertura de puerto serial, o timeout sin recibir la solicitud inicial del datáfono, por favor verificar nuevamente", new InfoModal());
 
                         isPaySuccess = false;
@@ -449,7 +450,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                     case "06":
                         StopTimer();
-                        CloseLoadModal();
+                        _nav.CloseLoadModal();
                         _nav.ShowModal("Transacción rechazada por trama inicial incorrecta, por favor verificar nuevamente", new InfoModal());
 
                         isPaySuccess = false;
@@ -460,7 +461,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                     case "99":
                         StopTimer();
-                        CloseLoadModal();
+                        _nav.CloseLoadModal();
+
                         _nav.ShowModal("Transacción rechazada por trama inicial incorrecta, por favor verificar nuevamente", new InfoModal());
 
                         isPaySuccess = false;
@@ -471,7 +473,8 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
                     default:
                         StopTimer();
-                        CloseLoadModal();
+                        _nav.CloseLoadModal();
+
                         _nav.ShowModal("Error desconocido, por favor verificar nuevamente", new InfoModal());
 
                         isPaySuccess = false;
@@ -567,7 +570,7 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
 
 
-                _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.");
+                _nav.ShowModal("Ocurrió un error fatal intentando reportar los datos del pago. Por favor comuníquese con soporte técnico.", new InfoModal());
             }
         }
 

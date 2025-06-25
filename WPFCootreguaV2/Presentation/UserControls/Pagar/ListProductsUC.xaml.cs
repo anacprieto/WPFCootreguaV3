@@ -61,6 +61,8 @@ namespace WPFCootreguaV2.UserControls
         private ObservableCollection<ProductsState> lstPager;
         private CollectionViewSource view;
         private decimal MaxAmountAhorroVista;
+        private readonly Navigator _navigator;
+
         #region Regex properies
 
         private string _referencia = string.Empty;
@@ -253,7 +255,7 @@ namespace WPFCootreguaV2.UserControls
         private void BtnCancelar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             StopTimer();
-            _nav.CloseModal();
+            _navigator.CloseModal();
             Dispatcher.Invoke(() => GoTo(new ConfigUC()));
 
         }
@@ -269,7 +271,7 @@ namespace WPFCootreguaV2.UserControls
                 else
                 {
                     StopTimer();
-                    _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
+                    _navigator.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
                     GoTimer();
                 }
             }
@@ -426,7 +428,7 @@ namespace WPFCootreguaV2.UserControls
         //                }
         //                else
         //                {
-                           
+
         //                   Dispatcher.Invoke(() => GoTo(new PaymentUC()));
         //                    EventLogger.SaveLog(EventType.Error, "Yendo a ventana de pago");
 
@@ -458,6 +460,18 @@ namespace WPFCootreguaV2.UserControls
         {
             try
             {
+
+                // Crear la transacción y esperar su resultado
+                if (_ts.IdTransaccionApi == 0)
+                {
+                    var tsCreated = await Api.CreateTransaction();
+                    if (tsCreated == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+
+                    }
+                }
+
                 // Crear la transacción y esperar su resultado
                 if (_ts == null)
                 {
@@ -482,7 +496,7 @@ namespace WPFCootreguaV2.UserControls
                 _ts.TipoTransaccion = TypeTransaction.Pago;
                 // Configurar los datos de la transacción después de que se haya creado exitosamente
                 _ts.EstadoTransaccion = StateTransaction.Iniciada;
-                _ts.Total = 0;
+                //_ts.Total = 0;
                 _ts.TipoPago = TypePayment.Efectivo;
                 _ts.Type= ETransactionType.Payment;
                 _ts.payer = new Payer
@@ -496,13 +510,17 @@ namespace WPFCootreguaV2.UserControls
                     Adress = _ts.DataPerson?.Adress ?? string.Empty,
                     IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
                     IdPayPad = _ts.IdPaypad,
-                    IdClient = 27
+                    IdClient = 24
                 };
+
 
                 // Crear el pagador y esperar su resultado
                 var payerCreated = await Api.CreatePayer();
                 if (payerCreated == null)
-                    throw new Exception("No se pudo enviar el pagador");
+                {
+                    EventLogger.SaveLog(EventType.Error, "Pagador no  pudo ser creado");
+
+                }
 
                 // _nav.CloseModal();
 
@@ -528,6 +546,9 @@ namespace WPFCootreguaV2.UserControls
 
                 }
 
+                StopTimer();
+                _nav.CloseModal();
+
             }
             catch (Exception ex)
             {
@@ -535,7 +556,7 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Error al guardar transacción: {ex.Message}");
 
                 // Mostrar mensaje de error al usuario
-                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.");
+                _nav.ShowModal("No se pudo completar reporte de la transacción. Por favor intentalo de nuevo.",new InfoModal());
                 _nav.CloseModal();
             }
         }
@@ -555,7 +576,7 @@ namespace WPFCootreguaV2.UserControls
         public event PropertyChangedEventHandler? PropertyChanged;
 
 
-            private int _CodSession;
+        private int _CodSession;
 
         private int _CreationDate;
 

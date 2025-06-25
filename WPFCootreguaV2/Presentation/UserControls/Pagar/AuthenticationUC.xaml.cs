@@ -240,11 +240,10 @@ namespace WPFCootreguaV2.UserControls
                         }
                         else
                         {
-                            _nav.CloseModal();
+                            _nav.CloseLoadModal();
                             StopTimer();
-                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", _ts.DataPerson.FirstName), new InfoModal());
                             EventLogger.SaveLog(EventType.Error, "Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName);
-
                             GoTimer();
                             CantIntentos++;
                             LoadReader();
@@ -252,24 +251,18 @@ namespace WPFCootreguaV2.UserControls
                     }
                     else
                     {
-                        _nav.CloseModal();
+                        _nav.CloseLoadModal();
                         StopTimer();
-
                         if (CantIntentos == 2)
                         {
-                            _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos.", _ts.DataPerson.FirstName), new InfoModal());
                             EventLogger.SaveLog(EventType.Error, "Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName);
-
                             StopTimer();
-
-                            //Switcher.ModalMS(string.Format("Estimado {0}, Ha superado el número de intentos permitidos.", transaction.DataPerson.FirstName));
-                            //Switcher.CLose();
                         }
                         else
                         {
-                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
+                            _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", _ts.DataPerson.FirstName), new InfoModal());
                             EventLogger.SaveLog(EventType.Error, "Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName);
-
                             // GoTimer();
                             CantIntentos++;
                             GoTimer();
@@ -278,7 +271,7 @@ namespace WPFCootreguaV2.UserControls
                     }
                 });
                 StopTimer();
-               _nav.ShowModal(string.Format("Consultando.....", _ts.DataPerson.FirstName));
+               _nav.ShowLoadModal(string.Format("Consultando.....", _ts.DataPerson.FirstName));
                 EventLogger.SaveLog(EventType.Error, "Consultando, saliendo del metodo , validar huella" + _ts.DataPerson.FirstName);
 
                 //Switcher.Timer(false);
@@ -371,13 +364,14 @@ namespace WPFCootreguaV2.UserControls
                     };
 
                     EventLogger.SaveLog(EventType.Info, "Creando objeto inicial de la transacción");
+                    _nav.ShowModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName), new InfoModal());
 
-                    _nav.ShowModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName, new InfoModal()));
+
 
 
                     if (this._ts.IdTransaccionApi == 0)
                     {
-                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo registrar la transacción." +_ts.DataPerson.FirstName));
+                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo registrar la transacción." + _ts.DataPerson.FirstName), new InfoModal());
                         EventLogger.SaveLog(EventType.Info, _ts.IdTransaccionApi.ToString()+" si es cero el id transaction  es cero");
 
                         _nav.CloseModal();
@@ -410,7 +404,7 @@ namespace WPFCootreguaV2.UserControls
 
 
                         Utilities.Speak(ms);
-                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.");
+                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.",new InfoModal());
                         _nav.CloseModal();
                     }
                 });

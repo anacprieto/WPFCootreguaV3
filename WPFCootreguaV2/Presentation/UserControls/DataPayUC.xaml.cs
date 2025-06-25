@@ -208,42 +208,38 @@ namespace WPFCootreguaV2.Presentation.UserControls
         #region Internal Operation Methods
         private async Task SendData()
         {
-            ModalWindow? loadModal = null;
             try
             {
-                loadModal = _nav.ShowModal(Messages.VALIDATING_INFO);
+                // Mostrar modal de carga
+                _nav.ShowLoadModal(Messages.VALIDATING_INFO);
 
                 var tsCreated = await Api.CreateTransaction();
                 if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
 
 #if NO_PERIPHERALS
 #else
-                // Cada camara es una source incremental
-              //  await VideoRecorder.Start(source: 0);
+        // Cada camara es una source incremental
+        // await VideoRecorder.Start(source: 0);
 #endif
 
-                if (loadModal != null)
-                {
-                    loadModal.Close();
-                    loadModal = null;
-                }
+                // Cerrar modal de carga antes de navegar
+                _nav.CloseLoadModal();
 
-                  Dispatcher.Invoke(() => _nav.NavigateTo(new CardPaymentUC()));
-
-
-
+                // Navegar a la siguiente vista
+                Dispatcher.Invoke(() => _nav.NavigateTo(new CardPaymentUC()));
             }
             catch (Exception ex)
             {
-                if (loadModal != null)
-                {
-                    loadModal.Close();
-                    loadModal = null;
+                // Cerrar modal de carga en caso de error
+                _nav.CloseLoadModal();
 
-                    EnableView();
-                }
+                // Habilitar la vista nuevamente
+                EnableView();
 
+                // Log del error
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
+
+                // Mostrar modal de error
                 _nav.ShowModal("Ocurrió un error validando la información. Por favor intente nuevamente.", new InfoModal());
             }
         }

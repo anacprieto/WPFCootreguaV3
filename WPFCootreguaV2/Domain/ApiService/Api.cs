@@ -348,65 +348,202 @@ namespace WPFCootreguaV2.ApiService
 
         }
 
-        public static void UpdateTransaction()
-        {
-            var ts = Transaction.Instance;
+        //public static void UpdateTransaction()
+        //{
+        //    var ts = Transaction.Instance;
 
 
-            var transactionToUpdate = ts.ApiDto;
+        //    var transactionToUpdate = ts.ApiDto;
 
-            transactionToUpdate.IdStateTransaction = (int) ts.EstadoTransaccion;
-            transactionToUpdate.Description = ts.Descripcion;
-            transactionToUpdate.IncomeAmount = (double)ts.TotalIngresado;
-            transactionToUpdate.ReturnAmount = (double)ts.TotalDevuelta;
-            transactionToUpdate.Document = ts.Documento;
+        //    if((int)ts.EstadoTransaccion == null)
+        //    {
+
+        //        EventLogger.SaveLog(EventType.Error, "No se pudo obtener el estado");
+        //        return;
+        //    }
+        //    transactionToUpdate.IdStateTransaction = (int)ts.EstadoTransaccion;
+        //    transactionToUpdate.Description = ts.Descripcion;
+        //    transactionToUpdate.IncomeAmount = (double)ts.TotalIngresado;
+        //    transactionToUpdate.ReturnAmount = (double)ts.TotalDevuelta;
+        //    transactionToUpdate.Document = ts.Documento;
 
 
            
 
-            _requestsQueue.Enqueue(async () =>
+        //    _requestsQueue.Enqueue(async () =>
+        //    {
+        //        string payload = JsonConvert.SerializeObject(transactionToUpdate);
+
+        //        var content = new StringContent(payload, Encoding.UTF8, "Application/json");
+        //        var url = AppConfig.Get("Transaction");
+
+        //        EventLogger.SaveLog(EventType.Info, "Petición: Actualización de transacción Dashboard", transactionToUpdate);
+        //        var response = await _client.PutAsync(url, content);
+
+        //        var result = await response.Content.ReadAsStringAsync();
+        //        if (result == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
+        //            return null;
+        //        }
+
+        //        var requestresponse = JsonConvert.DeserializeObject<ApiResponse<TransactionDto>>(result);
+        //        if (requestresponse == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
+        //            return null;
+        //        }
+
+        //        if (requestresponse.statusCode == 200)
+        //        {
+        //            var transactionUpdated = requestresponse.response;
+        //            ts.ApiDto = transactionUpdated;
+        //            ts.IdTransaccionApi = transactionUpdated.Id;
+        //            // Se guarda la transaccion en la base de datos local
+        //            var mapper = ObjMapper.Instance;
+        //            if (!await DB_TransactionService.Update(mapper.Map<DB_Transaction>(transactionUpdated)))
+        //            {
+        //                EventLogger.SaveLog(EventType.Error, "No se pudo actualizar la transacción de manera local");
+        //            }
+        //            EventLogger.SaveLog(EventType.Info, "Respuesta: Actualización de transacción Dashboard", requestresponse);
+        //            return requestresponse.response;
+        //        }
+
+        //        EventLogger.SaveLog(EventType.Error, "Api no respondió satisfactoriamente", requestresponse);
+        //        return null;
+        //    });
+
+        //}
+        public static void UpdateTransaction()
+        {
+            try
             {
-                string payload = JsonConvert.SerializeObject(transactionToUpdate);
-
-                var content = new StringContent(payload, Encoding.UTF8, "Application/json");
-                var url = AppConfig.Get("Transaction");
-
-                EventLogger.SaveLog(EventType.Info, "Petición: Actualización de transacción Dashboard", transactionToUpdate);
-                var response = await _client.PutAsync(url, content);
-
-                var result = await response.Content.ReadAsStringAsync();
-                if (result == null)
+                // Validación 1: Verificar que Transaction.Instance no sea null
+                var ts = Transaction.Instance;
+                if (ts == null)
                 {
-                    EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
-                    return null;
+                    EventLogger.SaveLog(EventType.Error, "Transaction.Instance es null");
+                    return;
                 }
 
-                var requestresponse = JsonConvert.DeserializeObject<ApiResponse<TransactionDto>>(result);
-                if (requestresponse == null)
+                // Validación 2: Verificar que ApiDto no sea null
+                var transactionToUpdate = ts.ApiDto;
+                if (transactionToUpdate == null)
                 {
-                    EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
-                    return null;
+                    EventLogger.SaveLog(EventType.Error, "ts.ApiDto es null - no se puede actualizar la transacción");
+                    return;
                 }
 
-                if (requestresponse.statusCode == 200)
+                // Validación 3: Verificar EstadoTransaccion correctamente
+                // EstadoTransaccion es un enum, no puede ser null directamente
+                // Pero si es nullable enum, usar HasValue
+                if (!Enum.IsDefined(typeof(StateTransaction), ts.EstadoTransaccion))
                 {
-                    var transactionUpdated = requestresponse.response;
-                    ts.ApiDto = transactionUpdated;
-                    ts.IdTransaccionApi = transactionUpdated.Id;
-                    // Se guarda la transaccion en la base de datos local
-                    var mapper = ObjMapper.Instance;
-                    if (!await DB_TransactionService.Update(mapper.Map<DB_Transaction>(transactionUpdated)))
+                    EventLogger.SaveLog(EventType.Error, $"Estado de transacción inválido: {ts.EstadoTransaccion}");
+                    return;
+                }
+
+                // Asignar valores con validaciones adicionales
+                transactionToUpdate.IdStateTransaction = (int)ts.EstadoTransaccion;
+                transactionToUpdate.Description = ts.Descripcion ?? string.Empty;
+                transactionToUpdate.IncomeAmount = (double)ts.TotalIngresado;
+                transactionToUpdate.ReturnAmount = (double)ts.TotalDevuelta;
+                transactionToUpdate.Document = ts.Documento;
+
+                // Validación 4: Verificar que _requestsQueue no sea null
+                if (_requestsQueue == null)
+                {
+                    EventLogger.SaveLog(EventType.Error, "_requestsQueue es null");
+                    return;
+                }
+
+                _requestsQueue.Enqueue(async () =>
+                {
+                    try
                     {
-                        EventLogger.SaveLog(EventType.Error, "No se pudo actualizar la transacción de manera local");
+                        string payload = JsonConvert.SerializeObject(transactionToUpdate);
+                        var content = new StringContent(payload, Encoding.UTF8, "Application/json");
+
+                        var url = AppConfig.Get("Transaction");
+                        if (string.IsNullOrEmpty(url))
+                        {
+                            EventLogger.SaveLog(EventType.Error, "URL de Transaction no configurada");
+                            return null;
+                        }
+
+                        EventLogger.SaveLog(EventType.Info, "Petición: Actualización de transacción Dashboard", transactionToUpdate);
+
+                        // Validación 5: Verificar que _client no sea null
+                        if (_client == null)
+                        {
+                            EventLogger.SaveLog(EventType.Error, "HttpClient (_client) es null");
+                            return null;
+                        }
+
+                        var response = await _client.PutAsync(url, content);
+
+                        if (response == null)
+                        {
+                            EventLogger.SaveLog(EventType.Error, "Response de la API es null");
+                            return null;
+                        }
+
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        if (string.IsNullOrEmpty(result))
+                        {
+                            EventLogger.SaveLog(EventType.Error, "No se obtuvo contenido de la api");
+                            return null;
+                        }
+
+                        var requestresponse = JsonConvert.DeserializeObject<ApiResponse<TransactionDto>>(result);
+
+                        if (requestresponse == null)
+                        {
+                            EventLogger.SaveLog(EventType.Error, "Error deserializando la respuesta");
+                            return null;
+                        }
+                        if (requestresponse.statusCode == 200)
+                        {
+                            var transactionUpdated = requestresponse.response;
+                            ts.ApiDto = transactionUpdated;
+                            ts.IdTransaccionApi = transactionUpdated.Id;
+                            // Se guarda la transaccion en la base de datos local
+                            var mapper = ObjMapper.Instance;
+                            if (!await DB_TransactionService.Update(mapper.Map<DB_Transaction>(transactionUpdated)))
+                            {
+                                EventLogger.SaveLog(EventType.Error, "No se pudo actualizar la transacción de manera local");
+                            }
+                            EventLogger.SaveLog(EventType.Info, "Respuesta: Actualización de transacción Dashboard", requestresponse);
+                            return requestresponse.response;
+                        }
+                        else
+                        {
+                            EventLogger.SaveLog(EventType.Error, $"Api respondió con código {requestresponse.statusCode}", requestresponse);
+                            return null;
+                        }
                     }
-                    EventLogger.SaveLog(EventType.Info, "Respuesta: Actualización de transacción Dashboard", requestresponse);
-                    return requestresponse.response;
-                }
-
-                EventLogger.SaveLog(EventType.Error, "Api no respondió satisfactoriamente", requestresponse);
-                return null;
-            });
-
+                    catch (HttpRequestException httpEx)
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error de red en UpdateTransaction: {httpEx.Message}");
+                        return null;
+                    }
+                    catch (JsonException jsonEx)
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error de JSON en UpdateTransaction: {jsonEx.Message}");
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error inesperado en UpdateTransaction (async): {ex.Message}");
+                        return null;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error inesperado en UpdateTransaction: {ex.Message} - StackTrace: {ex.StackTrace}");
+            }
         }
 
         /*

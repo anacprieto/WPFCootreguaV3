@@ -160,7 +160,10 @@ namespace WPFCootreguaV2.UserControls
             }
             else
             {
-                _loadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + "Este dinero dinero permanecerá en su cuenta.");
+
+               // _loadModal = _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + "Este dinero dinero permanecerá en su cuenta.");
+               _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + "Este dinero dinero permanecerá en su cuenta.",new InfoModal());
+
                 Thread.Sleep(5000); // Timer para mostrar la modal y que se pueda leer
                 _ts.DevueltaCorrecta = false;
                 await SaveWithdrawal();
@@ -320,7 +323,7 @@ namespace WPFCootreguaV2.UserControls
                     }
                     else
                     {
-                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo notificar el retiro. Por favor vuelve a intentarlo.", _ts.DataPerson.FirstName));
+                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo notificar el retiro. Por favor vuelve a intentarlo.", _ts.DataPerson.FirstName),new InfoModal());
 
                         _ts.EstadoTransaccion = StateTransaction.Cancelada;
 
@@ -446,7 +449,7 @@ namespace WPFCootreguaV2.UserControls
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
                // CloseLoadModal();
-                _nav.ShowModal("Se presentó un problema intentando reportar los datos del retiro. Por favor comuníquese con soporte técnico.");
+                _nav.ShowModal("Se presentó un problema intentando reportar los datos del retiro. Por favor comuníquese con soporte técnico.", new InfoModal());
                 CloseLoadModal();
 
 

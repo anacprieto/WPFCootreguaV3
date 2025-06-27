@@ -22,6 +22,7 @@
 
     <BitmapImage x:Key="BACKREGISTERID" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/identificate2.jpg"/>
     <BitmapImage x:Key="BACKREGISTERAUTH" UriSource="pack://application:,,,/WPFCootreguaV2;component/Images/Backgrounds/autenticate2.jpg"/>
+    <BitmapImage x:Key="THANKS" UriSource="pack://application:,,,/Images/Others/gracias.jpg"/>
 
 
 
@@ -35,9 +36,7 @@
     <BitmapImage x:Key="BTN_AUTENTICATE2" UriSource="pack://application:,,,/Images/Backgrounds/autenticate2.jpg"/>
     <BitmapImage x:Key="BTN_PRODUCTOS" UriSource="pack://application:,,,/Images/Backgrounds/elige.jpg"/>
 
-    
-    
-    
+
     <BitmapImage x:Key="BTN_ACEPTAR" UriSource="pack://application:,,,/Images/Buttons/aceptar.png"/>
 
 

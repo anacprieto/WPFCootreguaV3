@@ -5,22 +5,53 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
       mc:Ignorable="d" 
-      Height="1720" 
-      Width="680">
-    <Grid>
+      Height="1920" 
+      Width="1080">
+    <local:AppUserControl.Background>
+        <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+    </local:AppUserControl.Background>
+
+    <Grid  Width="680" Height="1720" HorizontalAlignment="Right">
         <Grid.RowDefinitions>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="100" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="400"/>
+            <RowDefinition Height="200" />
         </Grid.RowDefinitions>
-        <Image 
-        Source="/Images/Others/gracias.jpg"
-        Height="1000"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Margin="0,0,0,0"
-        Grid.Row="1"
-        Stretch="Uniform"
-    />
+        <Grid Grid.Row="0">
+            <TextBlock x:Name="TxtTimer" Text="" Style="{StaticResource TimerStyle}" Foreground="{StaticResource PRIMARYCOLOR}" Margin="0,62,0,0" Width="192"/>
+
+        </Grid>
+        <Grid Grid.Row="1">
+            <Image 
+                Source="{StaticResource THANKS}"
+                Height="1200"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,0,0,0"
+                Grid.Row="1"
+                Stretch="Uniform"
+            />
+            <Grid x:Name="StartContainer" Height="135" VerticalAlignment="Bottom" Margin="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Tag="1" Source="{StaticResource ICO_STAR}" Cursor="Hand" MouseDown="BtnRating" Margin="12,0,0,50"/>
+                <Image Grid.Column="1" Tag="2" Source="{StaticResource ICO_STAR}" Cursor="Hand" MouseDown="BtnRating" Margin="12,0,5,50"/>
+                <Image Grid.Column="2" Tag="3" Source="{StaticResource ICO_STAR}" Cursor="Hand" MouseDown="BtnRating" Margin="0,0,2,50"/>
+                <Image Grid.Column="3" Tag="4" Source="{StaticResource ICO_STAR}" Cursor="Hand" MouseDown="BtnRating" Margin="5,3,11,50"/>
+                <Image Grid.Column="4" Tag="5" Source="{StaticResource ICO_STAR}" Cursor="Hand" MouseDown="BtnRating" Margin="0,0,13,50"/>
+
+            </Grid>
+        </Grid>
+        <Grid  Grid.Row="2">
+            <Image x:Name="BtnContinuar" Source="{StaticResource BTN_FINALIZAR}" Margin="184,44,184,44"
+            MouseDown="FinishBtn" Visibility="Visible"/>
+        </Grid>
+
+
     </Grid>
 </local:AppUserControl>

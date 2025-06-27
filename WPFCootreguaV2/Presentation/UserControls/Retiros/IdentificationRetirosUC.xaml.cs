@@ -264,7 +264,7 @@ namespace WPFCootreguaV2.UserControls
 
                 StopTimer();
 
-                _nav.ShowLoadModal("Consultando...");
+                //_nav.ShowLoadModal("Consultando...");
             }
             catch (Exception ex)
             {

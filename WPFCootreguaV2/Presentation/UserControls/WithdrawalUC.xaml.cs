@@ -23,12 +23,12 @@ using WPFCootreguaV2.Domain.ApiService;
 using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Exceptions;
-using WPFCootreguaV2.Domain.Peripherals;
 using WPFCootreguaV2.Domain.UIServices;
 using WPFCootreguaV2.Domain.UIServices.Integrations;
 using WPFCootreguaV2.Modals;
 using WPFCootreguaV2.UserControls;
 using ManualInputViewModel = WPFCootreguaV2.UserControls.ManualInputViewModel;
+
 
 namespace WPFCootreguaV2.Presentation.UserControls
 {
@@ -43,14 +43,12 @@ namespace WPFCootreguaV2.Presentation.UserControls
         private PaymentViewModel _paymentViewModel;
 
         private StateTransaction _tranStateTemp = StateTransaction.Iniciada;
-
         public WithdrawalUC()
         {
             InitializeComponent();
             _ts = Transaction.Instance;
 
             _ts.DevueltaCorrecta = false;
-
 
 
 #if NO_PERIPHERALS
@@ -90,8 +88,9 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
             void ExecuteScanner(object sender, EventArgs e)
             {
+                SimulateFullDispense(_paymentViewModel.ReturnAmount);
 
-                SaveWithdrawal();
+                //SaveWithdrawal();
                 //NotifyPay();
             }
 
@@ -106,29 +105,24 @@ namespace WPFCootreguaV2.Presentation.UserControls
       _peripherals.CashDispensed += OnCashDispensed;
       _peripherals.DispenserReject += OnDispenserReject;
 #endif
-
             // Agregar eventos
             this.Loaded += OnLoaded;
             this.Unloaded += OnUnloaded;
 
         }
+        void SimulateFullDispense(decimal amount)
+        {
+            var dispensedDetails = SimulateCashDispense(amount);
+            decimal totalDispensed = dispensedDetails.Sum(d => d.Key * d.Value);
+            OnCashDispensed(totalDispensed, dispensedDetails);
+        }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-
-            InitViewModel();
-#if NO_PERIPHERALS
-#else
-            _peripherals.StartAcceptance(_paymentViewModel.PayAmount);
-#endif
-        }
-        private void InitViewModel()
-        {
-
             _paymentViewModel = new PaymentViewModel
             {
                 PayAmount = _ts.Total,
-                RemainingAmount =0,
+                RemainingAmount = 0,
                 ReturnAmount = _ts.Total,
                 EnteredAmount = 0,
                 Denominations = new List<Denomination>(),
@@ -137,7 +131,27 @@ namespace WPFCootreguaV2.Presentation.UserControls
 
             ReturnMoney(_paymentViewModel.ReturnAmount);
 
+            //#if NO_PERIPHERALS
+            //#else
+            //            _peripherals.StartAcceptance(_paymentViewModel.PayAmount);
+            //#endif
         }
+        //private void InitViewModel()
+        //{
+
+        //    _paymentViewModel = new PaymentViewModel
+        //    {
+        //        PayAmount = _ts.Total,
+        //        RemainingAmount =0,
+        //        ReturnAmount = _ts.Total,
+        //        EnteredAmount = 0,
+        //        Denominations = new List<Denomination>(),
+        //        DispensedAmount = 0
+        //    };
+
+        //    ReturnMoney(_paymentViewModel.ReturnAmount);
+
+        //}
 
 
 
@@ -151,65 +165,104 @@ namespace WPFCootreguaV2.Presentation.UserControls
 #endif
         }
 
-     
+#if NO_PERIPHERALS
+        private Dictionary<int, int> SimulateCashDispense(decimal amount)
+        {
+            var details = new Dictionary<int, int>();
+            const int billValue = 50000;
+
+            // Calcular cuántos billetes de 50,000 se necesitan
+            int billCount = (int)(amount / billValue);
+
+            if (billCount > 0)
+            {
+                details.Add(billValue, billCount);
+            }
+
+            return details;
+        }
+#endif
+
         private void ReturnMoney(decimal returnValue)
         {
             _ts.DevueltaCorrecta = false;
 #if NO_PERIPHERALS
+            var dispensedDetails = SimulateCashDispense(returnValue);
+            OnCashDispensed(returnValue, dispensedDetails);
             OnCashDispensed(returnValue, new Dictionary<int, int>());
 #else
             _peripherals.StartDispenser(returnValue);
 #endif
 
         }
-
         private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
         {
-
             _paymentViewModel.DispensedAmount = totalDispensed;
-
             _paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
             string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
-
             SendDispenseDetails(details);
-
-             _nav.CloseModal();
+            _nav.CloseModal();
 
             if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
             {
                 _ts.DevueltaCorrecta = true;
                 await SaveWithdrawal();
-
             }
             else
             {
-                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.",new InfoModal());
+                _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.", new InfoModal());
                 await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
                 _ts.DevueltaCorrecta = false;
                 await SaveWithdrawal();
-
             }
-
         }
 
         private void SendDispenseDetails(Dictionary<int, int> details)
         {
-
             foreach (var denom in details.Keys)
             {
                 var quantity = details[denom];
                 if (quantity <= 0) continue;
                 SendTransactionDetail(TypeOperation.DP, Convert.ToDecimal(denom), quantity);
-
             }
         }
+
+        //private async void OnCashDispensed(decimal totalDispensed, Dictionary<int, int> details)
+        //{
+
+        //    _paymentViewModel.DispensedAmount = totalDispensed;
+
+        //    _paymentViewModel.RemainingAmount = _paymentViewModel.ReturnAmount - _paymentViewModel.DispensedAmount;
+        //    string strValueToReturn = _paymentViewModel.RemainingAmount.ToString("C0");
+
+        //    SendDispenseDetails(details);
+
+        //     _nav.CloseModal();
+
+        //    if (_paymentViewModel.DispensedAmount == _paymentViewModel.ReturnAmount)
+        //    {
+        //        _ts.DevueltaCorrecta = true;
+        //        await SaveWithdrawal();
+
+        //    }
+        //    else
+        //    {
+        //        _nav.ShowModal("No se pudo entregar la totalidad del dinero hay un faltante de:" + $" {strValueToReturn} " + ".Por favor comunícate con un administrador.",new InfoModal());
+        //        await Task.Delay(5000); // Timer para mostrar la modal y que se pueda leer
+        //        _ts.DevueltaCorrecta = false;
+        //        await SaveWithdrawal();
+
+        //    }
+
+        //}
+
 
         private void SendTransactionDetail(TypeOperation op, decimal denom, int quantity)
         {
             try
             {
                 EventLogger.SaveLog(EventType.Info, $"Enviando detalle a la api: Op: {op}, Denom: {denom.ToString("C0")}, Cantidad: {quantity}");
-                Api.CreateTransactionDetail(op, (int)denom, quantity);
+                Api.CreateTransactionDetail1(op, (int)denom, quantity);
 
             }
             catch (Exception ex)

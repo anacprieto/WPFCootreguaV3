@@ -230,6 +230,7 @@ namespace WPFCootreguaV2.UserControls
                             var tsCreated = Api.CreateTransaction();
                             if (tsCreated == null) throw new Exception("No se pudo enviar la transacción");
                             SaveTransaction();
+
                              
                         }
                         else
@@ -250,8 +251,6 @@ namespace WPFCootreguaV2.UserControls
                             _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName), new InfoModal());
                             StopTimer();
 
-                            //Switcher.ModalMS(string.Format("Estimado {0}, Ha superado el número de intentos permitidos.", transaction.DataPerson.FirstName));
-                            //Switcher.CLose();
                         }
                         else
                         {
@@ -414,6 +413,8 @@ namespace WPFCootreguaV2.UserControls
                     Utilities.Speak(greeting);
                     _nav.ShowModal($"{greeting} Has sido registrad@ en el sistema.", new InfoModal());
                     _nav.CloseModal();
+                    Dispatcher.Invoke(() => GoTo(new ConfigUC()));
+
                 }
 
             }

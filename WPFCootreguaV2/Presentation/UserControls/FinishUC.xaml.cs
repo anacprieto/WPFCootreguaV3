@@ -8,7 +8,6 @@ using System.Windows.Media;
 using WPFCootreguaV2.Domain;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Peripherals;
-using WPFCootreguaV2.Domain.Peripherals.Printer;
 using WPFCootreguaV2.Domain.UIServices;
 using WPFCootreguaV2.Modals;
 
@@ -147,7 +146,7 @@ namespace WPFCootreguaV2.UserControls
                 _document.footer = footer;
 
                 PrintService.BuildPrint(header, body, footer);
-                await PrintService.Start();
+                PrintService.Start();
 
 
             }

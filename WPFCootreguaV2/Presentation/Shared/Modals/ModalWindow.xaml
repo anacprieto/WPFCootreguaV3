@@ -207,7 +207,11 @@
     </Window.Resources>
 
     <Viewbox x:Name="WindowVB" Stretch="Uniform">
+       
         <Grid Width="1080" Height="1920">
+            <!--<Grid.Background>
+                <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+            </Grid.Background>-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="360" />
                 <RowDefinition Height="810" />

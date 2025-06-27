@@ -12,9 +12,9 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         Height="550" Width="800">
-    <!--<Window.Background>
+    <Window.Background>
         <ImageBrush ImageSource="{StaticResource MODALGENERIC}" />
-    </Window.Background>-->
+    </Window.Background>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

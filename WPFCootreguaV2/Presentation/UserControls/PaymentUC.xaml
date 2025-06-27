@@ -5,129 +5,138 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
              mc:Ignorable="d" 
-             Height="1720" 
-             Width="680" >
-    <Grid x:Name="MainGrid" Background="Transparent">
+             Height="1920"
+             Width="1080"
+             >
+
+
+    <local:AppUserControl.Background>
+        <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+    </local:AppUserControl.Background>
+
+    <Grid x:Name="MainGrid" Width="680" Height="1920" HorizontalAlignment="Right">
         <Grid.RowDefinitions>
-            <RowDefinition Height="250" />
-            <RowDefinition Height="200" />
-            <RowDefinition Height="530" />
             <RowDefinition Height="300" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="200" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="300" />
+            <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
+            <TextBlock x:Name="TxtTimer" d:Text="00:59" Style="{StaticResource TimerStyle}" 
+          Foreground="Transparent" Margin="0,43,0,0" Height="38" Width="134"/>
             <TextBlock 
-             Text="Ingrese el dinero"
-             FontSize="60"
-             Width="500"
-             TextAlignment="Center"
-             TextWrapping="Wrap"
-             Margin="0,150,0,0"
-             FontFamily="Arial"
-             FontWeight="Bold"
-             VerticalAlignment="Bottom"
-             HorizontalAlignment="Center" />
+       Text="Ingrese el dinero"
+       FontSize="60"
+       Width="500"
+       TextAlignment="Center"
+       TextWrapping="Wrap"
+       Margin="0,150,0,0"
+       FontFamily="Arial"
+       FontWeight="Bold"
+       VerticalAlignment="Bottom"
+       HorizontalAlignment="Center" />
 
         </Grid>
         <Grid Grid.Row="1">
             <TextBlock 
-             Text="Denominación"
-             FontSize="30"
-             TextAlignment="Center"
-             Margin="20,0,0,0"
-             FontFamily="Arial"
-             FontWeight="Bold"
-             VerticalAlignment="Bottom"
-             HorizontalAlignment="Left" Grid.Row="6" />
+       Text="Denominación"
+       FontSize="30"
+       TextAlignment="Center"
+       Margin="20,0,0,0"
+       FontFamily="Arial"
+       FontWeight="Bold"
+       VerticalAlignment="Bottom"
+       HorizontalAlignment="Left" Grid.Row="6" />
 
             <TextBlock 
-             Text="Cantidad"
-             FontSize="30"
-             TextAlignment="Center"
-             Margin="0,0,0,0"
-             FontFamily="Arial"
-             FontWeight="Bold"
-             VerticalAlignment="Bottom"
-             HorizontalAlignment="Center" />
+       Text="Cantidad"
+       FontSize="30"
+       TextAlignment="Center"
+       Margin="0,0,0,0"
+       FontFamily="Arial"
+       FontWeight="Bold"
+       VerticalAlignment="Bottom"
+       HorizontalAlignment="Center" />
 
             <TextBlock 
-             Text="Total ($)"
-             FontSize="30"
-             TextAlignment="Center"
-             Margin="0,0,80,0"
-             FontFamily="Arial"
-             FontWeight="Bold"
-             VerticalAlignment="Bottom"
-             HorizontalAlignment="Right" />
+       Text="Total ($)"
+       FontSize="30"
+       TextAlignment="Center"
+       Margin="0,0,80,0"
+       FontFamily="Arial"
+       FontWeight="Bold"
+       VerticalAlignment="Bottom"
+       HorizontalAlignment="Right" />
         </Grid>
 
         <Grid Grid.Row="2">
             <ListView x:Name="lv_denominations" 
-                 Margin="0,0,0,0"
-                 Background="Transparent"
-                 BorderBrush="Transparent"
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Top"
-                 ItemsSource="{Binding}">
+           Margin="0,0,0,0"
+           Background="Transparent"
+           BorderBrush="Transparent"
+           HorizontalAlignment="Center" 
+           VerticalAlignment="Top"
+           ItemsSource="{Binding}">
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="1"
-                              HorizontalAlignment="Center"
-                                  VerticalAlignment="Top"/>
+                        HorizontalAlignment="Center"
+                            VerticalAlignment="Top"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Center"
-                         VerticalAlignment="Top" Background="Transparent"
-                         Margin="0,0,0,0"
-                         Width="600"
-                         Height="50">
+                   VerticalAlignment="Top" Background="Transparent"
+                   Margin="0,0,0,0"
+                   Width="600"
+                   Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock 
-                                 Text="{Binding Denominacion, StringFormat={}{0:C0}}"
-                                 FontSize="35"
-                                 FontFamily="Arial"
-                                 TextWrapping="Wrap"
-                                 Margin="0,0,0,0"
-                                 Width="200"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center"
-                                 Grid.Column="0"
-                                 TextAlignment="Center"
-                        />
+                           Text="{Binding Denominacion, StringFormat={}{0:C0}}"
+                           FontSize="35"
+                           FontFamily="Arial"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,0"
+                           Width="200"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Grid.Column="0"
+                           TextAlignment="Center"
+                  />
                             <TextBlock 
-                                 Text="{Binding Quantity}"
-                                 FontSize="35"
-                                 FontFamily="Arial"
-                                 Width="80"
-                                 TextAlignment="Center"
-                                 TextWrapping="Wrap"
-                                 Margin="0,0,0,0"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center"
-                                 FontWeight="Bold"
-                                 Grid.Column="1"
-                        />
+                           Text="{Binding Quantity}"
+                           FontSize="35"
+                           FontFamily="Arial"
+                           Width="80"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"
+                           Grid.Column="1"
+                  />
                             <TextBlock 
-                                 Text="{Binding Total, StringFormat={}{0:C0}}"
-                                 FontSize="30"
-                                 FontFamily="Arial"
-                                 TextWrapping="Wrap"
-                                 Margin="0,0,0,0"
-                                 Width="200"
-                                 TextAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center"
-                                 FontWeight="Bold"
-                                 Grid.Column="2" 
-                        />
+                           Text="{Binding Total, StringFormat={}{0:C0}}"
+                           FontSize="30"
+                           FontFamily="Arial"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,0"
+                           Width="200"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"
+                           Grid.Column="2" 
+                  />
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -135,100 +144,101 @@
         </Grid>
         <Grid Grid.Row="3">
             <TextBlock 
-             Text="Valor ingresado"
-             FontSize="35"
-             TextAlignment="Center"
-             Margin="10,0,0,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Left"
-          />
+       Text="Valor ingresado"
+       FontSize="35"
+       TextAlignment="Center"
+       Margin="10,0,0,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Left"
+    />
             <TextBlock 
-             Text="{Binding ValorIngresado, StringFormat={}{0:C0}}"
-             FontSize="40"
-             TextAlignment="Center"
-             Margin="0,0,100,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             FontWeight="Bold"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Right"
-          />
+       Text="{Binding ValorIngresado, StringFormat={}{0:C0}}"
+       FontSize="40"
+       TextAlignment="Center"
+       Margin="0,0,100,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       FontWeight="Bold"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Right"
+    />
             <TextBlock 
-             Text="Valor faltante"
-             FontSize="30"
-             TextAlignment="Center"
-             Margin="10,60,0,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Left"
-          />
+       Text="Valor faltante"
+       FontSize="30"
+       TextAlignment="Center"
+       Margin="10,60,0,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Left"
+    />
             <TextBlock 
-             Text="{Binding ValorFaltante, StringFormat={}{0:C0}}"
-             FontSize="35"
-             TextAlignment="Center"
-             Margin="0,60,100,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             FontWeight="Bold"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Right"
-          />
+       Text="{Binding ValorFaltante, StringFormat={}{0:C0}}"
+       FontSize="35"
+       TextAlignment="Center"
+       Margin="0,60,100,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       FontWeight="Bold"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Right"
+    />
 
             <TextBlock 
-             Text="Valor sobrante"
-             FontSize="30"
-             TextAlignment="Center"
-             Margin="10,120,0,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Left"
-          />
+       Text="Valor sobrante"
+       FontSize="30"
+       TextAlignment="Center"
+       Margin="10,120,0,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Left"
+    />
             <TextBlock 
-             Text="{Binding ValorSobrante, StringFormat={}{0:C0}}"
-             FontSize="35"
-             TextAlignment="Center"
-             Margin="0,120,100,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             FontWeight="Bold"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Right"
-          />
+       Text="{Binding ValorSobrante, StringFormat={}{0:C0}}"
+       FontSize="35"
+       TextAlignment="Center"
+       Margin="0,120,100,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       FontWeight="Bold"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Right"
+    />
             <TextBlock 
-             Text="Valor total transacción"
-             FontSize="30"
-             TextAlignment="Center"
-             Margin="10,180,0,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Left"
-          />
+       Text="Valor total transacción"
+       FontSize="30"
+       TextAlignment="Center"
+       Margin="10,180,0,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Left"
+    />
             <TextBlock 
-             Text="{Binding PayValue, StringFormat={}{0:C0}}"
-             FontSize="35"
-             TextAlignment="Center"
-             Margin="0,180,100,0"
-             FontFamily="Arial"
-             Foreground="#FF606060"
-             FontWeight="Bold"
-             VerticalAlignment="Top"
-             HorizontalAlignment="Right"
-          />
+       Text="{Binding PayValue, StringFormat={}{0:C0}}"
+       FontSize="35"
+       TextAlignment="Center"
+       Margin="0,180,100,0"
+       FontFamily="Arial"
+       Foreground="#FF606060"
+       FontWeight="Bold"
+       VerticalAlignment="Top"
+       HorizontalAlignment="Right"
+    />
         </Grid>
         <Grid Grid.Row="4">
-        
-            <Image x:Name="BtnCancel" Source="{StaticResource BTN_SALIR}" Height="90"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="30,50,0,0"
-            Visibility="{Binding ImgCancel}"
-            Stretch="Uniform"
-            MouseDown="BtnCancel_TouchDown"/>
+            <Image x:Name="BtnCancel" Source="{StaticResource BTN_CANCELAR}" Height="90"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="30,50,0,0"
+                Visibility="{Binding ImgCancel}"
+                Stretch="Uniform"
+                MouseDown="BtnCancel_TouchDown"/>
+
         </Grid>
     </Grid>
+
 </local:AppUserControl>

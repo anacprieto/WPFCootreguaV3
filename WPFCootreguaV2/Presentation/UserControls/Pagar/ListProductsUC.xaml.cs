@@ -77,6 +77,7 @@ namespace WPFCootreguaV2.UserControls
             try
             {
                 _ts = Transaction.Instance;
+
                 _ts.Total = 0;
                 MaxAmountAhorroVista = Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVista"));
                 view = new CollectionViewSource();
@@ -223,16 +224,40 @@ namespace WPFCootreguaV2.UserControls
                         }
 
                         ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
-                        modal.ShowDialog();
-                        _ts.Total = modal.ValueToPay;
+                        bool? result = modal.ShowDialog();
+                       // modal.ShowDialog();
+                        if (result == true)
+                        {
+                            _ts.Total = modal.ValueToPay; 
+
+                        }
+                        else
+                        {
+                            // Usuario canceló el modal
+                            EventLogger.SaveLog(EventType.Info, "Usuario canceló la selección de monto para AhorrosVista");
+                            HandleModalCancellation();
+                            return; // Salir del método sin continuar
+                        }
+
                     }
                     else
                     {
                         ModalAmountWindow modal = new ModalAmountWindow(_ts.Total, service.TipoProducto);
-                        modal.ShowDialog();
-                        _ts.Total = modal.ValueToPay;
+                        bool? result = modal.ShowDialog();
+                        // modal.ShowDialog();
+                        if (result == true)
+                        {
+                            _ts.Total = modal.ValueToPay;
+                        }
+                        else
+                        {
+                            // Usuario canceló el modal
+                            EventLogger.SaveLog(EventType.Info, "Usuario canceló la selección de monto para AhorrosVista");
+                            HandleModalCancellation();
+                            return; // Salir del método sin continuar
+                        }
                     }
-
+                    
                     this.Opacity = 1;
                      GoTimer();
 
@@ -252,10 +277,49 @@ namespace WPFCootreguaV2.UserControls
                 // Log del error
             }
         }
+        private void HandleModalCancellation()
+        {
+            try
+            {
+                EventLogger.SaveLog(EventType.Info, "Procesando cancelación de modal - limpiando selección");
+
+                // Restaurar opacidad
+                this.Opacity = 1;
+
+                // Limpiar la selección del servicio
+                if (ProductsSelected != null)
+                {
+                    ProductsSelected.IsSelected = false;
+                    ProductsSelected = null;
+                }
+
+                // Limpiar todas las selecciones en la lista
+                foreach (var item in lstPager)
+                {
+                    item.IsSelected = false;
+                }
+
+                // Limpiar datos de transacción
+                _ts.ProductSelect = null;
+                _ts.Total = 0;
+
+                // Recargar la lista de productos
+                InitView();
+
+                // Actualizar la vista
+                lv_Products.Items.Refresh();
+
+                EventLogger.SaveLog(EventType.Info, "Selección limpiada y lista recargada exitosamente");
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Error, $"Error al manejar cancelación de modal: {ex.Message}", ex);
+            }
+        }
         private void BtnCancelar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             StopTimer();
-            _navigator.CloseModal();
+            _nav.CloseModal();
             Dispatcher.Invoke(() => GoTo(new ConfigUC()));
 
         }
@@ -266,13 +330,41 @@ namespace WPFCootreguaV2.UserControls
                 if (ProductsSelected != null && _ts.Total > 0)
                 {
                     SaveTransaction();
-
                 }
                 else
                 {
-                    StopTimer();
-                    _navigator.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
-                    GoTimer();
+                    try
+                    {
+                        _nav.CloseLoadModal();
+                        _nav.CloseModal();
+
+                        // Usar Dispatcher para asegurar que se ejecute en el hilo UI correcto
+                        Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            try
+                            {
+                                _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
+                            }
+                            catch (InvalidOperationException ex)
+                            {
+                                // Si falla ShowModal, usar mensaje alternativo
+                                EventLogger.SaveLog(EventType.Warning, $"No se pudo mostrar modal: {ex.Message}");
+                                MessageBox.Show(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName),
+                                              "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                            }
+                        });
+
+                        EventLogger.SaveLog(EventType.Info, "Debe seleccionar un producto para continuar con el pago.");
+                        GoTimer();
+                    }
+                    catch (Exception navEx)
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error mostrando modal de información: {navEx.Message}", navEx);
+                        // Fallback a MessageBox si falla el modal personalizado
+                        MessageBox.Show("Debe seleccionar un producto para continuar.", "Información",
+                                      MessageBoxButton.OK, MessageBoxImage.Information);
+                        GoTimer();
+                    }
                 }
             }
             catch (Exception ex)
@@ -280,7 +372,54 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"btnPagar_TouchDown {ex.Message}", ex);
             }
         }
+        //private void BtnPagar_TouchDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (ProductsSelected != null && _ts.Total > 0)
+        //        {
+        //            SaveTransaction();
 
+        //        }
+        //        else
+        //        {
+        //            _nav.CloseLoadModal(); 
+        //            _nav.CloseModal();
+        //            _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
+        //            EventLogger.SaveLog(EventType.Info, "Debe seleccionar un producto para continuar con el pago.");
+        //            GoTimer();
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        EventLogger.SaveLog(EventType.Error, $"btnPagar_TouchDown {ex.Message}", ex);
+        //    }
+        //}
+
+        // En la ventana principal o en el código que abre ModalWindow
+        private void OpenModalWindow()
+        {
+            var viewModel = new ModalViewModel
+            {
+                Message = string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName),
+                Title = "",
+                TypeModal = new InfoModal() // O ConfirmationModal, LoadModal, según sea necesario
+            };
+
+            var modal = new ModalWindow(viewModel);
+            if (modal.ShowDialog() == true)
+            {
+                modal.Close();
+                //MessageBox.Show("El usuario aceptó el diálogo");
+            }
+            else
+            {
+                modal.Close();
+
+                //MessageBox.Show("El usuario canceló el diálogo");
+            }
+        }
         private void txtSaldo_TouchDown(object sender, System.Windows.Input.MouseEventArgs e)
         {
             try
@@ -456,110 +595,215 @@ namespace WPFCootreguaV2.UserControls
         //    }
         //}
 
-        private async Task SaveTransaction()
+
+        private void SaveTransaction()
         {
             try
             {
-
-                // Crear la transacción y esperar su resultado
-                if (_ts.IdTransaccionApi == 0)
+                Task.Run(async () =>
                 {
-                    var tsCreated = await Api.CreateTransaction();
-                    if (tsCreated == null)
+                    if (_ts.IdTransaccionApi == 0)
                     {
-                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+                        var tsCreated = await Api.CreateTransaction();
+                        if (tsCreated == null)
+                        {
+                            EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+
+                        }
+                    }
+
+                    // Crear la transacción y esperar su resultado
+                    if (_ts == null)
+                    {
+                        _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
+                        EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
+
+                        return;
+                    }
+                    if (_ts.DataPerson == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
+                        _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
+                        return;
+                    }
+
+                    if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
+                    {
+                        string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
+                        _nav.ShowModal(ms, new InfoModal());
+                    }
+
+                    _ts.TipoTransaccion = TypeTransaction.Pago;
+                    // Configurar los datos de la transacción después de que se haya creado exitosamente
+                    _ts.EstadoTransaccion = StateTransaction.Iniciada;
+                    //_ts.Total = 0;
+                    _ts.TipoPago = TypePayment.Efectivo;
+                    _ts.Type = ETransactionType.Payment;
+                    _ts.payer = new Payer
+                    {
+                        Document = _ts.Documento,
+                        DocumentType = "CC",
+                        Name = _ts.DataPerson?.FirstName ?? string.Empty,
+                        LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+                        Email = _ts.DataPerson?.Email ?? string.Empty,
+                        Phone = _ts.DataPerson?.Phone ?? string.Empty,
+                        Adress = _ts.DataPerson?.Adress ?? string.Empty,
+                        IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
+                        IdPayPad = _ts.IdPaypad,
+                        IdClient = 24
+                    };
+
+
+                    // Crear el pagador y esperar su resultado
+                    var payerCreated = await Api.CreatePayer();
+                    if (payerCreated == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "Pagador no  pudo ser creado");
 
                     }
-                }
 
-                // Crear la transacción y esperar su resultado
-                if (_ts == null)
-                {
-                    _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
-                    EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
+                    // _nav.CloseModal();
 
-                    return;
-                }
-                if (_ts.DataPerson == null)
-                {
-                    EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
-                    _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
-                    return;
-                }
+                    // Validar si el proceso fue exitoso
+                    _nav.CloseModal();
 
-                if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
-                {
-                    string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
-                    _nav.ShowModal(ms, new InfoModal());
-                }
-
-                _ts.TipoTransaccion = TypeTransaction.Pago;
-                // Configurar los datos de la transacción después de que se haya creado exitosamente
-                _ts.EstadoTransaccion = StateTransaction.Iniciada;
-                //_ts.Total = 0;
-                _ts.TipoPago = TypePayment.Efectivo;
-                _ts.Type= ETransactionType.Payment;
-                _ts.payer = new Payer
-                {
-                    Document = _ts.Documento,
-                    DocumentType = "CC",
-                    Name = _ts.DataPerson?.FirstName ?? string.Empty,
-                    LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
-                    Email = _ts.DataPerson?.Email ?? string.Empty,
-                    Phone = _ts.DataPerson?.Phone ?? string.Empty,
-                    Adress = _ts.DataPerson?.Adress ?? string.Empty,
-                    IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
-                    IdPayPad = _ts.IdPaypad,
-                    IdClient = 24
-                };
-
-
-                // Crear el pagador y esperar su resultado
-                var payerCreated = await Api.CreatePayer();
-                if (payerCreated == null)
-                {
-                    EventLogger.SaveLog(EventType.Error, "Pagador no  pudo ser creado");
-
-                }
-
-                // _nav.CloseModal();
-
-                // Validar si el proceso fue exitoso
-                _nav.CloseModal();
-
-                if (_ts.IdTransaccionApi == 0)
-                {
-                    Dispatcher.Invoke(() =>
+                    if (_ts.IdTransaccionApi == 0)
                     {
-                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
-                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
+                        Dispatcher.Invoke(() =>
+                        {
+                            _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
+                            EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
 
-                        GoTimer();
-                    });
-                }
-                else
-                {
+                            GoTimer();
+                        });
+                    }
+                    else
+                    {
 
-                    Dispatcher.Invoke(() => GoTo(new PaymentUC()));
-                    EventLogger.SaveLog(EventType.Error, "Yendo a ventana de pago");
+                        Dispatcher.Invoke(() => GoTo(new PaymentUC()));
+                        EventLogger.SaveLog(EventType.Error, "Yendo a ventana de pago");
 
 
-                }
+                    }
 
+                   
+                });
                 StopTimer();
                 _nav.CloseModal();
 
+                //Switcher.Timer(false);
             }
             catch (Exception ex)
             {
-                _nav.CloseModal(); // Asegurar que se cierre el modal en caso de error
-                EventLogger.SaveLog(EventType.Error, $"Error al guardar transacción: {ex.Message}");
+                EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
 
-                // Mostrar mensaje de error al usuario
-                _nav.ShowModal("No se pudo completar reporte de la transacción. Por favor intentalo de nuevo.",new InfoModal());
-                _nav.CloseModal();
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
+        //private async Task SaveTransaction()
+        //{
+        //    try
+        //    {
+
+        //        // Crear la transacción y esperar su resultado
+        //        if (_ts.IdTransaccionApi == 0)
+        //        {
+        //            var tsCreated = await Api.CreateTransaction();
+        //            if (tsCreated == null)
+        //            {
+        //                EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+
+        //            }
+        //        }
+
+        //        // Crear la transacción y esperar su resultado
+        //        if (_ts == null)
+        //        {
+        //            _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
+        //            EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
+
+        //            return;
+        //        }
+        //        if (_ts.DataPerson == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
+        //            _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
+        //            return;
+        //        }
+
+        //        if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
+        //        {
+        //            string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
+        //            _nav.ShowModal(ms, new InfoModal());
+        //        }
+
+        //        _ts.TipoTransaccion = TypeTransaction.Pago;
+        //        // Configurar los datos de la transacción después de que se haya creado exitosamente
+        //        _ts.EstadoTransaccion = StateTransaction.Iniciada;
+        //        //_ts.Total = 0;
+        //        _ts.TipoPago = TypePayment.Efectivo;
+        //        _ts.Type= ETransactionType.Payment;
+        //        _ts.payer = new Payer
+        //        {
+        //            Document = _ts.Documento,
+        //            DocumentType = "CC",
+        //            Name = _ts.DataPerson?.FirstName ?? string.Empty,
+        //            LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+        //            Email = _ts.DataPerson?.Email ?? string.Empty,
+        //            Phone = _ts.DataPerson?.Phone ?? string.Empty,
+        //            Adress = _ts.DataPerson?.Adress ?? string.Empty,
+        //            IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
+        //            IdPayPad = _ts.IdPaypad,
+        //            IdClient = 24
+        //        };
+
+
+        //        // Crear el pagador y esperar su resultado
+        //        var payerCreated = await Api.CreatePayer();
+        //        if (payerCreated == null)
+        //        {
+        //            EventLogger.SaveLog(EventType.Error, "Pagador no  pudo ser creado");
+
+        //        }
+
+        //        // _nav.CloseModal();
+
+        //        // Validar si el proceso fue exitoso
+        //        _nav.CloseModal();
+
+        //        if (_ts.IdTransaccionApi == 0)
+        //        {
+        //            Dispatcher.Invoke(() =>
+        //            {
+        //                _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
+        //                EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
+
+        //                GoTimer();
+        //            });
+        //        }
+        //        else
+        //        {
+
+        //            Dispatcher.Invoke(() => GoTo(new PaymentUC()));
+        //            EventLogger.SaveLog(EventType.Error, "Yendo a ventana de pago");
+
+
+        //        }
+
+        //        StopTimer();
+        //        _nav.CloseModal();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _nav.CloseModal(); // Asegurar que se cierre el modal en caso de error
+        //        EventLogger.SaveLog(EventType.Error, $"Error al guardar transacción: {ex.Message}");
+
+        //        // Mostrar mensaje de error al usuario
+        //        _nav.ShowModal("No se pudo completar reporte de la transacción. Por favor intentalo de nuevo.",new InfoModal());
+        //        _nav.CloseModal();
+        //    }
+        //}
 
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

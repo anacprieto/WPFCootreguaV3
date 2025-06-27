@@ -34,11 +34,15 @@
     <None Remove="Images\Backgrounds\BgInicio.jpg" />
     <None Remove="Images\Backgrounds\BgInicio.png" />
     <None Remove="Images\Backgrounds\elige.jpg" />
+    <None Remove="Images\Backgrounds\generico-modal.png" />
     <None Remove="Images\Backgrounds\identificate.jpg" />
     <None Remove="Images\Backgrounds\identificate2.jpg" />
+    <None Remove="Images\Backgrounds\modal-error.png" />
+    <None Remove="Images\Backgrounds\modal-info.png" />
     <None Remove="Images\Backgrounds\paga.jpg" />
     <None Remove="Images\Backgrounds\type.jpg" />
     <None Remove="Images\Buttons\aceptar.png" />
+    <None Remove="Images\Buttons\btn-cancel-pay.png" />
     <None Remove="Images\Buttons\Btn0.png" />
     <None Remove="Images\Buttons\Btn1.png" />
     <None Remove="Images\Buttons\Btn2.png" />
@@ -54,6 +58,7 @@
     <None Remove="Images\Buttons\BtnCancelar.png" />
     <None Remove="Images\Buttons\BtnConsultar.png" />
     <None Remove="Images\Buttons\BtnContinuar.png" />
+    <None Remove="Images\Buttons\BtnDatafono.png" />
     <None Remove="Images\Buttons\BtnDocumento.png" />
     <None Remove="Images\Buttons\BtnEfectivo.png" />
     <None Remove="Images\Buttons\BtnEscanear.png" />
@@ -257,6 +262,7 @@
     <None Remove="Images\Others\check.png" />
     <None Remove="Images\Others\ChecOk.png" />
     <None Remove="Images\Others\circle.png" />
+    <None Remove="Images\Others\gracias.jpg" />
     <None Remove="Images\Others\IcoDocumento.png" />
     <None Remove="Images\Others\icono_referencia_pagar.png" />
     <None Remove="Images\Others\icono_referencia_pagar_industria_comercio.png" />
@@ -296,6 +302,7 @@
     <None Remove="Images\Others\txt_selecciona_opcion_a_utilizar.png" />
     <None Remove="Images\Others\txt_seleccione_la_referencia_a_pagar.png" />
     <None Remove="Images\Others\voucher.png" />
+    <None Remove="Images\Others\x.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -333,6 +340,9 @@
 
 
   <ItemGroup>
+    <Compile Update="Presentation\UserControls\Pagar\ListProductsOthersUC.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Presentation\UserControls\Registros\AuthenticationRegisterUC.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -416,10 +426,19 @@
     <Resource Include="Images\Backgrounds\elige.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Backgrounds\generico-modal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Backgrounds\identificate.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Backgrounds\identificate2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\modal-error.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Backgrounds\modal-info.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Backgrounds\paga.jpg">
@@ -429,6 +448,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\aceptar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\btn-cancel-pay.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\Btn0.png">
@@ -466,6 +488,9 @@
     </Resource>
     <Resource Include="Images\Buttons\BtnAtrasTxt.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Buttons\BtnDatafono.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Buttons\BtnDocumento.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -530,6 +555,9 @@
     <Resource Include="Images\Others\circle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Others\gracias.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Others\IcoDocumento.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -585,6 +613,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Others\TxtValorPagar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Others\x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

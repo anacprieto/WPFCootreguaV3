@@ -5,9 +5,23 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPFCootreguaV2.UserControls"
       mc:Ignorable="d" 
-       Height="1720" 
-       Width="680">
-    <!--
+                Height="1920"
+         Width="1080"
+         >
+
+
+    <local:AppUserControl.Background>
+        <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
+    </local:AppUserControl.Background>
+
+    <Grid x:Name="MainGrid" Width="680" Height="1920" HorizontalAlignment="Right">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="500" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="500" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <!--
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="{StaticResource BACKGENERIC}" Stretch="Uniform"/>
@@ -51,13 +65,7 @@
             <ContentControl Name="cc_View" />
         </Grid>
     </Grid>-->
-    <Grid Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="450" />
-            <RowDefinition Height="600" />
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+    
             <TextBlock 
             Text="Transacción en proceso" 
             FontFamily="pack://application:,,,/fonts/#Ubuntu"

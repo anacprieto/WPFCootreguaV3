@@ -1,8 +1,4 @@
-﻿using ControlzEx.Standard;
-using DB;
-using MahApps.Metro.Controls;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MPOST;
 using System;
 using System.Collections.Generic;
@@ -38,12 +34,13 @@ using WPFCootreguaV2.Presentation.UserControls;
 
 namespace WPFCootreguaV2.UserControls
 {
-    /// <summary>
-    /// Lógica de interacción para ScanInputUC.xaml
-    /// </summary>
     public partial class ListProductsRetirosUC : AppUserControl
     {
         private DocumentFormat _document = new();
+        private bool isSelected = false;
+
+        private MenuBackground bg;
+
         private const string STR_TIMER = "02:30";
         private TimerGeneric _timer;
         private Transaction _ts;
@@ -53,6 +50,7 @@ namespace WPFCootreguaV2.UserControls
         private ObservableCollection<ProductsState> lstPager;
         private CollectionViewSource view;
         private decimal MaxAmountAhorroVista;
+        private readonly Navigator _navigator;
 
         #region Regex properies
 
@@ -61,6 +59,7 @@ namespace WPFCootreguaV2.UserControls
         public TypeTransaction TransactionType { get; private set; }
         #endregion
         private ProductsState ProductsSelected = null;
+        private bool flag = false; // Variable para controlar el estado de la imagen
 
         public ListProductsRetirosUC()
         {
@@ -68,16 +67,15 @@ namespace WPFCootreguaV2.UserControls
             try
             {
                 _ts = Transaction.Instance;
+
                 _ts.Total = 0;
                 MaxAmountAhorroVista = Convert.ToDecimal(AppConfig.Get("MaxAmountAhorroVista"));
                 view = new CollectionViewSource();
                 lstPager = new ObservableCollection<ProductsState>();
-                ProductsSelected = new ProductsState();
-
 
                 InitView();
 
-                Utilities.Speak("Selecciona el producto con el que vas a pagar.");
+                Utilities.Speak("Selecciona el producto del que vas a retirar");
                 this.Unloaded += OnUnloaded;
                 this.Loaded += Onloaded;
             }
@@ -85,12 +83,17 @@ namespace WPFCootreguaV2.UserControls
             {
                 // Log del error
             }
-           
         }
+
         private void Onloaded(object sender, RoutedEventArgs e)
         {
         }
 
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            _nav.CloseModal();
+            StopTimer();
+        }
 
         private void InitView()
         {
@@ -147,7 +150,6 @@ namespace WPFCootreguaV2.UserControls
                             IsSelected = false, // NUEVA PROPIEDAD
                         });
                     }
-
                 }
 
                 if (lstPager.Count > 0)
@@ -166,6 +168,27 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
             }
         }
+
+        #region "Eventos"
+
+        private void btnCheck_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var button = sender as Button;
+                var service = button?.DataContext as ProductsState;
+                if (service != null && service.ValorPagar > 0)
+                {
+                    HandleProductSelection(service);
+                    // No necesitas actualizar itemInCollection aquí porque HandleProductSelection ya lo hace
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log del error
+            }
+        }
+
         private void HandleProductSelection(ProductsState service)
         {
             try
@@ -208,14 +231,36 @@ namespace WPFCootreguaV2.UserControls
                         }
 
                         ModalAmountWindow modal = new ModalAmountWindow(MaxAmountAhorroVista, service.TipoProducto);
-                        modal.ShowDialog();
-                        _ts.Total = modal.ValueToPay;
+                        bool? result = modal.ShowDialog();
+                        // modal.ShowDialog();
+                        if (result == true)
+                        {
+                            _ts.Total = modal.ValueToPay;
+                        }
+                        else
+                        {
+                            // Usuario canceló el modal
+                            EventLogger.SaveLog(EventType.Info, "Usuario canceló la selección de monto para AhorrosVista");
+                            HandleModalCancellation();
+                            return; // Salir del método sin continuar
+                        }
                     }
                     else
                     {
                         ModalAmountWindow modal = new ModalAmountWindow(_ts.Total, service.TipoProducto);
-                        modal.ShowDialog();
-                        _ts.Total = modal.ValueToPay;
+                        bool? result = modal.ShowDialog();
+                        // modal.ShowDialog();
+                        if (result == true)
+                        {
+                            _ts.Total = modal.ValueToPay;
+                        }
+                        else
+                        {
+                            // Usuario canceló el modal
+                            EventLogger.SaveLog(EventType.Info, "Usuario canceló la selección de monto para AhorrosVista");
+                            HandleModalCancellation();
+                            return; // Salir del método sin continuar
+                        }
                     }
 
                     this.Opacity = 1;
@@ -237,21 +282,44 @@ namespace WPFCootreguaV2.UserControls
                 // Log del error
             }
         }
-        private void btnCheck_Click(object sender, RoutedEventArgs e)
+
+        private void HandleModalCancellation()
         {
             try
             {
-                var button = sender as Button;
-                var service = button?.DataContext as ProductsState;
-                if (service != null && service.ValorPagar > 0)
+                EventLogger.SaveLog(EventType.Info, "Procesando cancelación de modal - limpiando selección");
+
+                // Restaurar opacidad
+                this.Opacity = 1;
+
+                // Limpiar la selección del servicio
+                if (ProductsSelected != null)
                 {
-                    HandleProductSelection(service);
-                    // No necesitas actualizar itemInCollection aquí porque HandleProductSelection ya lo hace
+                    ProductsSelected.IsSelected = false;
+                    ProductsSelected = null;
                 }
+
+                // Limpiar todas las selecciones en la lista
+                foreach (var item in lstPager)
+                {
+                    item.IsSelected = false;
+                }
+
+                // Limpiar datos de transacción
+                _ts.ProductSelect = null;
+                _ts.Total = 0;
+
+                // Recargar la lista de productos
+                InitView();
+
+                // Actualizar la vista
+                lv_Products.Items.Refresh();
+
+                EventLogger.SaveLog(EventType.Info, "Selección limpiada y lista recargada exitosamente");
             }
             catch (Exception ex)
             {
-                // Log del error
+                EventLogger.SaveLog(EventType.Error, $"Error al manejar cancelación de modal: {ex.Message}", ex);
             }
         }
 
@@ -260,8 +328,8 @@ namespace WPFCootreguaV2.UserControls
             StopTimer();
             _nav.CloseModal();
             Dispatcher.Invoke(() => GoTo(new ConfigUC()));
-
         }
+
         private void BtnPagar_TouchDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -269,18 +337,68 @@ namespace WPFCootreguaV2.UserControls
                 if (ProductsSelected != null && _ts.Total > 0)
                 {
                     SaveTransaction();
-
                 }
                 else
                 {
-                    StopTimer();
-                    _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
-                    GoTimer();
+                    try
+                    {
+                        _nav.CloseLoadModal();
+                        _nav.CloseModal();
+
+                        // Usar Dispatcher para asegurar que se ejecute en el hilo UI correcto
+                        Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            try
+                            {
+                                _nav.ShowModal(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName), new InfoModal());
+                            }
+                            catch (InvalidOperationException ex)
+                            {
+                                // Si falla ShowModal, usar mensaje alternativo
+                                EventLogger.SaveLog(EventType.Warning, $"No se pudo mostrar modal: {ex.Message}");
+                                MessageBox.Show(string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName),
+                                              "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                            }
+                        });
+
+                        EventLogger.SaveLog(EventType.Info, "Debe seleccionar un producto para continuar con el pago.");
+                        GoTimer();
+                    }
+                    catch (Exception navEx)
+                    {
+                        EventLogger.SaveLog(EventType.Error, $"Error mostrando modal de información: {navEx.Message}", navEx);
+                        // Fallback a MessageBox si falla el modal personalizado
+                        MessageBox.Show("Debe seleccionar un producto para continuar.", "Información",
+                                      MessageBoxButton.OK, MessageBoxImage.Information);
+                        GoTimer();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 EventLogger.SaveLog(EventType.Error, $"btnPagar_TouchDown {ex.Message}", ex);
+            }
+        }
+
+        private void OpenModalWindow()
+        {
+            var viewModel = new ModalViewModel
+            {
+                Message = string.Format("Estimado {0}, debe de seleccionar un producto para continuar.", _ts.DataPerson.FirstName),
+                Title = "",
+                TypeModal = new InfoModal() // O ConfirmationModal, LoadModal, según sea necesario
+            };
+
+            var modal = new ModalWindow(viewModel);
+            if (modal.ShowDialog() == true)
+            {
+                modal.Close();
+                //MessageBox.Show("El usuario aceptó el diálogo");
+            }
+            else
+            {
+                modal.Close();
+                //MessageBox.Show("El usuario canceló el diálogo");
             }
         }
 
@@ -305,6 +423,7 @@ namespace WPFCootreguaV2.UserControls
             }
         }
 
+        #endregion
 
         #region Timer
         public void GoTimer()
@@ -317,9 +436,7 @@ namespace WPFCootreguaV2.UserControls
 
                 _timer.CallBackTimeOut = () =>
                 {
-
                     Dispatcher.Invoke(() => GoTo(new ConfigUC()));
-
                 };
 
                 _timer.CallBackTick = stringTimer =>
@@ -327,10 +444,8 @@ namespace WPFCootreguaV2.UserControls
                     Dispatcher.BeginInvoke((Action)delegate
                     {
                         TxtTimer.Text = stringTimer;
-
                     });
                 };
-
             }
             catch (Exception ex)
             {
@@ -354,191 +469,103 @@ namespace WPFCootreguaV2.UserControls
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
             }
         }
-
-
         #endregion
-        //private void SaveTransaction()
-        //{
-        //    _nav.CloseModal();
-        //    try
-        //    {
-        //        // Add null check for _ts and its properties
-        //        if (_ts == null)
-        //        {
-        //            _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
-        //            EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
 
-        //            return;
-        //        }
-        //        if (_ts.DataPerson == null)
-        //        {
-        //            EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
-        //            _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
-        //            return;
-        //        }
-
-        //        if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
-        //        {
-        //            string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
-        //            _nav.ShowModal(ms, new InfoModal());
-        //        }
-
-        //        _ts.TipoTransaccion = TypeTransaction.Retiro;
-
-        //        Task.Run(async () =>
-        //        {
-        //            try
-        //            {
-        //                _ts.TipoPago = TypePayment.Efectivo;
-        //                _ts.TipoTransaccion = TypeTransaction.Retiro;
-        //                _ts.EstadoTransaccion = StateTransaction.Iniciada;
-        //                _ts.payer = new Payer
-        //                {
-        //                    Document = _ts.Documento,
-        //                    Name = _ts.DataPerson?.FirstName ?? string.Empty,
-        //                    Email = _ts.DataPerson?.Email ?? string.Empty
-        //                };
-
-        //                var tsCreated = await Api.CreateTransaction();
-        //                if (tsCreated == null)
-        //                {
-        //                    //throw new Exception("No se pudo enviar la transacción");
-        //                    EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
-
-        //                }
-        //                ;
-        //                _nav.CloseModal();
-
-        //                if (_ts.IdTransaccionApi == 0)
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
-        //                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
-
-        //                        GoTimer();
-        //                    });
-        //                }
-        //                else
-        //                {
-
-        //                    Dispatcher.Invoke(() => GoTo(new WithdrawalUC()));
-        //                    EventLogger.SaveLog(EventType.Error, "Yendo a ventana de retiros");
-
-
-        //                }
-        //            }
-        //            catch (Exception taskEx)
-        //            {
-        //                Dispatcher.Invoke(() =>
-        //                {
-        //                    _nav.CloseModal();
-        //                    EventLogger.SaveLog(EventType.Error, $"Error in SaveTransaction task: {taskEx.Message}", taskEx);
-        //                    _nav.ShowModal("Error procesando la transacción. Por favor intenta de nuevo.", new InfoModal());
-        //                });
-        //            }
-        //        });
-
-        //        StopTimer();
-        //        _nav.ShowModal("Procesando transacción...");
-        //        // CloseModal();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución:SaveTransaction de listProducts {ex.Message}", ex);
-        //    }
-        //}
-
-        private async Task SaveTransaction()
+        private void SaveTransaction()
         {
             try
             {
-                // Crear la transacción y esperar su resultado
-                if (_ts == null)
+                Task.Run(async () =>
                 {
-                    _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
-                    EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
-
-                    return;
-                }
-                if (_ts.DataPerson == null)
-                {
-                    EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
-                    _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
-                    return;
-                }
-
-                if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
-                {
-                    string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
-                    _nav.ShowModal(ms, new InfoModal());
-                }
-
-                _ts.TipoTransaccion = TypeTransaction.Retiro;
-                // Configurar los datos de la transacción después de que se haya creado exitosamente
-                _ts.EstadoTransaccion = StateTransaction.Iniciada;
-                _ts.Total = 0;
-                _ts.TipoPago = TypePayment.Efectivo;
-                _ts.Type = ETransactionType.Withdrawal;
-                _ts.payer = new Payer
-                {
-                    Document = _ts.Documento,
-                    DocumentType = "CC",
-                    Name = _ts.DataPerson?.FirstName ?? string.Empty,
-                    LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
-                    Email = _ts.DataPerson?.Email ?? string.Empty,
-                    Phone = _ts.DataPerson?.Phone ?? string.Empty,
-                    Adress = _ts.DataPerson?.Adress ?? string.Empty,
-                    IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
-                    IdPayPad = _ts.IdPaypad,
-                    IdClient = 27
-                };
-
-                // Crear el pagador y esperar su resultado
-                var payerCreated = await Api.CreatePayer();
-                if (payerCreated == null)
-                    throw new Exception("No se pudo enviar el pagador");
-
-                // _nav.CloseModal();
-
-                // Validar si el proceso fue exitoso
-                _nav.CloseModal();
-
-                if (_ts.IdTransaccionApi == 0)
-                {
-                    Dispatcher.Invoke(() =>
+                    if (_ts.IdTransaccionApi == 0)
                     {
-                        _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
-                        EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
+                        var tsCreated = await Api.CreateTransaction();
+                        if (tsCreated == null)
+                        {
+                            EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción");
+                        }
+                    }
 
-                        GoTimer();
-                    });
-                }
-                else
-                {
+                    // Crear la transacción y esperar su resultado
+                    if (_ts == null)
+                    {
+                        _nav.ShowModal("Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", new InfoModal());
+                        EventLogger.SaveLog(EventType.Error, "Error: No se pudo obtener la información de la transacción. Por favor intenta de nuevo.", null);
+                        return;
+                    }
 
-                    Dispatcher.Invoke(() => GoTo(new WithdrawalUC()));
-                    EventLogger.SaveLog(EventType.Error, "Yendo a ventana de retiros");
+                    if (_ts.DataPerson == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "DataPerson is null in SaveTransaction", null);
+                        _nav.ShowModal("Error: No se pudo obtener la información de la persona. Por favor intenta de nuevo.", new InfoModal());
+                        return;
+                    }
 
+                    if (_ts.ProductSelect?.TipoProducto == (int)ETypeProductCootregua.Creditos)
+                    {
+                        string ms = string.Format("Estimado {0}, {1} Esta transacción esta siendo realizado a la cuota de su crédito.", _ts.DataPerson.FirstName, Environment.NewLine);
+                        _nav.ShowModal(ms, new InfoModal());
+                    }
 
-                }
+                    _ts.TipoTransaccion = TypeTransaction.Retiro;
+                    // Configurar los datos de la transacción después de que se haya creado exitosamente
+                    _ts.EstadoTransaccion = StateTransaction.Iniciada;
+                    _ts.Total = 0;
+                    _ts.TipoPago = TypePayment.Efectivo;
+                    _ts.Type = ETransactionType.Withdrawal;
+                    _ts.payer = new Payer
+                    {
+                        Document = _ts.Documento,
+                        DocumentType = "CC",
+                        Name = _ts.DataPerson?.FirstName ?? string.Empty,
+                        LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+                        Email = _ts.DataPerson?.Email ?? string.Empty,
+                        Phone = _ts.DataPerson?.Phone ?? string.Empty,
+                        Adress = _ts.DataPerson?.Adress ?? string.Empty,
+                        IdTransaction = _ts.IdTransaccionApi, // Este valor debe estar disponible después de crear la transacción
+                        IdPayPad = _ts.IdPaypad,
+                        IdClient = 27
+                    };
 
+                    // Crear el pagador y esperar su resultado
+                    var payerCreated = await Api.CreatePayer();
+                    if (payerCreated == null)
+                    {
+                        EventLogger.SaveLog(EventType.Error, "Pagador no  pudo ser creado");
+                    }
+
+                    // _nav.CloseModal();
+
+                    // Validar si el proceso fue exitoso
+                    _nav.CloseModal();
+
+                    if (_ts.IdTransaccionApi == 0)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            _nav.ShowModal("Se presentó un problema en los servicios de consulta, por favor intentalo más tarde.", new InfoModal());
+                            EventLogger.SaveLog(EventType.Error, "No se pudo enviar la transacción,_ts.IdTransaccionApi==0");
+                            GoTimer();
+                        });
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() => GoTo(new WithdrawalUC()));
+                        EventLogger.SaveLog(EventType.Error, "Yendo a ventana de pago");
+                    }
+                });
+
+                StopTimer();
+                _nav.CloseModal();
+                //Switcher.Timer(false);
             }
             catch (Exception ex)
             {
-                _nav.CloseModal(); // Asegurar que se cierre el modal en caso de error
-                EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución:SaveTransaction de listProducts {ex.Message}", ex);
-
-                // Mostrar mensaje de error al usuario
-                _nav.ShowModal("No se pudo completar el registro. Por favor intentalo de nuevo.", new InfoModal());
-                _nav.CloseModal();
+                EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            _nav.CloseModal();
-            StopTimer();
-        }
+
         public static decimal RoundValue(decimal Total, bool arriba)
         {
             try
@@ -559,333 +586,236 @@ namespace WPFCootreguaV2.UserControls
             catch (Exception ex)
             {
                 EventLogger.SaveLog(EventType.Error, $"Ocurrió un error en tiempo de ejecución: {ex.Message}", ex);
-
                 // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, "Utilities", ex);
                 return Total;
             }
         }
-        public class ListProductsRetirosViewModel : INotifyPropertyChanged
-    {
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-
-        private int _CodSession;
-
-        private int _CreationDate;
-
-        private int _Identititfy;
-
-        private int _NameLine;
-
-        private string _NameProduct;
-
-        private int _NumberProduct;
-
-        private int _PaymentMethod;
-
-        private int _ProxDate;
-
-        private decimal _Saldo;
-
-        private int _TipoProducto;
-
-        private string _img;
-
-        private decimal _Cuota;
-
-        private decimal _ValorPagar;
-
-
-        private int _ColorState;
-
-        private int _RetirarProducto;
-
-         private bool _isSelected = false;
-            public bool IsSelected
-            {
-                get { return _isSelected; }
-                set
-                {
-                    _isSelected = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
-                }
-            }
-
-            public int CodSession
-        {
-            get { return _CodSession; }
-            set
-            {
-                if (_CodSession != value)
-                {
-                    _CodSession = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CodSession)));
-                }
-            }
-        }
-
-        public int CreationDate
-        {
-            get { return _CreationDate; }
-            set
-            {
-                if (_CreationDate != value)
-                {
-                    _CreationDate = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreationDate)));
-                }
-            }
-        }
-
-        public int Identititfy
-        {
-            get { return _Identititfy; }
-            set
-            {
-                if (_Identititfy != value)
-                {
-                    _Identititfy = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Identititfy)));
-                }
-            }
-        }
-
-        public int NameLine
-        {
-            get { return _NameLine; }
-            set
-            {
-                if (_NameLine != value)
-                {
-                    _NameLine = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NameLine)));
-                }
-            }
-        }
-
-        public string NameProduct
-        {
-            get { return _NameProduct; }
-            set
-            {
-                if (_NameProduct != value)
-                {
-                    _NameProduct = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NameProduct)));
-                }
-            }
-        }
-        public int NumberProduct
-        {
-            get { return _NumberProduct; }
-            set
-            {
-                if (_NumberProduct != value)
-                {
-                    _NumberProduct = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumberProduct)));
-                }
-            }
-        }
-
-        public int PaymentMethod
-        {
-            get { return _PaymentMethod; }
-            set
-            {
-                if (_PaymentMethod != value)
-                {
-                    _PaymentMethod = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PaymentMethod)));
-                }
-            }
-        }
-
-        public int ProxDate
-        {
-            get { return _ProxDate; }
-            set
-            {
-                if (_ProxDate != value)
-                {
-                    _ProxDate = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProxDate)));
-                }
-            }
-        }
-
-        public decimal Saldo
-        {
-            get { return _Saldo; }
-            set
-            {
-                if (_Saldo != value)
-                {
-                    _Saldo = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Saldo)));
-                }
-            }
-        }
-        
-
-
-        public int TipoProducto
-        {
-            get { return _TipoProducto; }
-            set
-            {
-                if (_TipoProducto != value)
-                {
-                    _TipoProducto = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TipoProducto)));
-                }
-            }
-        }
-        public string img
-        {
-            get { return _img; }
-            set
-            {
-                if (_img != value)
-                {
-                    _img = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(img)));
-                }
-            }
-        }
-
-
-        public decimal Cuota
-        {
-            get { return _Cuota; }
-            set
-            {
-                if (_Cuota != value)
-                {
-                    _Cuota = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cuota)));
-                }
-            }
-        }
-        public decimal ValorPagar
-        {
-            get { return _ValorPagar; }
-            set
-            {
-                if (_ValorPagar != value)
-                {
-                    _ValorPagar = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValorPagar)));
-                }
-            }
-        }
-
-        
-
-
-        public int ColorState
-        {
-            get { return _ColorState; }
-            set
-            {
-                if (_ColorState != value)
-                {
-                    _ColorState = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ColorState)));
-                }
-            }
-        }
-
-        public int RetirarProducto
-        {
-            get { return _RetirarProducto; }
-            set
-            {
-                if (_RetirarProducto != value)
-                {
-                    _RetirarProducto = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RetirarProducto)));
-                }
-            }
-        }
-
-
-
-        
-        //public decimal RemainingAmount
-        //{
-        //    get { return _remainingAmount; }
-        //    set
-        //    {
-        //        if (_remainingAmount != value)
-        //        {
-        //            _remainingAmount = value;
-        //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemainingAmount)));
-        //        }
-        //    }
-        //}
-
-        //public decimal ReturnAmount
-        //{
-        //    get { return _returnAmount; }
-        //    set
-        //    {
-        //        if (_returnAmount != value)
-        //        {
-        //            _returnAmount = value;
-        //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReturnAmount)));
-        //        }
-        //    }
-        //}
-
-        //public decimal DispensedAmount
-        //{
-        //    get { return _dispensedAmount; }
-        //    set
-        //    {
-        //        if (_dispensedAmount != value)
-        //        {
-        //            _dispensedAmount = value;
-        //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DispensedAmount)));
-        //        }
-        //    }
-        //}
-
-        //public bool IsPayCompleted
-        //{
-        //    get { return _isReturnSuccess; }
-        //    set
-        //    {
-        //        if (_isReturnSuccess != value)
-        //        {
-        //            _isReturnSuccess = value;
-        //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPayCompleted)));
-        //        }
-        //    }
-        //}
-
-        //#endregion
-
-        //#region Methods
-        //public void RefreshAmountsList(int denomination, int quantity)
-        //{
-
-        //    var itemDenomination = Denominations.Where(d => d.DenominationValue == denomination).FirstOrDefault();
-        //    if (itemDenomination == null)
-        //    {
-        //        Denominations.Add(new Denomination
-        //        {
-        //            DenominationValue = denomination,
-        //            Quantity = quantity,
-        //            TotalDenomAmount = denomination * quantity,
-        //        });
-        //        return;
-        //    }
-
-        //    itemDenomination.Quantity += quantity;
-        //    itemDenomination.TotalDenomAmount = denomination * itemDenomination.Quantity;
-        
     }
 }
+
+public class ListProductsRetirosViewModel : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private int _CodSession;
+    private int _CreationDate;
+    private int _Identititfy;
+    private int _NameLine;
+    private string _NameProduct;
+    private int _NumberProduct;
+    private int _PaymentMethod;
+    private int _ProxDate;
+    private decimal _Saldo;
+    private int _TipoProducto;
+    private string _img;
+    private decimal _Cuota;
+    private decimal _ValorPagar;
+    private int _ColorState;
+    private int _RetirarProducto;
+    private bool _isSelected = false;
+
+    public bool IsSelected
+    {
+        get { return _isSelected; }
+        set
+        {
+            _isSelected = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+        }
+    }
+
+    public int CodSession
+    {
+        get { return _CodSession; }
+        set
+        {
+            if (_CodSession != value)
+            {
+                _CodSession = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CodSession)));
+            }
+        }
+    }
+
+    public int CreationDate
+    {
+        get { return _CreationDate; }
+        set
+        {
+            if (_CreationDate != value)
+            {
+                _CreationDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreationDate)));
+            }
+        }
+    }
+
+    public int Identititfy
+    {
+        get { return _Identititfy; }
+        set
+        {
+            if (_Identititfy != value)
+            {
+                _Identititfy = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Identititfy)));
+            }
+        }
+    }
+
+    public int NameLine
+    {
+        get { return _NameLine; }
+        set
+        {
+            if (_NameLine != value)
+            {
+                _NameLine = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NameLine)));
+            }
+        }
+    }
+
+    public string NameProduct
+    {
+        get { return _NameProduct; }
+        set
+        {
+            if (_NameProduct != value)
+            {
+                _NameProduct = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NameProduct)));
+            }
+        }
+    }
+
+    public int NumberProduct
+    {
+        get { return _NumberProduct; }
+        set
+        {
+            if (_NumberProduct != value)
+            {
+                _NumberProduct = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumberProduct)));
+            }
+        }
+    }
+
+    public int PaymentMethod
+    {
+        get { return _PaymentMethod; }
+        set
+        {
+            if (_PaymentMethod != value)
+            {
+                _PaymentMethod = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PaymentMethod)));
+            }
+        }
+    }
+
+    public int ProxDate
+    {
+        get { return _ProxDate; }
+        set
+        {
+            if (_ProxDate != value)
+            {
+                _ProxDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProxDate)));
+            }
+        }
+    }
+
+    public decimal Saldo
+    {
+        get { return _Saldo; }
+        set
+        {
+            if (_Saldo != value)
+            {
+                _Saldo = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Saldo)));
+            }
+        }
+    }
+
+    public int TipoProducto
+    {
+        get { return _TipoProducto; }
+        set
+        {
+            if (_TipoProducto != value)
+            {
+                _TipoProducto = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TipoProducto)));
+            }
+        }
+    }
+
+    public string img
+    {
+        get { return _img; }
+        set
+        {
+            if (_img != value)
+            {
+                _img = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(img)));
+            }
+        }
+    }
+
+    public decimal Cuota
+    {
+        get { return _Cuota; }
+        set
+        {
+            if (_Cuota != value)
+            {
+                _Cuota = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cuota)));
+            }
+        }
+    }
+
+    public decimal ValorPagar
+    {
+        get { return _ValorPagar; }
+        set
+        {
+            if (_ValorPagar != value)
+            {
+                _ValorPagar = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValorPagar)));
+            }
+        }
+    }
+
+    public int ColorState
+    {
+        get { return _ColorState; }
+        set
+        {
+            if (_ColorState != value)
+            {
+                _ColorState = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ColorState)));
+            }
+        }
+    }
+
+    public int RetirarProducto
+    {
+        get { return _RetirarProducto; }
+        set
+        {
+            if (_RetirarProducto != value)
+            {
+                _RetirarProducto = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RetirarProducto)));
+            }
+        }
+    }
 }

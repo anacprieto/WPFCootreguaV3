@@ -142,7 +142,7 @@ namespace WPFCootreguaV2.UserControls
         }
         private void Onloaded(object sender, RoutedEventArgs e)
         {
-            _nav.CloseModal();
+            //_nav.CloseModal();
         }
 
         private void LoadReader()
@@ -301,8 +301,10 @@ namespace WPFCootreguaV2.UserControls
                         Template = template
                     };
                     EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
-                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
-                    var desencrypted = EncryptorEcity.Decrypt(authen);
+                    //var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
+                    var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
+
+                    var desencrypted = EncryptorEcity.Decrypt(product);
                     EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
                     if (!string.IsNullOrEmpty(desencrypted))
                     {
@@ -367,7 +369,7 @@ namespace WPFCootreguaV2.UserControls
                 };
 
                 var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
-                _nav.ShowModal("Consultando productos para {0}...", new LoadModal());
+                //_nav.ShowModal("Consultando productos para {0}...", new LoadModal());
                 //var desencrypted = EncryptorEcity.Decrypt(prodct);
                 //var respuesta1120557056 = "UlmKdX4+uzXax9XsKwFwqkgxt6FMJoVaVcQpR4ambziDsTfenMMfOjwUzrGFBNEtauGKXdJKOMTd/bFOMHjxkw==";
                 ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
@@ -399,15 +401,15 @@ namespace WPFCootreguaV2.UserControls
                     }
                     else
                     {
-                        _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+                        //_nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
 
-                        _nav.CloseModal();
+                        //_nav.CloseModal();
                     }
                 }
                 else
                 {
-                    _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
-                    _nav.CloseModal();
+                    //_nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+                    //_nav.CloseModal();
                 }
             }
             catch (Exception ex)

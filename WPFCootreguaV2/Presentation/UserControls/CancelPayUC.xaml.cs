@@ -26,7 +26,6 @@ using WPFCootreguaV2.Domain.ApiService.Models;
 using WPFCootreguaV2.Domain.Enumerables;
 using WPFCootreguaV2.Domain.Integrations;
 using WPFCootreguaV2.Domain.Peripherals;
-using WPFCootreguaV2.Domain.Peripherals.Printer;
 using WPFCootreguaV2.Domain.UIServices;
 using WPFCootreguaV2.Domain.Variables;
 using WPFCootreguaV2.Modals;
@@ -133,24 +132,24 @@ namespace WPFCootreguaV2.UserControls
         }
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            _nav.CloseModal();
-            DisableView();
-            PrintService.CleanPrintQueue();
-            PrintVoucher();
-            _nav.ShowModal("Imprimiendo factura...", new LoadModal());
+            //_nav.CloseModal();
+            //DisableView();
+            //PrintService.CleanPrintQueue();
+            //PrintVoucher();
+            //_nav.ShowModal("Imprimiendo factura...", new LoadModal());
 
-            await Task.Delay(TimeSpan.FromSeconds(PrintService.numberOfSecondsToPrint));
-            _timer.ControlTimer(pauseOrder: true);
-            while (!(PrintService.recentImpressionSuccess ?? false))
-            {
-                _nav.CloseModal();
-                //if (!HandlePrintingError()) break;
-                _nav.ShowModal("Imprimiendo factura...", new LoadModal());
-                await Task.Delay(TimeSpan.FromSeconds(PrintService.numberOfSecondsToPrint));
-            }
-            _nav.CloseModal();
-            _timer.ControlTimer(pauseOrder: false);
-            EnableView();
+            //await Task.Delay(TimeSpan.FromSeconds(PrintService.numberOfSecondsToPrint));
+            //_timer.ControlTimer(pauseOrder: true);
+            //while (!(PrintService.recentImpressionSuccess ?? false))
+            //{
+            //    _nav.CloseModal();
+            //    //if (!HandlePrintingError()) break;
+            //    _nav.ShowModal("Imprimiendo factura...", new LoadModal());
+            //    await Task.Delay(TimeSpan.FromSeconds(PrintService.numberOfSecondsToPrint));
+            //}
+            //_nav.CloseModal();
+            //_timer.ControlTimer(pauseOrder: false);
+            //EnableView();
         }
         #region Timer
         public void GoTimer()
@@ -207,7 +206,7 @@ namespace WPFCootreguaV2.UserControls
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             StopTimer();
-            PrintService.recentImpressionSuccess = false;
+           // PrintService.recentImpressionSuccess = false;
         }
 
         private async void PrintVoucher()
@@ -270,7 +269,7 @@ namespace WPFCootreguaV2.UserControls
                 _document.body = body;
                 _document.footer = footer;
                 PrintService.BuildPrint(header, body, footer);
-                await PrintService.Start();
+                PrintService.Start();
 
 
                 }

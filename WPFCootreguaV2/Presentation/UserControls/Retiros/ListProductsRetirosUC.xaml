@@ -14,7 +14,7 @@
             <ImageBrush ImageSource="{StaticResource BACKPAGARPRODUCTS}" Stretch="Uniform"/>
         </local:AppUserControl.Background>
 
-        <Grid Width="680" Height="1720" HorizontalAlignment="Right">
+    <Grid  x:Name="MainGrid" Width="680" Height="1720" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0" />
                 <RowDefinition Height="*" />

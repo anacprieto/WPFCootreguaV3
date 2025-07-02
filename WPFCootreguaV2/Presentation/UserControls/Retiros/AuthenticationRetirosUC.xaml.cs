@@ -44,9 +44,9 @@ namespace WPFCootreguaV2.UserControls
         private TimerGeneric _timer;
         private Transaction _ts;
         private AuthenticationRetirosUCViewModel _viewModel;
-        private ModalWindow? _currentLoadModal = null;
+        //private ModalWindow? _nav = null;
+
         private int CantIntentos;
-        public Navigator _nav;
 
         #region Regex properies
         //private string _regexReferencia = @"8020(0*[1-9]\d*)\u001d3900";
@@ -67,7 +67,7 @@ namespace WPFCootreguaV2.UserControls
         public AuthenticationRetirosUC()
         {
             InitializeComponent();
-            //_nav = Navigator.Instance;
+            _nav = Navigator.Instance;
             try
             {
 
@@ -107,8 +107,6 @@ namespace WPFCootreguaV2.UserControls
                      //await _ts.integrationHelpers._consultReferencesManager.ConsultAfterPalmInput();
                  }*/
                 MainGrid.Children.Add(dynamicButton);
-
-                //MainGrid.Children.Add(dynamicButton);
                 //MainGrid.Children.Add(dynamicButton2);
 #else
             LoadReader();
@@ -142,7 +140,7 @@ namespace WPFCootreguaV2.UserControls
         }
         private void Onloaded(object sender, RoutedEventArgs e)
         {
-            //_nav.CloseModal();
+            _nav.CloseModal();
         }
 
         private void LoadReader()
@@ -204,91 +202,13 @@ namespace WPFCootreguaV2.UserControls
             }
         }
 
-
-        // var encrypt = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBZ4j3JVhPqj5DPQF/2pDb7pVPx4BV0gxVmMc2G9320aEGHrKU2iPyqxtHWItgM7v1Ve/MkWnUgHRJvllTH9y7ObowgNIJzuwHeJ7JKe3Ggtj1LL5T7unObqxIVW8NJVb5+AAES4nAtP0LigbP3rwiFwCt3DeAeStJkWkSbBYx1HBN4rkn9ypmsIuSKHSfu+jViw/StytLCwQdDvaFnJNh7LDDwI+2un+hrC8QjB5IueJTza3w5sTDiTI0xuTa0hFn8ILMgcqIfLcl3EiQX44BbWkmI/c1XCTCHUGdp/BNYR9GLYsSuADUEhhvVxc4TunwzoIfnN6aCwGolzu+HtfBFVLzE3o+VUAbr01tuHOpM/d1a9zmt4EM/HqWi6Zu82nW1aFDUiaqltyw4ObMayPlZWFuFqtW+otRd0N2Mvkd+ZFdNKsf8XA7CcEfSWAM+bMzkpqlPCaeCLDHBJqSJZ7aa2lUQkwRhm3jjFGN3m98i5FV2qm09L9yaOlB7ZwGF1zK+2/P84PzLsQ1oThn7r71jmnJythbkv5zZaw+VTEOjUGpvsshOaku1A6z3vJstf6EVgU2lA4We5uhdQQyOjHu5HU0NfarRCm60W96iqTBZUgl+QO2Y3Fxlo8Wnhg6H76ac4EDkcAWqBMP+8K98hnO+hJNBpQ31X+rnAvAcYtK8lDXecUTI1zvOMekoWRGarFmn9sXgvLB5kYnX8XAz7xUgLE/Dgac7HC4+KIM08InSSCtQbwIQFDHE1BhY2hNRjRBPVUPIxS/KqFoBl3OY9TdyixNC1eJkYHvLki49tzsrMSfTqe9Y2DwWqhV/fr/kURJgZsYBwi7xy2bVmbvaJWa4ryxVh95tahOgKNcOO9mnoq3VmoPhlFkc+xa3Ai4B+Ip9BIbwUfKzSv9bbE5FxUGPuZcQT2J9mZrCATo+qWzMtDRqM7DPxcMuAtDBaez+r1apUzDmo1zHdzK6zy578f8JSIPeY7pzhTh0o7oDBiv8aK/5yKmo2ipvaPgC6PIWDCuYObzHtATjtt07R9pGcjciBcpN1XuW4Yx1L6u1wfwsYpxCF/NNsUKuwysH0rVLlPksWe9bcpWlexefVMpgIseNE9qEAEwUXCcyUpqLj3vDgSW48K1AphvEqzXWrZkQDe/nEm7dhw++LzO1lUfWmPUU7VlFgMl2eS93rUR9XfkbmGKXTW1poMLs/pdvzJkXb/xOhGP02JZwL3wmid//xl8BwdfgSLg7xdKShNwN/n5EGUHf+N8ppF162daAm4TiaqQZHo4lQbqM4J7bxyY9Sht4IJbvWVrN8jFEn3AIm+eYXMArqHwHWKzzaHeJuyeKScTyCZ3sXSW8pg+RlPlP1F0x8Ag01eBLbNzr2ZCl5Fr2pv2gHc2KE87JDLjCi0jiLo75a/G/DB6F1kz7Z0G0LAGEsyAExD8pJLlaeRkTFQ9i44jrbJHEhZRDxjeTIgExFKvLuhnq0ZsMenqekr/+2hU8fsHHu6RBnJw43jM2/Vs29BPKVqI5OrexEXLeUyWh7Vzf7GwQlzbi0tr/dO1OAZeDqava7vh6Vfo4dgu0ERZkstZI6dOX0wQ8F5wTSmlCzb2RSBLhZwNN+wRWc+UPNJ0HKbAsp04JbOmY4M7aRKpJ0EADBjuj2/j6W0MJnJEqGiu+D8SogwHkfie28CQbQ3RUckSXXt3/vIhoaajAC0cuPngrTzWJwR5Jdd9VJxJI30a9jA8EMerrY0FM0j/vFKM0vKbILHNO+MiyjMLsj0iwIhaFsNEiLHBnFKl9Ug7JAQRayjvN/t7rtqaQU4ZysZaok=";
-        //var desencrypted = EncryptorEcity.Decrypt(encrypt);
-        //var desencrypted = EncryptorEcity.Decrypt(authen);
-        //var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
-        //private void ValidateUser(string template)
-        //{
-        //    try
-        //    {
-        //        Task.Run(async () =>
-        //        {
-        //            AuthenticationBiomety biomety = new AuthenticationBiomety
-        //            {
-        //                CodSession = _ts.Codigo,
-        //                Identification = _ts.Documento,
-        //                TypeReader = 1,
-        //                Template = template
-        //            };
-        //            EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
-
-        //            var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
-        //            var desencrypted = EncryptorEcity.Decrypt(authen);
-        //            EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
-
-
-
-        //            if (!string.IsNullOrEmpty(desencrypted))
-        //            {
-
-        //                var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
-
-        //                if (data.Validate == 1)
-        //                {
-        //                    var result = GetProducts();
-        //                }
-        //                else
-        //                {
-        //                    _nav.CloseModal();
-        //                    StopTimer();
-        //                    _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
-        //                    EventLogger.SaveLog(EventType.Error, "Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName);
-
-        //                    GoTimer();
-        //                    CantIntentos++;
-        //                    LoadReader();
-        //                }
-        //            }
-        //            else
-        //            {
-        //                _nav.CloseModal();
-        //                StopTimer();
-
-        //                if (CantIntentos == 2)
-        //                {
-        //                    _nav.ShowModal(string.Format("Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName, new InfoModal()));
-        //                    EventLogger.SaveLog(EventType.Error, "Estimado {0}, Ha superado el número de intentos permitidos." + _ts.DataPerson.FirstName);
-
-        //                    StopTimer();
-        //                }
-        //                else
-        //                {
-        //                    _nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName, new InfoModal()));
-        //                    EventLogger.SaveLog(EventType.Error, "Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo." + _ts.DataPerson.FirstName);
-
-        //                    // GoTimer();
-        //                    CantIntentos++;
-        //                    GoTimer();
-        //                    LoadReader();
-        //                }
-        //            }
-        //        });
-        //        StopTimer();
-        //        _nav.ShowLoadModal(string.Format("Consultando.....", _ts.DataPerson.FirstName), new LoadModal());
-        //        EventLogger.SaveLog(EventType.Error, "Consultando, saliendo del metodo , validar huella" + _ts.DataPerson.FirstName);
-
-        //        //Switcher.Timer(false);
-        //        //Switcher.ModalLoad(true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        EventLogger.SaveLog(EventType.Error, MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex.ToString());
-        //    }
-        //}
         private void ValidateUser(string template)
         {
+            // var encrypt = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBZ4j3JVhPqj5DPQF/2pDb7pVPx4BV0gxVmMc2G9320aEGHrKU2iPyqxtHWItgM7v1Ve/MkWnUgHRJvllTH9y7ObowgNIJzuwHeJ7JKe3Ggtj1LL5T7unObqxIVW8NJVb5+AAES4nAtP0LigbP3rwiFwCt3DeAeStJkWkSbBYx1HBN4rkn9ypmsIuSKHSfu+jViw/StytLCwQdDvaFnJNh7LDDwI+2un+hrC8QjB5IueJTza3w5sTDiTI0xuTa0hFn8ILMgcqIfLcl3EiQX44BbWkmI/c1XCTCHUGdp/BNYR9GLYsSuADUEhhvVxc4TunwzoIfnN6aCwGolzu+HtfBFVLzE3o+VUAbr01tuHOpM/d1a9zmt4EM/HqWi6Zu82nW1aFDUiaqltyw4ObMayPlZWFuFqtW+otRd0N2Mvkd+ZFdNKsf8XA7CcEfSWAM+bMzkpqlPCaeCLDHBJqSJZ7aa2lUQkwRhm3jjFGN3m98i5FV2qm09L9yaOlB7ZwGF1zK+2/P84PzLsQ1oThn7r71jmnJythbkv5zZaw+VTEOjUGpvsshOaku1A6z3vJstf6EVgU2lA4We5uhdQQyOjHu5HU0NfarRCm60W96iqTBZUgl+QO2Y3Fxlo8Wnhg6H76ac4EDkcAWqBMP+8K98hnO+hJNBpQ31X+rnAvAcYtK8lDXecUTI1zvOMekoWRGarFmn9sXgvLB5kYnX8XAz7xUgLE/Dgac7HC4+KIM08InSSCtQbwIQFDHE1BhY2hNRjRBPVUPIxS/KqFoBl3OY9TdyixNC1eJkYHvLki49tzsrMSfTqe9Y2DwWqhV/fr/kURJgZsYBwi7xy2bVmbvaJWa4ryxVh95tahOgKNcOO9mnoq3VmoPhlFkc+xa3Ai4B+Ip9BIbwUfKzSv9bbE5FxUGPuZcQT2J9mZrCATo+qWzMtDRqM7DPxcMuAtDBaez+r1apUzDmo1zHdzK6zy578f8JSIPeY7pzhTh0o7oDBiv8aK/5yKmo2ipvaPgC6PIWDCuYObzHtATjtt07R9pGcjciBcpN1XuW4Yx1L6u1wfwsYpxCF/NNsUKuwysH0rVLlPksWe9bcpWlexefVMpgIseNE9qEAEwUXCcyUpqLj3vDgSW48K1AphvEqzXWrZkQDe/nEm7dhw++LzO1lUfWmPUU7VlFgMl2eS93rUR9XfkbmGKXTW1poMLs/pdvzJkXb/xOhGP02JZwL3wmid//xl8BwdfgSLg7xdKShNwN/n5EGUHf+N8ppF162daAm4TiaqQZHo4lQbqM4J7bxyY9Sht4IJbvWVrN8jFEn3AIm+eYXMArqHwHWKzzaHeJuyeKScTyCZ3sXSW8pg+RlPlP1F0x8Ag01eBLbNzr2ZCl5Fr2pv2gHc2KE87JDLjCi0jiLo75a/G/DB6F1kz7Z0G0LAGEsyAExD8pJLlaeRkTFQ9i44jrbJHEhZRDxjeTIgExFKvLuhnq0ZsMenqekr/+2hU8fsHHu6RBnJw43jM2/Vs29BPKVqI5OrexEXLeUyWh7Vzf7GwQlzbi0tr/dO1OAZeDqava7vh6Vfo4dgu0ERZkstZI6dOX0wQ8F5wTSmlCzb2RSBLhZwNN+wRWc+UPNJ0HKbAsp04JbOmY4M7aRKpJ0EADBjuj2/j6W0MJnJEqGiu+D8SogwHkfie28CQbQ3RUckSXXt3/vIhoaajAC0cuPngrTzWJwR5Jdd9VJxJI30a9jA8EMerrY0FM0j/vFKM0vKbILHNO+MiyjMLsj0iwIhaFsNEiLHBnFKl9Ug7JAQRayjvN/t7rtqaQU4ZysZaok=";
+            //var desencrypted = EncryptorEcity.Decrypt(encrypt);
+            //var desencrypted = EncryptorEcity.Decrypt(authen);
+            //var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
+
             try
             {
                 Task.Run(async () =>
@@ -301,17 +221,21 @@ namespace WPFCootreguaV2.UserControls
                         Template = template
                     };
                     EventLogger.SaveLog(EventType.Info, "Objeto AuthenticationBiomety" + biomety);
-                    //var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
-                    var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
 
-                    var desencrypted = EncryptorEcity.Decrypt(product);
+                    var authen = await ApiIntegration.CallApiCootregua("ControllerCootreguaValidateBiometria", biomety);
+
+                    var desencrypted = EncryptorEcity.Decrypt(authen);
                     EventLogger.SaveLog(EventType.Info, "Desencryptor" + desencrypted);
+
+
+
                     if (!string.IsNullOrEmpty(desencrypted))
                     {
+
                         var data = JsonConvert.DeserializeObject<AuthenticationBiomety>(desencrypted);
+
                         if (data.Validate == 1)
                         {
-                            _nav.CloseLoadModal();
                             var result = GetProducts();
                         }
                         else
@@ -347,14 +271,14 @@ namespace WPFCootreguaV2.UserControls
                     }
                 });
                 StopTimer();
-                _nav.ShowLoadModal(string.Format("Consultando {0}.....", _ts.DataPerson.FirstName));
+                _nav.ShowLoadModal(string.Format("Consultando.....", _ts.DataPerson.FirstName));
                 EventLogger.SaveLog(EventType.Error, "Consultando, saliendo del metodo , validar huella" + _ts.DataPerson.FirstName);
+
                 //Switcher.Timer(false);
                 //Switcher.ModalLoad(true);
             }
             catch (Exception ex)
             {
-                _nav.CloseLoadModal();
                 EventLogger.SaveLog(EventType.Error, MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex.ToString());
             }
         }
@@ -368,17 +292,21 @@ namespace WPFCootreguaV2.UserControls
                     Identititfy = _ts.Documento,
                 };
 
-                var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
-                //_nav.ShowModal("Consultando productos para {0}...", new LoadModal());
-                //var desencrypted = EncryptorEcity.Decrypt(prodct);
-                //var respuesta1120557056 = "UlmKdX4+uzXax9XsKwFwqkgxt6FMJoVaVcQpR4ambziDsTfenMMfOjwUzrGFBNEtauGKXdJKOMTd/bFOMHjxkw==";
-                ////var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
-                //var desencrypted1120 = EncryptorEcity.Decrypt(respuesta1120557056);
-                //_nav.ShowModal(string.Format("Estimado {0}, La huella capturada no coincide con la registrada, por favor intentalo de nuevo.", new InfoModal()));
-                var desncrypted = EncryptorEcity.Decrypt(prodct);
-                //Switcher.ModalLoad(false);
+                //var prodct = await ApiIntegration.CallApiCootregua("ControllerCootreguaGetStateProduct", products);
+                // _nav.ShowModal("Consultando productos para {0}...");
 
-                if (!string.IsNullOrEmpty(desncrypted))
+                var product = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBeJYoTdJp/V8NmPJKnJ+5AiGqCZpc3AgXun/Ahe52WX4qdo+O4LVFHp8LRSGjHzXJg2VLEu2uBwgidsHc8DGvlL5e9H+hF+yvnwPTp6BC64+xK6QAy2BawvJPtza+WsUah7BeNacMetafWtS/LjFgNhCddOTSxKZd7DjTQ/xPr5kkZ9BEq5iWNfmlg/PS90HswE1MPkZ5cTQCKIRd7AFU28awiWrYpYmOov7vGA5jBypYvXCpBzbUhhMNvrOpukNBaOxRzwuKA3c5OMkr0Fitzw=";
+   
+                var desncrypted = EncryptorEcity.Decrypt(product);
+
+                var huellero = "3WNkRgO/cTqlfKg08SmuYkwcjgbtYEJfdzqtooSCeGY1fpfGALyNKoifqqpamsGjSeE25UFeKUM8snwB7ODcBZ4j3JVhPqj5DPQF/2pDb7pVPx4BV0gxVmMc2G9320aEGHrKU2iPyqxtHWItgM7v1Ve/MkWnUgHRJvllTH9y7ObowgNIJzuwHeJ7JKe3Ggtj1LL5T7unObqxIVW8NJVb5+AAES4nAtP0LigbP3rwiFwCt3DeAeStJkWkSbBYx1HBN4rkn9ypmsIuSKHSfu+jViw/StytLCwQdDvaFnJNh7LDDwI+2un+hrC8QjB5IueJTza3w5sTDiTI0xuTa0hFn8ILMgcqIfLcl3EiQX44BbWkmI/c1XCTCHUGdp/BNYR9GLYsSuADUEhhvVxc4TunwzoIfnN6aCwGolzu+HtfBFVLzE3o+VUAbr01tuHOpM/d1a9zmt4EM/HqWi6Zu82nW1aFDUiaqltyw4ObMayPlZWFuFqtW+otRd0N2Mvkd+ZFdNKsf8XA7CcEfSWAM+bMzkpqlPCaeCLDHBJqSJZ7aa2lUQkwRhm3jjFGN3m98i5FV2qm09L9yaOlB7ZwGF1zK+2/P84PzLsQ1oThn7r71jmnJythbkv5zZaw+VTEOjUGpvsshOaku1A6z3vJstf6EVgU2lA4We5uhdQQyOjHu5HU0NfarRCm60W96iqTBZUgl+QO2Y3Fxlo8Wnhg6H76ac4EDkcAWqBMP+8K98hnO+hJNBpQ31X+rnAvAcYtK8lDXecUTI1zvOMekoWRGarFmn9sXgvLB5kYnX8XAz7xUgLE/Dgac7HC4+KIM08InSSCtQbwIQFDHE1BhY2hNRjRBPVUPIxS/KqFoBl3OY9TdyixNC1eJkYHvLki49tzsrMSfTqe9Y2DwWqhV/fr/kURJgZsYBwi7xy2bVmbvaJWa4ryxVh95tahOgKNcOO9mnoq3VmoPhlFkc+xa3Ai4B+Ip9BIbwUfKzSv9bbE5FxUGPuZcQT2J9mZrCATo+qWzMtDRqM7DPxcMuAtDBaez+r1apUzDmo1zHdzK6zy578f8JSIPeY7pzhTh0o7oDBiv8aK/5yKmo2ipvaPgC6PIWDCuYObzHtATjtt07R9pGcjciBcpN1XuW4Yx1L6u1wfwsYpxCF/NNsUKuwysH0rVLlPksWe9bcpWlexefVMpgIseNE9qEAEwUXCcyUpqLj3vDgSW48K1AphvEqzXWrZkQDe/nEm7dhw++LzO1lUfWmPUU7VlFgMl2eS93rUR9XfkbmGKXTW1poMLs/pdvzJkXb/xOhGP02JZwL3wmid//xl8BwdfgSLg7xdKShNwN/n5EGUHf+N8ppF162daAm4TiaqQZHo4lQbqM4J7bxyY9Sht4IJbvWVrN8jFEn3AIm+eYXMArqHwHWKzzaHeJuyeKScTyCZ3sXSW8pg+RlPlP1F0x8Ag01eBLbNzr2ZCl5Fr2pv2gHc2KE87JDLjCi0jiLo75a/G/DB6F1kz7Z0G0LAGEsyAExD8pJLlaeRkTFQ9i44jrbJHEhZRDxjeTIgExFKvLuhnq0ZsMenqekr/+2hU8fsHHu6RBnJw43jM2/Vs29BPKVqI5OrexEXLeUyWh7Vzf7GwQlzbi0tr/dO1OAZeDqava7vh6Vfo4dgu0ERZkstZI6dOX0wQ8F5wTSmlCzb2RSBLhZwNN+wRWc+UPNJ0HKbAsp04JbOmY4M7aRKpJ0EADBjuj2/j6W0MJnJEqGiu+D8SogwHkfie28CQbQ3RUckSXXt3/vIhoaajAC0cuPngrTzWJwR5Jdd9VJxJI30a9jA8EMerrY0FM0j/vFKM0vKbILHNO+MiyjMLsj0iwIhaFsNEiLHBnFKl9Ug7JAQRayjvN/t7rtqaQU4ZysZaok=";
+                var deshuellero = EncryptorEcity.Decrypt(huellero);
+
+
+                var hue = "L6CAdKZBxxz37eWyjb52t+NkRiUKO2C0Coc4E0HvzrOy8hXQ3Ca/UpresMDMbdn+svhsBkf9724VXLjH4S0PeTSeyd7/JJF7VY9WYC7EdUHDGwUViH2QjGIHCKzi1G1iuUAxPVGc8UJd6bYpr4S2kFIsu4mb53TIGooPvnb4Vwrg572Nnn4qhEAHIpNpjmVqHNvKKWVCPg+yndt/q70tCaYtpMcS+UdXoghKRtKw7ASb/jqbAVBOwoiTH+MVHlvRVWCZ+bEEgl8twJkQoCIgU+vVzNvEUjwsgb7tXP+Bu1W2i7zhIcCxReNjBLEmnzw9WKtvDo8a58kHUPfe2CmhO5Wa/gHCBO3c9x2/fzDkSkPbxW7TEs7WIo7H9hlojYYNduQES0u5y2l1/P02gFd2NljNJUAdkpNb4xMJsaaH3po=";
+                var deshuellero1 = EncryptorEcity.Decrypt(hue);
+
+                if (!string.IsNullOrEmpty(deshuellero1))
                 {
                     var settings = new JsonSerializerSettings
                     {
@@ -391,31 +319,105 @@ namespace WPFCootreguaV2.UserControls
 
                     if (data.Count >= 1)
                     {
+                        //TIPO DE PRODUCTO 3
 
                         _ts.DataProducts = data;
 
                         //Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
-                        Dispatcher.Invoke(() => GoTo(new ListProductsUC()));
+                        Dispatcher.Invoke(() => GoTo(new ListProductsRetirosUC()));
                         //GC.Collect();
-                        //
                     }
                     else
                     {
-                        //_nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+                        _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
 
-                        //_nav.CloseModal();
+                        _nav.CloseModal();
                     }
                 }
                 else
                 {
-                    //_nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
-                    //_nav.CloseModal();
+                    _nav.ShowModal(string.Format("Estimado {0}, no se encontraron productos en el servicio.", _ts.DataPerson.FirstName), new InfoModal());
+                    _nav.CloseModal();
                 }
             }
             catch (Exception ex)
             {
                 EventLogger.SaveLog(EventType.Info, MethodBase.GetCurrentMethod().Name);
 
+            }
+        }
+        private void SaveTransaction()
+        {
+            try
+            {
+                Task.Run(async () =>
+                {
+                    _ts.Type = TransactionType;
+                    _ts.EstadoTransaccion = StateTransaction.Iniciada;
+                    _ts.Total = 0;
+                    _ts.payer = new Payer
+                    {
+                        Document = _ts.DataPerson.CodPerson.ToString(),
+                        Name = string.Concat(_ts.DataPerson.FirstName, " ", _ts.DataPerson.SecondName),
+                        Email = _ts.DataPerson.Email,
+                        LastName = string.Concat(_ts.DataPerson.FirstLastName, " ", _ts.DataPerson.SecondLastName),
+                        Phone = _ts.DataPerson.Phone,
+                        Adress = _ts.DataPerson.Adress,
+                    };
+
+                    EventLogger.SaveLog(EventType.Info, "Creando objeto inicial de la transacción");
+                    _nav.ShowModal(string.Format("Guardando transacción" + _ts.DataPerson.FirstName), new InfoModal());
+
+
+
+
+                    if (this._ts.IdTransaccionApi == 0)
+                    {
+                        _nav.ShowModal(string.Format("Estimado {0}, no se pudo registrar la transacción." + _ts.DataPerson.FirstName), new InfoModal());
+                        EventLogger.SaveLog(EventType.Info, _ts.IdTransaccionApi.ToString() + " si es cero el id transaction  es cero");
+
+                        _nav.CloseModal();
+
+                    }
+                    else
+                    {
+                        string NameUser = _ts.DataPerson.FirstName;
+                        int Time = DateTime.Now.Hour;
+                        string ms = string.Empty;
+
+                        if (Time >= 6 && Time < 12)
+                        {
+                            ms = "Buenos días " + NameUser;
+                        }
+                        else
+                        if (Time >= 12 && Time < 16)
+                        {
+                            ms = "Buenas tardes " + NameUser;
+                        }
+                        else
+                        if (Time >= 16 && Time <= 24)
+                        {
+                            ms = "Buenas noches " + NameUser;
+                        }
+                        else
+                        {
+                            ms = "Bienvenido " + NameUser;
+                        }
+
+
+                        Utilities.Speak(ms);
+                        _nav.ShowModal(ms + " Has sido registrad@ en el sistema.", new InfoModal());
+                        _nav.CloseModal();
+                    }
+                });
+
+                //Switcher.Timer(false);
+            }
+            catch (Exception ex)
+            {
+                EventLogger.SaveLog(EventType.Info, "No se pudo capturar la huella, por favor intentalo de nuevo.");
+
+                // Error.SaveLogError(MethodBase.GetCurrentMethod().Name, this.GetType().Name, ex, ex.ToString());
             }
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -488,7 +490,6 @@ namespace WPFCootreguaV2.UserControls
 
         #endregion
     }
-
 
     public class AuthenticationRetirosUCViewModel : INotifyPropertyChanged
     {

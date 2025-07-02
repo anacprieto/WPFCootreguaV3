@@ -17,6 +17,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFCootreguaV2.ApiService;
 using WPFCootreguaV2.ApiService.IntegrationModels;
@@ -73,11 +74,13 @@ namespace WPFCootreguaV2.UserControls
                 view = new CollectionViewSource();
                 lstPager = new ObservableCollection<ProductsState>();
 
-                InitView();
 
                 Utilities.Speak("Selecciona el producto del que vas a retirar");
+
+               InitView();
+
                 this.Unloaded += OnUnloaded;
-                this.Loaded += Onloaded;
+                this.Loaded += OnLoaded;
             }
             catch (Exception ex)
             {
@@ -85,8 +88,69 @@ namespace WPFCootreguaV2.UserControls
             }
         }
 
-        private void Onloaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            
+        }
+
+        private void quemarProdut()
+        {
+            _ts.DataProducts.Clear(); // Limpiar la lista antes de agregar nuevos elementos
+
+            // Datos recibidos (simulados como una lista de objetos anónimos para este ejemplo)
+            var products = new[]
+            {
+                new { TipoProducto = 1, Identititfy = (string)null, NameLine = "APORTES-APORTES SOCIALES ADULTOS", NumberProduct = "593", NameProduct = (string)null, CreationDate = "0017-05-31T00:00:00", ProxDate = "2021-03-30T00:00:00", PaymentMethod = "Caja", Saldo = 786500.0m, Cuota = 27000.0m, ValorAPagar = 77000.0m, RetirarProducto = 0 },
+                new { TipoProducto = 1, Identititfy = (string)null, NameLine = "APORTES-APORTES SOCIALES ADULTOS", NumberProduct = "593", NameProduct = (string)null, CreationDate = "0017-05-31T00:00:00", ProxDate = "2021-03-30T00:00:00", PaymentMethod = "Caja", Saldo = 786500.0m, Cuota = 27000.0m, ValorAPagar = 77000.0m, RetirarProducto = 0 },
+                new { TipoProducto = 2, Identititfy = (string)null, NameLine = "CREDITOS-LIBRE DESTINACIÓN", NumberProduct = "1200024257", NameProduct = (string)null, CreationDate = "0021-01-08T00:00:00", ProxDate = "2021-07-25T00:00:00", PaymentMethod = "Caja", Saldo = 517891.0m, Cuota = 93750.0m, ValorAPagar = 0.0m, RetirarProducto = 0 },
+                new { TipoProducto = 1, Identititfy = (string)null, NameLine = "APORTES-FONDO MUTUAL", NumberProduct = "595", NameProduct = (string)null, CreationDate = "0017-05-31T00:00:00", ProxDate = "2021-06-30T00:00:00", PaymentMethod = "Caja", Saldo = 95505.0m, Cuota = 2000.0m, ValorAPagar = 0.0m, RetirarProducto = 0 },
+                new { TipoProducto = 3, Identititfy = (string)null, NameLine = "AHORROS-VISTA-AHORRO A LA VISTA ", NumberProduct = "11511", NameProduct = (string)null, CreationDate = "0017-06-02T00:00:00", ProxDate = "2017-12-30T00:00:00", PaymentMethod = "Caja", Saldo = 753900.0m, Cuota = 54000.0m, ValorAPagar = 0.0m, RetirarProducto = 1 }
+            };
+
+            
+
+            // Iterar sobre los productos
+            foreach (var product in products)
+            {
+                // Manejo de fechas inválidas
+                DateTime creationDate = DateTime.MinValue;
+                DateTime proxDate = DateTime.MinValue;
+                try
+                {
+                    if (!string.IsNullOrEmpty(product.CreationDate) && product.CreationDate != "0017-05-31T00:00:00" && product.CreationDate != "0021-01-08T00:00:00")
+                        creationDate = DateTime.Parse(product.CreationDate);
+                    if (!string.IsNullOrEmpty(product.ProxDate) && product.ProxDate != "0001-01-01T00:00:00")
+                        proxDate = DateTime.Parse(product.ProxDate);
+                }
+                catch (FormatException)
+                {
+                    // Usar DateTime.MinValue para fechas inválidas
+                }
+
+                // Agregar todos los productos a DataProducts (sin filtro RetirarProducto)
+                _ts.DataProducts.Add(new ProductsState
+                {
+                    Identititfy = product.Identititfy ?? string.Empty, // Manejo de null
+                    CodSession = 11, // Valor fijo (ajusta si es dinámico)
+                    NameLine = product.NameLine?.ToLower() ?? string.Empty, // Manejo de null y conversión a minúsculas
+                    NumberProduct = product.NumberProduct ?? string.Empty, // Manejo de null
+                    NameProduct = product.NameProduct ?? string.Empty, // Manejo de null
+                    CreationDate = creationDate,
+                    ProxDate = proxDate,
+                    PaymentMethod = product.PaymentMethod ?? string.Empty, // Manejo de null
+                    Saldo = product.Saldo,
+                    RetirarProducto = product.RetirarProducto,
+                    Cuota = RoundValue(product.Cuota, true),
+                    TipoProducto = product.TipoProducto,
+                    ValorPagar = 0, // No calcular aquí, InitView lo manejará
+                    ValorAPagar = product.ValorAPagar, // Asignar directamente
+                    ColorState = string.Empty, // No calcular aquí, InitView lo manejará
+                    IsSelected = false,
+                    img = null, // No está en el JSON
+                    SelectionColor = "#FF000000" // Valor por defecto
+                });
+
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -97,8 +161,13 @@ namespace WPFCootreguaV2.UserControls
 
         private void InitView()
         {
+     
             try
             {
+
+                ///QUEMAR PRODUCT ES PARA PRUEBAS
+                quemarProdut();
+
                 lstPager.Clear(); // Limpiar la lista antes de agregar nuevos elementos
 
                 if (_ts.TipoTransaccion == TypeTransaction.Retiro)
